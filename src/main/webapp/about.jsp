@@ -64,14 +64,27 @@
         This page should also be used to describe the features and improvements
         you've added.
       </p>
+      
+      <h1> Our team </h1>
+
+    	<ul>
+    	  <li> <strong> Veronica T Woldehanna:</strong> I'm from Ethiopia. I'm a
+    		rising junior at Columbia University majoring in Computer Science
+    		and minoring in Statistics.</li>
+    	</ul>
+
 
       <ul>
-      	<li><strong>Guillermo M. Leal Gamboa:</strong> I'm a rising sophomore 
-      		at the University of Southern California majoring in Computer 
-      		Science. My hobbies include anything soccer related. I'm looking 
-      		forward to CodeU!</li>
+    	  <li> <strong> Jasmine Chau:</strong> I'm from California. I'm a
+    		rising Freshman at Middlebury College majoring in Computer Science.
+        I love baking and memes.</li>
+    	</ul>
+
+      <ul>
+        <li><strong>Guillermo M. Leal Gamboa:</strong> I'm a rising sophomore 
+          at the University of Southern California majoring in Computer 
+          Science. My hobbies include anything soccer related.</li>
       </ul>
-      
     </div>
   </div>
 </body>
