@@ -70,7 +70,14 @@
 	  <li> <strong> Veronica T Woldehanna:</strong> I'm from Ethiopia. I'm a
 		rising junior at Columbia University majoring in Computer Science
 		and minoring in Statistics.</li>
-	</ul>  
+	</ul>
+
+
+  <ul>
+	  <li> <strong> Jasmine Chau:</strong> I'm from California. I'm a
+		rising Freshman at Middlebury College majoring in Computer Science.
+    I love baking and memes.</li>
+	</ul>
     </div>
   </div>
 </body>
