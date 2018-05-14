@@ -64,6 +64,13 @@
         This page should also be used to describe the features and improvements
         you've added.
       </p>
+      <h1> Our team </h1>
+
+	<ul>
+	  <li> <strong> Veronica T Woldehanna:</strong> I'm from Ethiopia. I'm a
+		rising junior at Columbia University majoring in Computer Science
+		and minoring in Statistics.</li>
+	</ul>  
     </div>
   </div>
 </body>
