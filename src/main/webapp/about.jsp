@@ -64,6 +64,14 @@
         This page should also be used to describe the features and improvements
         you've added.
       </p>
+
+      <ul>
+      	<li><strong>Guillermo M. Leal Gamboa:</strong> I'm a rising sophomore 
+      		at the University of Southern California majoring in Computer 
+      		Science. My hobbies include anything soccer related. I'm looking 
+      		forward to CodeU!</li>
+      </ul>
+      
     </div>
   </div>
 </body>
