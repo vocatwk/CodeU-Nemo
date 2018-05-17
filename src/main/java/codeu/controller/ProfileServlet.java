@@ -61,7 +61,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(requestUrl.length() <= "/profile/".length()){
       // if user navigates to "/profile/" without a specific user
-      request.getRequestDispatcher("WEB-INF/view/index.jsp").forward(request,response);
+      request.getRequestDispatcher("/index.jsp").forward(request,response);
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
@@ -71,7 +71,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
-      request.getRequestDispatcher("/WEB-INF/view/index.jsp").forward(request, response);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 

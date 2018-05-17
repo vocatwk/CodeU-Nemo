@@ -28,10 +28,10 @@ String subject = (String) request.getAttribute("subject");
     <a href="/about.jsp">About</a>
   </nav>
 
-  <% if (request.getSession().getAttribute("user") != null) { %>
-	<% if (request.getSession().getAttribute("user").equals(subject)) { %>
+  <% if ((request.getSession().getAttribute("user") != null) &&
+	(request.getSession().getAttribute("user").equals(subject))) { %>
 		<h1> This is your profile page </h1>
-  <% }} else { %>
+  <% } else { %>
 	<h1> This is <%= subject %>'s profile page </h1>
   <% } %>
   
