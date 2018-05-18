@@ -14,6 +14,8 @@ import org.jsoup.safety.Whitelist;
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+  throws IOException, ServletException {
     System.out.println("page is connected");
+}
 }
