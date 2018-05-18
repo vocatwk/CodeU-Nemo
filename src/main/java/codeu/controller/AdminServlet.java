@@ -33,10 +33,11 @@ public class AdminServlet extends HttpServlet {
 
       for(int i = 0; i<username.length; i++){
           User user = userStore.getUser(username[i]);
-          for(int j = 0; j < admin.length; j++)
+          for(int j = 0; j < admin.length; j++){
           if(user != admin[i]){
             response.sendRedirect("/profile");
             return;
+          }
           }
       }
 
