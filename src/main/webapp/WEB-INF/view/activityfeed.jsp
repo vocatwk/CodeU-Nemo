@@ -19,10 +19,10 @@
   </nav>
 
   <div id="container">
-  	<h1>Activity</h1>
+    <h1>Activity</h1>
 
-  	<p>Here's everything that's happened on the site so far!</p>
-  	
+    <p>Here's everything that's happened on the site so far!</p>
   </div>
+  
 </body>
 </html>
