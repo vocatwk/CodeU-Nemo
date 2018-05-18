@@ -14,9 +14,23 @@ import org.jsoup.safety.Whitelist;
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
 
+  private UserStore userStore;
+
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 
+    User user = userStore.getUser(username);
+      String[] admin = new String[]{"jay","memo","ver"};
+      for (int i = 0; i < admin.length; i++){
+        if(user != admin[i]){
+          response.sendRedirect("/profile");
+          return;
+        }
+
+      }
+
 }
+
+
 }
