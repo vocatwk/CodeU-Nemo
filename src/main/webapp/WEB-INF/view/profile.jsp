@@ -1,7 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
-<%@ page import="codeu.model.store.basic.UserStore" %>
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");

@@ -84,14 +84,15 @@ public class MessageStore {
 
     return messagesInConversation;
   }
+
   /** Access the current set of Messages from the given author. */
   public List<Message> getMessagesFromAuthor(UUID authorId) {
 
     List<Message> messagesFromAuthor = new ArrayList<>();
     
-    for(Message message : messages) {
-      if(message.getAuthorId().equals(authorId)) {
-	messagesFromAuthor.add(message);
+    for (Message message : messages) {
+      if (message.getAuthorId().equals(authorId)) {
+        messagesFromAuthor.add(message);
       }
     }
 
