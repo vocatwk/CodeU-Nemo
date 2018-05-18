@@ -16,6 +16,15 @@ public class AdminServlet extends HttpServlet {
 
   private UserStore userStore;
 
+  public void init() throws ServletException {
+    super.init();
+    setUserStore(UserStore.getInstance());
+  }
+
+  void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
