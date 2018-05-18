@@ -28,15 +28,16 @@ public class AdminServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-
-    User user = userStore.getUser(username);
+      String[] username = new String[]{"bay","Nemo","bear"};
       String[] admin = new String[]{"jay","memo","ver"};
-      for (int i = 0; i < admin.length; i++){
-        if(user != admin[i]){
-          response.sendRedirect("/profile");
-          return;
-        }
 
+      for(int i = 0; i<username.length; i++){
+          User user = userStore.getUser(username[i]);
+          for(int j = 0; j < admin.length; j++)
+          if(user != admin[i]){
+            response.sendRedirect("/profile");
+            return;
+          }
       }
 
 }
