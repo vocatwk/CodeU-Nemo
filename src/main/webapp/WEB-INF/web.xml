@@ -92,8 +92,8 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>ActivityFeedServlet</servlet-name>
-    <url-pattern>/activityfeed</url-pattern>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/admin</url-pattern>
   </servlet-mapping>
 
 </web-app>
