@@ -16,7 +16,7 @@ public class AdminServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
-    
-    System.out.print("This is the admin page");
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+
 }
 }
