@@ -18,7 +18,7 @@ String subject = (String) request.getAttribute("subject");
     <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
     <a href="/conversations">Conversations</a>
     <% if(request.getSession().getAttribute("user") != null){ %>
-	<a href="profile/<%= request.getSession().getAttribute("user") %>">
+	<a href="/profile/<%= request.getSession().getAttribute("user") %>">
 	   Hello <%= request.getSession().getAttribute("user") %>!</a>
     <% } else{ %>
 	<a href="/login">Login</a>
