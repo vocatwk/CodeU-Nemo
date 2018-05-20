@@ -1,21 +1,16 @@
 package codeu.controller;
 
-import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -61,7 +56,8 @@ public class ProfileServlet extends HttpServlet {
 
     if(requestUrl.length() <= "/profile/".length()){
       // if user navigates to "/profile/" without a specific user
-      request.getRequestDispatcher("/index.jsp").forward(request,response);
+      // TODO respond with 404
+      response.sendRedirect("/");
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
@@ -71,7 +67,8 @@ public class ProfileServlet extends HttpServlet {
 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
-      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      // TODO respond with 404
+      response.sendRedirect("/");
       return;
     }
 

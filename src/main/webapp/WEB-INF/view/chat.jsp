@@ -20,6 +20,7 @@
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
+String user = (String) request.getSession().getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -49,9 +50,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-      <% if (request.getSession().getAttribute("user") != null) { %>
-    <a href="/profile/<%= request.getSession().getAttribute("user") %>">
-       Hello <%= request.getSession().getAttribute("user") %>!</a>
+    <% if (user != null) { %>
+    <a href="/profile/<%= user %>">
+       Hello <%= user%>!</a>
     <% } else { %>
       <a href="/login">Login</a>
     <% } %>
