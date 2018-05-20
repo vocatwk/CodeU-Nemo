@@ -56,7 +56,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(requestUrl.length() <= "/profile/".length()){
       // if user navigates to "/profile/" without a specific user
-      // TO-DO respond with 404
+      // TODO respond with 404
       response.sendRedirect("/");
       return;
     }
@@ -67,7 +67,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
-      // TO-DO reposnd with 404
+      // TODO respond with 404
       response.sendRedirect("/");
       return;
     }

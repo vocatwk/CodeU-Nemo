@@ -50,7 +50,7 @@ String user = (String) request.getSession().getAttribute("user");
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-      <% if (user != null) { %>
+    <% if (user != null) { %>
     <a href="/profile/<%= user %>">
        Hello <%= user%>!</a>
     <% } else { %>
