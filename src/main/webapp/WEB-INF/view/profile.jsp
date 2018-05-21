@@ -1,4 +1,5 @@
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
 <%@ page import="codeu.model.data.Message" %>
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -12,8 +13,15 @@ String user = (String) request.getSession().getAttribute("user");
   <title><%= subject %></title>
   <link rel="stylesheet" href="/css/main.css">
 
+  <script>
+    // scroll the messages div to the bottom
+    function scrollChat() {
+      var chatDiv = document.getElementById('chat');
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    };
+  </script>
 </head>
-<body>
+<body onload="scrollChat()">
 
   <nav>
     <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
@@ -32,6 +40,23 @@ String user = (String) request.getSession().getAttribute("user");
   <% } else { %>
       <h1> This is <%= subject %>'s profile page </h1>
   <% } %>
-  
+
+  <div id="container">
+
+   <h1> <%= subject %>'s messages <a href="" style="float: right">&#8635;</a></h1>
+
+   <div id="messages">
+
+     <ul>
+       <% for (Message message : messages) { %>
+       <li> <strong> <%= Date.from(message.getCreationTime()) %>: 
+            </strong> <%= message.getContent() %> </li>
+       <% } %>
+     </ul>
+
+   </div>
+
+  </div>
+
 </body>
 </html>
