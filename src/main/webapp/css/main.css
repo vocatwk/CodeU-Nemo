@@ -56,3 +56,8 @@ input {
 button {
   font-size: 18px;
 }
+
+/*This if for the Activity Feed Page*/
+#activity {
+  background-color: white;
+}

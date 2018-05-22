@@ -1,5 +1,5 @@
-<%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 
 <!DOCTYPE html>
@@ -7,11 +7,6 @@
 <head>
   <title>Activity Feed</title>
   <link rel="stylesheet" href="/css/main.css">
-  <style>
-    #activity {
-      background-color: white;
-    }
-  </style>
 </head>
 <body>
 
@@ -33,15 +28,13 @@
     <p>Here's everything that's happened on the site so far!</p>
 
     <div id="activity">
-      
       <%List<User> users = 
         (List<User>) request.getAttribute("users");
-      if (users != null && !users.isEmpty()) {
       %>
       <ul>
         <% 
           for(User user : users) {
-          Date date = Date.from(user.getCreationTime());
+            Date date = Date.from(user.getCreationTime());
         %>
         <li><b><%= date %>: </b> 
           <a href="/profile/<%= user.getName() %>">
@@ -50,9 +43,6 @@
         }
         %>
       </ul>
-      <%
-      }
-      %>
     </div>
 
   </div>

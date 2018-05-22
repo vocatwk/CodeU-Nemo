@@ -2,11 +2,8 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-
 import java.io.IOException;
-
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,10 +38,7 @@ public class ActivityFeedServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
     List<User> users = userStore.getAllUsers();
-    if (users != null)
-      request.setAttribute("users", users);
-    else
-      System.out.println("USERS IS NULL");
+    request.setAttribute("users", users);
     request.getRequestDispatcher("/WEB-INF/view/activityfeed.jsp").forward(request, response);
   }
 
