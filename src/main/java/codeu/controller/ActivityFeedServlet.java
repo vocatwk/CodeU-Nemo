@@ -4,7 +4,6 @@ import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import javax.servlet.ServletException;
