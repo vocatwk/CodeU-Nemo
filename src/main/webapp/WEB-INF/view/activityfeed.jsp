@@ -1,5 +1,6 @@
-<%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.User" %>
+
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 
 <!DOCTYPE html>
