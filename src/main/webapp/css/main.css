@@ -57,8 +57,14 @@ button {
   font-size: 18px;
 }
 
+/* This is for Profile Pages */
 #messages {
   background-color: white;
   height: 500px;
   overflow-y: scroll;
+}
+
+/*This if for the Activity Feed Page*/
+#activity {
+  background-color: white;
 }
