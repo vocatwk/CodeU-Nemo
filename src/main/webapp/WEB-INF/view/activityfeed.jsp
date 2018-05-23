@@ -1,3 +1,7 @@
+<%@ page import="codeu.model.data.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +26,25 @@
     <h1>Activity</h1>
 
     <p>Here's everything that's happened on the site so far!</p>
+
+    <div id="activity">
+      <%List<User> users = 
+        (List<User>) request.getAttribute("users");
+      %>
+      <ul>
+        <% 
+          for(User user : users) {
+            Date date = Date.from(user.getCreationTime());
+        %>
+        <li><b><%= date %>: </b> 
+          <a href="/profile/<%= user.getName() %>">
+          <%= user.getName() %></a> joined!</li>
+        <%
+        }
+        %>
+      </ul>
+    </div>
+
   </div>
   
 </body>
