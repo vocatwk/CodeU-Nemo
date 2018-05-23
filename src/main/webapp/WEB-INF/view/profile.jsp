@@ -43,7 +43,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
     <hr/>
 
     <h2> About <%= subject %> </h2>
-    <% if (aboutMe != null) { %>
+    <% if (!aboutMe.equals("")) { %>
       <p> <%= aboutMe %> </p>
     <% } else { %>
       <p> <%= subject %> has not provided any information.</p>

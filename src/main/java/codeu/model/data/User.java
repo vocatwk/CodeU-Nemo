@@ -38,7 +38,7 @@ public class User {
     this.name = name;
     this.passwordHash = passwordHash;
     this.creation = creation;
-    aboutMe = null;
+    aboutMe = "";
   }
 
   /** Returns the ID of this User. */

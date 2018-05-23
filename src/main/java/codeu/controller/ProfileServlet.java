@@ -79,7 +79,7 @@ public class ProfileServlet extends HttpServlet {
 
     List<Message> messages = messageStore.getMessagesFromAuthor(subjectId);
 
-    request.setAttribute("aboutMe", subject.getAboutMe()); 
+    request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
@@ -91,8 +91,8 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
-
-	  String username = (String) request.getSession().getAttribute("user");
+ 
+    String username = (String) request.getSession().getAttribute("user");
     User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(username == null){
@@ -104,6 +104,7 @@ public class ProfileServlet extends HttpServlet {
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
       // TODO respond with access denied
+      response.sendRedirect("/login");
       return;
     }
  
