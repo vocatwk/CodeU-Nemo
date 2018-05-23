@@ -11,6 +11,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -76,7 +78,8 @@ public class ProfileServlet extends HttpServlet {
     UUID subjectId = subject.getId();
 
     List<Message> messages = messageStore.getMessagesFromAuthor(subjectId);
-    
+
+    request.setAttribute("aboutMe", subject.getAboutMe()); 
     request.setAttribute("messages", messages);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
@@ -87,8 +90,32 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-  	
-	// TO-DO
+    String requestUrl = request.getRequestURI();
 
+	  String username = (String) request.getSession().getAttribute("user");
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
+
+    if(username == null){
+      // user not logged in
+      response.sendRedirect("/login");
+      return;
+    }
+
+    if(!username.equals(subject.getName())){
+      // user is trying to edit another user's profile
+      // TODO respond with access denied
+      return;
+    }
+ 
+    String aboutMe = request.getParameter("aboutMe");
+
+    // remove any HTML from the About me message
+    String cleanedAboutMe = Jsoup.clean(aboutMe, Whitelist.none());
+
+    //set user's about me and update it in dataStore
+    subject.setAboutMe(cleanedAboutMe);
+    userStore.updateUser(subject);
+
+    response.sendRedirect("/profile/" + subject.getName());
   }
 }
