@@ -23,7 +23,7 @@ public class User {
   private final String name;
   private final String passwordHash;
   private final Instant creation;
-  private String aboutMe = null;
+  private String aboutMe;
 
   /**
    * Constructs a new User.
@@ -38,6 +38,7 @@ public class User {
     this.name = name;
     this.passwordHash = passwordHash;
     this.creation = creation;
+    aboutMe = null;
   }
 
   /** Returns the ID of this User. */
