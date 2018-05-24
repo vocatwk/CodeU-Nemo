@@ -13,30 +13,27 @@ import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
-
   private UserStore userStore;
-
   public void init() throws ServletException {
-    super.init();
-    setUserStore(UserStore.getInstance());
+  super.init();
+  setUserStore(UserStore.getInstance());
   }
 
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
-      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-      String[] username = new String[]{"bay","Nemo","bear"};
-      String[] admin = new String[]{"jay","memo","ver"};
+public void doGet(HttpServletRequest request, HttpServletResponse response)
+  throws IOException, ServletException {
 
-      for(int i = 0; i<username.length; i++){
-          User user = userStore.getUser(username[i]);
-          for(int j = 0; j < admin.length; j++){
-          if(user != admin[i]){
-            response.sendRedirect("/profile");
-            return;
+  String requestUrl = request.getRequestURI();
+  if(requestUrl.length() <= "/profile/".length()){
+  // if user navigates to "/profile/" without a specific user
+    request.getRequestDispatcher("/index.jsp").forward(request,response);
+    return;
+    }
+    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+
           }
           }
       }
