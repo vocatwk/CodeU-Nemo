@@ -52,17 +52,16 @@ public class AdminServlet extends HttpServlet {
       throws IOException, ServletException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-    User user = userStore.getUser(username);
 
     if (!userStore.isUserRegistered(username)) {
-      if(!user.getAdmin == false){
+
         request.setAttribute("error", "That username is not an admin.");
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
         return;
-      }
+
     }
 
-
+    User user = userStore.getUser(username);
 
     if (!BCrypt.checkpw(password, user.getPasswordHash())) {
       request.setAttribute("error", "Please enter a correct password.");
@@ -70,8 +69,8 @@ public class AdminServlet extends HttpServlet {
       return;
     }
     request.getSession().setAttribute("user", username);
-    if(user.getAdmin == true){
+
       response.sendRedirect("/admin");
-    }
+    
   }
 }
