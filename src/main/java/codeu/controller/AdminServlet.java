@@ -55,7 +55,7 @@ public class AdminServlet extends HttpServlet {
     String password = request.getParameter("password");
 
     if (!userStore.isUserRegistered(username)) {
-      if(!user.getAdmin == false{
+      if(!user.getAdmin == false){
         request.setAttribute("error", "That username is not an admin.");
         request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
         return;
@@ -69,7 +69,6 @@ public class AdminServlet extends HttpServlet {
       request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
       return;
     }
-
     request.getSession().setAttribute("user", username);
     if(user.getAdmin == true){
       response.sendRedirect("/admin");
