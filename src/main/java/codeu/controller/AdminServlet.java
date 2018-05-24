@@ -40,7 +40,7 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
   }
 
   /**
@@ -54,19 +54,23 @@ public class AdminServlet extends HttpServlet {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
 
-    if (!userStore.isUserRegistered(username)) {
-
-        request.setAttribute("error", "That username is not an admin.");
-        request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
-        return;
-
-    }
-
     User user = userStore.getUser(username);
+
+    if (!userStore.isUserRegistered(username)) {
+        request.setAttribute("error", "That username is not an admin.");
+        request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+        return;
+    } else if (userStore.isUserRegistered(username)){
+        if(user.getAdmin() == false){
+      request.setAttribute("error", "That username is not an admin.");
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+      return;
+      }
+    }
 
     if (!BCrypt.checkpw(password, user.getPasswordHash())) {
       request.setAttribute("error", "Please enter a correct password.");
-      request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
       return;
     }
     request.getSession().setAttribute("user", username);

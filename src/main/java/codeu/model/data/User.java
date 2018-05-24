@@ -73,7 +73,7 @@ public class User {
   }
 
 /** sets if the user is admin */
-  public boolean setAdmin(boolean a){
+  public void setAdmin(boolean a){
     this.admin = a;
   }
 
