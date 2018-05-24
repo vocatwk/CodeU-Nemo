@@ -40,7 +40,7 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
   }
 
   /**
@@ -48,6 +48,7 @@ public class AdminServlet extends HttpServlet {
    * the submitted form data, checks for validity and if correct adds the username to the session so
    * we know the user is logged in.
    */
+   /*
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -77,5 +78,5 @@ public class AdminServlet extends HttpServlet {
       response.sendRedirect("/admin");
 
   }
-
+*/
 }
