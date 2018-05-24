@@ -23,6 +23,7 @@ public class User {
   private final String name;
   private final String passwordHash;
   private final Instant creation;
+  private String aboutMe;
 
   /**
    * Constructs a new User.
@@ -37,6 +38,7 @@ public class User {
     this.name = name;
     this.passwordHash = passwordHash;
     this.creation = creation;
+    aboutMe = "";
   }
 
   /** Returns the ID of this User. */
@@ -57,5 +59,15 @@ public class User {
   /** Returns the creation time of this User. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  /** sets users' about me message. */
+  public void setAboutMe(String message) {
+    aboutMe = message;
+  }
+
+  /** Return the About Me of a user. */
+  public String getAboutMe() {
+    return aboutMe;
   }
 }
