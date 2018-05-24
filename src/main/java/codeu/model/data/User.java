@@ -72,10 +72,12 @@ public class User {
     return aboutMe;
   }
 
+/** sets if the user is admin */
   public boolean setAdmin(boolean a){
-    admin = a;
+    this.admin = a;
   }
 
+  /** returns true if the user is admin */
   public boolean getAdmin(){
     return admin;
   }

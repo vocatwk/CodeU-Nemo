@@ -49,6 +49,8 @@
       <br/>
       <input type="password" name="password" id="password">
       <br/><br/>
+      <button name="button" value="true" type="button">Admin</button>
+      <br/><br/>
       <button type="submit">Submit</button>
     </form>
   </div>
