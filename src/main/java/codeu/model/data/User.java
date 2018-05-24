@@ -73,7 +73,7 @@ public class User {
   }
 
   public boolean setAdmin(boolean a){
-    this.admin = a;
+    admin = a;
   }
 
   public boolean getAdmin(){

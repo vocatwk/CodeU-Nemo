@@ -69,7 +69,6 @@ public class AdminServlet extends HttpServlet {
       return;
     }
     request.getSession().setAttribute("user", username);
-
       response.sendRedirect("/admin");
 
   }
