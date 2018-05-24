@@ -52,6 +52,7 @@ public class AdminServlet extends HttpServlet {
       throws IOException, ServletException {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    User user = userStore.getUser(username);
 
     if (!userStore.isUserRegistered(username)) {
       if(!user.getAdmin == false){
@@ -61,7 +62,7 @@ public class AdminServlet extends HttpServlet {
       }
     }
 
-    User user = userStore.getUser(username);
+
 
     if (!BCrypt.checkpw(password, user.getPasswordHash())) {
       request.setAttribute("error", "Please enter a correct password.");
