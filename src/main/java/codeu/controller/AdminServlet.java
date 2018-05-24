@@ -12,7 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
-  
+
   private UserStore userStore;
 
   /**
@@ -73,5 +73,5 @@ public class AdminServlet extends HttpServlet {
       response.sendRedirect("/admin");
 
   }
-  */
+
 }
