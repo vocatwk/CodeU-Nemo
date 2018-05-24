@@ -26,6 +26,14 @@ public class AdminServlet extends HttpServlet {
 public void doGet(HttpServletRequest request, HttpServletResponse response)
   throws IOException, ServletException {
 
+
+
+
+
+  }
+
+
+/*
   String requestUrl = request.getRequestURI();
   if(requestUrl.length() <= "/profile/".length()){
   // if user navigates to "/profile/" without a specific user
@@ -40,5 +48,5 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 
 }
 
-
+*/
 }

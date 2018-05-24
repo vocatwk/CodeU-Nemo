@@ -1,13 +1,10 @@
 package codeu.controller;
 
-import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -61,7 +58,8 @@ public class ProfileServlet extends HttpServlet {
 
     if(requestUrl.length() <= "/profile/".length()){
       // if user navigates to "/profile/" without a specific user
-      request.getRequestDispatcher("/index.jsp").forward(request,response);
+      // TODO respond with 404
+      response.sendRedirect("/");
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
@@ -71,7 +69,8 @@ public class ProfileServlet extends HttpServlet {
 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
-      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      // TODO respond with 404
+      response.sendRedirect("/");
       return;
     }
 
@@ -79,7 +78,8 @@ public class ProfileServlet extends HttpServlet {
     UUID subjectId = subject.getId();
 
     List<Message> messages = messageStore.getMessagesFromAuthor(subjectId);
-    
+
+    request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
@@ -90,8 +90,33 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-  	
-	// TO-DO
+    String requestUrl = request.getRequestURI();
+ 
+    String username = (String) request.getSession().getAttribute("user");
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
+    if(username == null){
+      // user not logged in
+      response.sendRedirect("/login");
+      return;
+    }
+
+    if(!username.equals(subject.getName())){
+      // user is trying to edit another user's profile
+      // TODO respond with access denied
+      response.sendRedirect("/login");
+      return;
+    }
+ 
+    String aboutMe = request.getParameter("aboutMe");
+
+    // remove any HTML from the About me message
+    String cleanedAboutMe = Jsoup.clean(aboutMe, Whitelist.none());
+
+    //set user's about me and update it in dataStore
+    subject.setAboutMe(cleanedAboutMe);
+    userStore.updateUser(subject);
+
+    response.sendRedirect("/profile/" + subject.getName());
   }
 }
