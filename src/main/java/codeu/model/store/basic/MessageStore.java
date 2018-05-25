@@ -104,7 +104,4 @@ public class MessageStore {
     this.messages = messages;
   }
 
-  public List<Message> getMessages(){
-    return this.messages;
-  }
 }
