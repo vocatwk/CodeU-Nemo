@@ -70,40 +70,4 @@ public class AdminServlet extends HttpServlet {
 
 
 
-  /**
-   * This function fires when a user submits the login form. It gets the username and password from
-   * the submitted form data, checks for validity and if correct adds the username to the session so
-   * we know the user is logged in.
-   */
-   /*
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
-
-    User user = userStore.getUser(username);
-
-    if (!userStore.isUserRegistered(username)) {
-        request.setAttribute("error", "That username is not an admin.");
-        request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-        return;
-    } else if (userStore.isUserRegistered(username)){
-        if(user.getAdmin() == false){
-      request.setAttribute("error", "That username is not an admin.");
-      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-      return;
-      }
-    }
-
-    if (!BCrypt.checkpw(password, user.getPasswordHash())) {
-      request.setAttribute("error", "Please enter a correct password.");
-      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-      return;
-    }
-    request.getSession().setAttribute("user", username);
-      response.sendRedirect("/admin");
-
-  }
-  */
-}
+  
