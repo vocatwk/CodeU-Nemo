@@ -40,8 +40,35 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
-  }
+    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+    User user = userStore.getUser(username);
+    if(user.getAdmin() == false){
+      response.sendRedirect("/login");
+      return;
+    }else if (user.getAdmin() == true){
+    int numOfUsers = userStore.getAllUsers().length;
+
+    int numOfMessages = userStore.getMessages().length;
+
+    int numOfConvos = ConversationStore.getAllConversations().length;
+    request.setAttribute("Users", numOfUsers);
+    request.setAttribute("Messages", numOfMessages);
+    request.setAttribute("Conversations", numOfConvos);
+    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+
+    }
+
+}
+
+
+}
+
+
+
+
+
+
+
 
   /**
    * This function fires when a user submits the login form. It gets the username and password from
@@ -78,5 +105,5 @@ public class AdminServlet extends HttpServlet {
       response.sendRedirect("/admin");
 
   }
-*/
+  */
 }

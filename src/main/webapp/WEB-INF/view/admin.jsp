@@ -19,25 +19,11 @@
   </nav>
 
   <div id="container">
-    <h1>Login</h1>
-
-    <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-    <% } %>
-
-    <form action="/login" method="POST">
-      <label for="username">Username: </label>
-      <br/>
-      <input type="text" name="username" id="username">
-      <br/>
-      <label for="password">Password: </label>
-      <br/>
-      <input type="password" name="password" id="password">
-      <br/><br/>
-      <button type="submit">Login</button>
-    </form>
-
-    <p>New users can register <a href="/register">here</a>.</p>
+    <h1>Admin</h1>
+		<p> Here are some statistics of Nemo. </p>
+		<p> Current number of Users: <%= request.getAttribute("Users") %></p>
+		<p> Current number of Messages: <%= request.getAttribute("Messages") %></p>
+		<p> Current number of Conversations: <%= request.getAttribute("Conversations") %></p>
   </div>
 </body>
 </html>s
