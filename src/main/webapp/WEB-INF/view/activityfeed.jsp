@@ -5,7 +5,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Map" %>
-<!-- <%@ page import="java.util.TreeMap" %> -->
 <%
 Map<Instant, Object> sortedEventsMap = 
   (Map<Instant, Object>) request.getAttribute("sortedEventsMap");
@@ -19,14 +18,6 @@ List<Conversation> conversations =
 <head>
   <title>Activity Feed</title>
   <link rel="stylesheet" href="/css/main.css">
-
- <!--  <script>
-    // scroll the activity div to the bottom
-    function scrollChat() {
-      var activityDiv = document.getElementById('activity');
-      activityDiv.scrollTop = activityDiv.scrollHeight;
-    };
-  </script> -->
 </head>
 <body>
 
