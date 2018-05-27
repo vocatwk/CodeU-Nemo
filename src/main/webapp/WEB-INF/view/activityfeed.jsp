@@ -1,15 +1,17 @@
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Conversation" %>
-<%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.Message" %>
 <%@ page import="java.time.Instant" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="java.util.TreeMap" %>
+<!-- <%@ page import="java.util.TreeMap" %> -->
 <%
 Map<Instant, Object> sortedEventsMap = 
   (Map<Instant, Object>) request.getAttribute("sortedEventsMap");
 List<User> users = (List<User>) request.getAttribute("users");
+List<Conversation> conversations = 
+  (List<Conversation>) request.getAttribute("conversations");
 %>
 
 <!DOCTYPE html>
@@ -17,6 +19,14 @@ List<User> users = (List<User>) request.getAttribute("users");
 <head>
   <title>Activity Feed</title>
   <link rel="stylesheet" href="/css/main.css">
+
+ <!--  <script>
+    // scroll the activity div to the bottom
+    function scrollChat() {
+      var activityDiv = document.getElementById('activity');
+      activityDiv.scrollTop = activityDiv.scrollHeight;
+    };
+  </script> -->
 </head>
 <body>
 
@@ -33,7 +43,8 @@ List<User> users = (List<User>) request.getAttribute("users");
   </nav>
 
   <div id="container">
-    <h1>Activity</h1>
+    <h1>Activity
+      <a href="" style="float: right">&#8635;</a></h1>
 
     <p>Here's everything that's happened on the site so far!</p>
 
@@ -57,11 +68,12 @@ List<User> users = (List<User>) request.getAttribute("users");
           else if (entry.getValue() instanceof Conversation) {
             Conversation conversation = (Conversation) entry.getValue();
             User conversationOwner = null;
-            for (User user : users) {
-              if (user.getId().equals(conversation.getOwnerId()))
+            for(User user : users) {
+              if (user.getId().equals(conversation.getOwnerId())) {
                 conversationOwner = user;
-                break; 
-              }
+                break;
+              } 
+            }
           %>
             <a href="/profile/<%= conversationOwner.getName() %>">
               <%= conversationOwner.getName() %></a> 
@@ -71,8 +83,32 @@ List<User> users = (List<User>) request.getAttribute("users");
           </li>
           <%
           }
+          else if (entry.getValue() instanceof Message) {
+            Message message = (Message) entry.getValue();
+            User messageAuthor = null;
+            Conversation messageConversation = null;
+            for(User user : users) {
+              if (user.getId().equals(message.getAuthorId())) {
+                messageAuthor = user;
+                break;
+              }
+            }
+            for(Conversation conversation : conversations) {
+              if (conversation.getId().equals(message.getConversationId())) {
+                messageConversation = conversation;
+                break;
+              }
+            }
           %>
-        <%
+            <a href="/profile/<%= messageAuthor.getName() %>">
+              <%= messageAuthor.getName() %></a>
+            sent a message in
+            <a href="/chat/<%= messageConversation.getTitle() %>">
+              <%=messageConversation.getTitle()%></a>: 
+              "<%= message.getContent() %>"
+          </li>
+          <%
+          }
         }
         %>
       </ul>
