@@ -17,14 +17,16 @@
     <% } %>
     <a href="/about.jsp">About</a>
   </nav>
-	<form action="/login" method="POST">
-		<label for="username">Username: </label>
-		<form action="/login" method="POST">
-			<label for="username">Username: </label>
+    <%-- logging in before accessing the page --%>
+	<form action="/admin" method="POST">
+    <label for="username">Username: </label>
+    <br/>
+    <input type="text" name="username" id="username">
+    <br/>
 			<br/><br/>
 			<button type="submit">Login</button>
 		</form>
-
+  <%-- getting statistics --%>
 			<br/>
 		<br/>
   <div id="container">
@@ -36,4 +38,4 @@
 
   </div>
 </body>
-</html>s
+</html>

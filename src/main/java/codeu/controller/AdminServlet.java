@@ -2,10 +2,6 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-import codeu.model.data.Conversation;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.data.Message;
-import codeu.model.store.basic.MessageStore;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,80 +9,62 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.mindrot.jbcrypt.BCrypt;
+import codeu.model.store.persistence.PersistentStorageAgent;
+import codeu.model.store.persistence.PersistentDataStoreException;
+import codeu.model.store.persistence.PersistentDataStore;
 
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
-
+//  private PersistentStorageAgent PersistentStorageAgent;
   private UserStore userStore;
-  private ConversationStore ConversationStore;
-  private MessageStore MessageStore;
 
-  /**
-   * Set up state for handling login-related requests. This method is only called when running in a
-   * server, not when running in a test.
-   */
-  @Override
-  public void init() throws ServletException {
+  public void init() throws ServletException{
     super.init();
     setUserStore(UserStore.getInstance());
-    setConversationStore(ConversationStore.getInstance());
-    setMessageStore(MessageStore.getInstance());
   }
 
-  /**
-   * Sets the UserStore used by this servlet. This function provides a common setup method for use
-   * by the test framework or the servlet's init() function.
-   */
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
 
-  void setConversationStore(ConversationStore ConversationStore) {
-    this.ConversationStore = ConversationStore;
-  }
-
-  void setMessageStore(MessageStore MessageStore) {
-    this.MessageStore = MessageStore;
-  }
-
-  @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
   }
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-     String username = request.getParameter("username");
 
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException {
 /* checks to see if user is admin if false redrects them to the login page*/
+    String username = request.getParameter("username");
     User user = userStore.getUser(username);
     if(user.getAdmin() == false){
       response.sendRedirect("/login");
       return;
     }else if (user.getAdmin() == true){
-      /* an attempt to grab information from the stores to display on the page */
+      /*setting the attribute*/
+      int[] c = getData();
 
-    int numOfUsers = userStore.getAllUsers().size();
+      request.setAttribute("Users", c[0]);
 
-    int numOfConvos = ConversationStore.getAllConversations().size();
+      request.setAttribute("Conversations", c[1]);
 
-    int Messages = MessageStore.getMessages().size();
+      request.setAttribute("Messages", c[2]);
 
-    request.setAttribute("Users", numOfUsers);
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+    }
+  }
 
-    request.setAttribute("Conversations", numOfConvos);
-
-    request.setAttribute("Messages", Messages);
-
-    request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-
-
-
-}
-
-
-}
+  public int[] getData() throws PersistentDataStoreException{
+      /*getting information about the chat up from the persistentDataStore*/
+    PersistentStorageAgent data = PersistentStorageAgent.getInstance();
+    int[] v = new int[3];
+    int numOfUsers = data.loadUsers().size();
+    v[0] = numOfUsers;
+    int numOfConvos = data.loadConversations().size();
+    v[1] = numOfConvos;
+    int Messages = data.loadMessages().size();
+    v[2] = Messages;
+    return v;
+  }
 }

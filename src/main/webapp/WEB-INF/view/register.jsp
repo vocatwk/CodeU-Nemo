@@ -49,7 +49,8 @@
       <br/>
       <input type="password" name="password" id="password">
       <br/><br/>
-      <button type="button" name ="adminButton" value="adminYes" >Admin</button>
+      <%-- button used to set admin boolean as true */ --%>
+      <button type="button" name ="adminButton" onclick="makeAdmin();">Admin</button>
       <br/><br/>
       <button type="submit">Submit</button>
     </form>

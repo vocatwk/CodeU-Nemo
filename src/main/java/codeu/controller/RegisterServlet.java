@@ -17,7 +17,7 @@ import codeu.model.store.basic.UserStore;
 public class RegisterServlet extends HttpServlet {
 
   /** Store class that gives access to Users. */
-  private UserStore userStore;
+  private UserStore UserStore;
 
   /**
    * Set up state for handling registration-related requests. This method is only called when
@@ -33,8 +33,8 @@ public class RegisterServlet extends HttpServlet {
    * Sets the UserStore used by this servlet. This function provides a common setup method for use
    * by the test framework or the servlet's init() function.
    */
-  void setUserStore(UserStore userStore) {
-    this.userStore = userStore;
+  void setUserStore(UserStore UserStore) {
+    this.UserStore = UserStore;
   }
 
   @Override
@@ -55,7 +55,7 @@ public class RegisterServlet extends HttpServlet {
       return;
     }
 
-    if (userStore.isUserRegistered(username)) {
+    if (UserStore.isUserRegistered(username)) {
       request.setAttribute("error", "That username is already taken.");
       request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
       return;
@@ -65,17 +65,13 @@ public class RegisterServlet extends HttpServlet {
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
     User user = new User(UUID.randomUUID(), username, hashedPassword, Instant.now());
-    userStore.addUser(user);
-
-    String button = request.getParameter("adminbutton");
-
-          if ("adminButton".equals(button)) {
-            user.setAdmin(true);
-          } else {
-            user.setAdmin(false);
-          }
-
+    UserStore.addUser(user);
 
     response.sendRedirect("/login");
+  }
+  public void makeAdmin(){
+    /*trying to set the admin boolean as true when button is pressed */
+    User u = UserStore.getUser(username);
+    u.setAdmin(true);
   }
 }
