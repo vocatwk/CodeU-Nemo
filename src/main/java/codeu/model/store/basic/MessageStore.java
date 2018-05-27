@@ -65,6 +65,12 @@ public class MessageStore {
     messages = new ArrayList<>();
   }
 
+  /** Access the current set of messages known to the application. This function 
+  is temporary for the Activiy Feed MVP. */
+  public List<Message> getAllMessages() {
+    return messages;
+  }
+
   /** Add a new message to the current set of messages known to the application. */
   public void addMessage(Message message) {
     messages.add(message);
