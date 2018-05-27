@@ -67,4 +67,6 @@ button {
 /*This if for the Activity Feed Page*/
 #activity {
   background-color: white;
+  height: 500px;
+  overflow-y: scroll
 }
