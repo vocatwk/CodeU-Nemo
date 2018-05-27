@@ -49,7 +49,7 @@
       <br/>
       <input type="password" name="password" id="password">
       <br/><br/>
-      <button name="button" value="true" type="button">Admin</button>
+      <button type="button" name ="adminButton" value="adminYes" >Admin</button>
       <br/><br/>
       <button type="submit">Submit</button>
     </form>

@@ -67,6 +67,15 @@ public class RegisterServlet extends HttpServlet {
     User user = new User(UUID.randomUUID(), username, hashedPassword, Instant.now());
     userStore.addUser(user);
 
+    String button = request.getParameter("adminbutton");
+
+          if ("adminButton".equals(button)) {
+            user.setAdmin(true);
+          } else {
+            user.setAdmin(false);
+          }
+
+
     response.sendRedirect("/login");
   }
 }

@@ -17,13 +17,23 @@
     <% } %>
     <a href="/about.jsp">About</a>
   </nav>
+	<form action="/login" method="POST">
+		<label for="username">Username: </label>
+		<form action="/login" method="POST">
+			<label for="username">Username: </label>
+			<br/><br/>
+			<button type="submit">Login</button>
+		</form>
 
+			<br/>
+		<br/>
   <div id="container">
-    <h1>Admin</h1>
+    <h1>Admin Page</h1>
 		<p> Here are some statistics of Nemo. </p>
 		<p> Current number of Users: <%= request.getAttribute("Users") %></p>
 		<p> Current number of Messages: <%= request.getAttribute("Messages") %></p>
 		<p> Current number of Conversations: <%= request.getAttribute("Conversations") %></p>
+
   </div>
 </body>
 </html>s
