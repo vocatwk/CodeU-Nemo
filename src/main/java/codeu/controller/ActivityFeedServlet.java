@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.HashMap;
+// import java.util.HashMap;
 import java.util.TreeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -65,13 +65,6 @@ public class ActivityFeedServlet extends HttpServlet {
     request.setAttribute("conversations", conversations);
 
     // Make, sort, and set the event map
-    Map<Instant, Object> unsortedEventsMap = new HashMap<Instant, Object>();
-    for(User user : users)
-      unsortedEventsMap.put(user.getCreationTime(), user);
-    for(Conversation conversation : conversations)
-      unsortedEventsMap.put(conversation.getCreationTime(), conversation);
-    request.setAttribute("unsortedEventsMap", unsortedEventsMap);
-    // Sort the event map by key in descending order
     Map<Instant, Object> sortedEventsMap = 
       new TreeMap<Instant, Object>(new Comparator<Instant>() {
         @Override
@@ -79,7 +72,10 @@ public class ActivityFeedServlet extends HttpServlet {
           return o2.compareTo(o1);
         }
       });
-    sortedEventsMap.putAll(unsortedEventsMap);
+    for(User user : users)
+      sortedEventsMap.put(user.getCreationTime(), user);
+    for(Conversation conversation : conversations)
+      sortedEventsMap.put(conversation.getCreationTime(), conversation);
     request.setAttribute("sortedEventsMap", sortedEventsMap);
 
     request.getRequestDispatcher("/WEB-INF/view/activityfeed.jsp").forward(request, response);
