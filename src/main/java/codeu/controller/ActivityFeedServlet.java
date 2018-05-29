@@ -2,14 +2,15 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.data.Conversation;
+import codeu.model.data.Message;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.ConversationStore;
+import codeu.model.store.basic.MessageStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.TreeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,12 +26,16 @@ public class ActivityFeedServlet extends HttpServlet {
   /** Store class that gives access to Conversations. */
   private ConversationStore conversationStore;
 
+  /** Store class that gives access to Messages. */
+  private MessageStore messageStore;
+
   /** Set up state for handling activty feed requests. */
   @Override
   public void init() throws ServletException {
   	super.init();
     setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
+    setMessageStore(MessageStore.getInstance());
   }
 
   /**
@@ -50,6 +55,14 @@ public class ActivityFeedServlet extends HttpServlet {
   }
 
   /**
+   * Sets the MessageStore used by this servlet. This function provides a common 
+   * setup method for use by the test framework or the servlet's init() function.
+   */
+  void setMessageStore(MessageStore messageStore) {
+    this.messageStore = messageStore;
+  }
+
+  /**
    * This function fires when a user navigates to the activity feed page. It 
    * simply forwards to activityfeed.jsp for rendering.
    */
@@ -64,14 +77,11 @@ public class ActivityFeedServlet extends HttpServlet {
     List<Conversation> conversations = conversationStore.getAllConversations();
     request.setAttribute("conversations", conversations);
 
+    // Get and set Messages
+    List<Message> messages = messageStore.getAllMessages();
+    request.setAttribute("messages", messages);
+
     // Make, sort, and set the event map
-    Map<Instant, Object> unsortedEventsMap = new HashMap<Instant, Object>();
-    for(User user : users)
-      unsortedEventsMap.put(user.getCreationTime(), user);
-    for(Conversation conversation : conversations)
-      unsortedEventsMap.put(conversation.getCreationTime(), conversation);
-    request.setAttribute("unsortedEventsMap", unsortedEventsMap);
-    // Sort the event map by key in descending order
     Map<Instant, Object> sortedEventsMap = 
       new TreeMap<Instant, Object>(new Comparator<Instant>() {
         @Override
@@ -79,7 +89,12 @@ public class ActivityFeedServlet extends HttpServlet {
           return o2.compareTo(o1);
         }
       });
-    sortedEventsMap.putAll(unsortedEventsMap);
+    for(User user : users)
+      sortedEventsMap.put(user.getCreationTime(), user);
+    for(Conversation conversation : conversations)
+      sortedEventsMap.put(conversation.getCreationTime(), conversation);
+    for(Message message : messages)
+      sortedEventsMap.put(message.getCreationTime(), message);
     request.setAttribute("sortedEventsMap", sortedEventsMap);
 
     request.getRequestDispatcher("/WEB-INF/view/activityfeed.jsp").forward(request, response);
