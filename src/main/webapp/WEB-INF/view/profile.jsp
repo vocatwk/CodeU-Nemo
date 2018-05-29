@@ -25,17 +25,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 </head>
 <body onload="scrollChat()">
 
-  <nav>
-    <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
-    <a href="/conversations">Conversations</a>
-    <% if(user != null){ %>
-	<a href="/profile/<%= user %>">
-	   Hello <%= user %>!</a>
-    <% } else{ %>
-	<a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-  </nav>
+  <%@ include file="navbar.jsp" %>
 
   <div id="container">
 
