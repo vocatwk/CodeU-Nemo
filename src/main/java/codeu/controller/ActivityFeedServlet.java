@@ -32,7 +32,7 @@ public class ActivityFeedServlet extends HttpServlet {
   /** Set up state for handling activty feed requests. */
   @Override
   public void init() throws ServletException {
-  	super.init();
+    super.init();
     setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
