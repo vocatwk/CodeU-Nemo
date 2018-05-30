@@ -65,8 +65,8 @@ public class MessageStore {
     messages = new ArrayList<>();
   }
 
-  /** Access the current set of messages known to the application. This function 
-  is temporary for the Activiy Feed MVP. */
+  /** Access the current set of messages known to the application.
+  TODO: Remove once messages are grouped to user in activity feed. */
   public List<Message> getAllMessages() {
     return messages;
   }
