@@ -43,11 +43,11 @@ public class AdminServletTest {
       Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/admin.jsp"))
           .thenReturn(mockRequestDispatcher);
 
-      mockConversationStore = Mockito.mock(ConversationStore.class);
-      AdminServlet.setConversationStore(mockConversationStore);
-
       mockUserStore = Mockito.mock(UserStore.class);
       AdminServlet.setUserStore(mockUserStore);
+
+      mockConversationStore = Mockito.mock(ConversationStore.class);
+      AdminServlet.setConversationStore(mockConversationStore);
 
       mockMessageStore = Mockito.mock(MessageStore.class);
       AdminServlet.setMessageStore(mockMessageStore);
@@ -60,7 +60,6 @@ public class AdminServletTest {
       User fakeUser = new User(UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
       fakeUser.setAdmin(true);
       fakeUserList.add(fakeUser);
-
       Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
 
       UUID fakeConversationId = UUID.randomUUID();
@@ -72,30 +71,28 @@ public class AdminServletTest {
       List<Message> fakeMessageList = new ArrayList<>();
       fakeMessageList.add(
           new Message(UUID.randomUUID(),fakeConversationId, UUID.randomUUID(),"test_message",Instant.now()));
-      Mockito.when(mockMessageStore.getMessages()).thenReturn(fakeMessageList);
+      Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
 
 
-      AdminServlet.doGet(mockRequest, mockResponse);
 
-      Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
+    if(fakeUser.getAdmin() == true){
 
       int fakenumOfUsers = mockUserStore.getAllUsers().size();
-      int fakenumOfConvos = mockConversationStore.getAllConversations().size();
-      int fakenumOfMessages = mockMessageStore.getMessages().size();
 
+      int fakenumOfMessages = mockMessageStore.getAllMessages().size();
+
+      int fakenumOfConvos = mockConversationStore.getAllConversations().size();
 
       Mockito.verify(mockRequest).setAttribute("numOfUsers", fakenumOfUsers);
-      Mockito.verify(mockRequest).setAttribute("numOfMessages", fakenumOfMessages );
-      Mockito.verify(mockRequest).setAttribute("numOfConvos", fakenumOfConvos );
-
-      Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/admin.jsp")).thenReturn(mockRequestDispatcher);
-
-      Mockito.when(mockSession.getAttribute("numOfUsers")).thenReturn(fakenumOfUsers);
-      Mockito.when(mockSession.getAttribute("numOfMessages")).thenReturn(fakenumOfMessages);
-      Mockito.when(mockSession.getAttribute("numOfConvos")).thenReturn(fakenumOfConvos);
-
+      Mockito.verify(mockRequest).setAttribute("numOfMessages", fakenumOfMessages);
+      Mockito.verify(mockRequest).setAttribute("numOfConvos", fakenumOfConvos);
+AdminServlet.doGet(mockRequest, mockResponse);
       Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+    }   else if(fakeUser.getAdmin() == false){
+          System.out.println("not admin");
+          return;
+    }
 
     }
   }

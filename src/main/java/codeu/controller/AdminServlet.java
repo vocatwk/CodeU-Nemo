@@ -72,7 +72,7 @@ public class AdminServlet extends HttpServlet {
       /* an attempt to grab information from the stores to display on the page */
           int numOfUsers = UserStore.getInstance().getAllUsers().size();
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
-          int numOfMessages = MessageStore.getInstance().getMessages().size();
+          int numOfMessages = MessageStore.getInstance().getAllMessages().size();
           List<User> userList = UserStore.getInstance().getAllUsers();
           //String mostActiveUser = userList.get
           //String newestUser = userList.
