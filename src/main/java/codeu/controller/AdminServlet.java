@@ -60,7 +60,7 @@ public class AdminServlet extends HttpServlet {
       }
 
       User user = UserStore.getUser(username);
-      
+
       if (user == null) {
         // user was not found, don't let them access the admin page
         System.out.println("User not found: " + username);
@@ -74,6 +74,7 @@ public class AdminServlet extends HttpServlet {
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
           int numOfMessages = MessageStore.getInstance().getAllMessages().size();
           List<User> userList = UserStore.getInstance().getAllUsers();
+          //TODO additonal stats
           //String mostActiveUser = userList.get
           //String newestUser = userList.
           //String wordiestUser = userList
