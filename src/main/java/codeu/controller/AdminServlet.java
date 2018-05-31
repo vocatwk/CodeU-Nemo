@@ -73,6 +73,11 @@ public class AdminServlet extends HttpServlet {
           int numOfUsers = UserStore.getInstance().getAllUsers().size();
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
           int numOfMessages = MessageStore.getInstance().getMessages().size();
+          List<User> userList = UserStore.getInstance().getAllUsers();
+          //String mostActiveUser = userList.get
+          //String newestUser = userList.
+          //String wordiestUser = userList
+
           request.setAttribute("numOfUsers", numOfUsers);
           request.setAttribute("numOfMessages", numOfMessages);
           request.setAttribute("numOfConvos", numOfConvos);
