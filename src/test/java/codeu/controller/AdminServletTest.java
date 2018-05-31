@@ -55,8 +55,10 @@ public class AdminServletTest {
 
     @Test
     public void testDoGet() throws IOException, ServletException {
+
       List<User> fakeUserList = new ArrayList<>();
-      User fakeUser = new User(UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now())
+      User fakeUser = new User(UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
+      fakeUser.setAdmin(true);
       fakeUserList.add(fakeUser);
 
       Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
@@ -74,19 +76,24 @@ public class AdminServletTest {
 
 
       AdminServlet.doGet(mockRequest, mockResponse);
+
       Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
 
       int fakenumOfUsers = mockUserStore.getAllUsers().size();
       int fakenumOfConvos = mockConversationStore.getAllConversations().size();
       int fakenumOfMessages = mockMessageStore.getMessages().size();
 
-      Mockito.when(mockSession.getAttribute("numOfUsers")).thenReturn(fakenumOfUsers);
-      Mockito.when(mockSession.getAttribute("numOfMessages")).thenReturn(fakenumOfMessages);
-      Mockito.when(mockSession.getAttribute("numOfConvos")).thenReturn(fakenumOfConvos);
 
       Mockito.verify(mockRequest).setAttribute("numOfUsers", fakenumOfUsers);
       Mockito.verify(mockRequest).setAttribute("numOfMessages", fakenumOfMessages );
       Mockito.verify(mockRequest).setAttribute("numOfConvos", fakenumOfConvos );
+
+      Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/admin.jsp")).thenReturn(mockRequestDispatcher);
+
+      Mockito.when(mockSession.getAttribute("numOfUsers")).thenReturn(fakenumOfUsers);
+      Mockito.when(mockSession.getAttribute("numOfMessages")).thenReturn(fakenumOfMessages);
+      Mockito.when(mockSession.getAttribute("numOfConvos")).thenReturn(fakenumOfConvos);
 
       Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
 
