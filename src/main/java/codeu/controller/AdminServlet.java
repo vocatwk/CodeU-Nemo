@@ -60,16 +60,16 @@ public class AdminServlet extends HttpServlet {
       }
 
       User user = UserStore.getUser(username);
-      user.setAdmin(true);
+      
       if (user == null) {
-        // user was not found, don't let them create a conversation
+        // user was not found, don't let them access the admin page
         System.out.println("User not found: " + username);
         response.sendRedirect("/");
         return;
       }
 
       if (user.getAdmin() == true) {
-      /* an attempt to grab information from the stores to display on the page */
+      /* an attempt to grab information from the stores to display on the page if the user is admin*/
           int numOfUsers = UserStore.getInstance().getAllUsers().size();
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
           int numOfMessages = MessageStore.getInstance().getAllMessages().size();
@@ -84,6 +84,7 @@ public class AdminServlet extends HttpServlet {
           request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 
         } else if (user.getAdmin() == false) {
+            /* rediects user to homepage if not admin*/
           System.out.println("User not an Admin: " + username);
           response.sendRedirect("/");
           return;
