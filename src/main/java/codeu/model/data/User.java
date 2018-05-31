@@ -24,6 +24,7 @@ public class User {
   private final String passwordHash;
   private final Instant creation;
   private String aboutMe;
+  private boolean admin = false;
 
   /**
    * Constructs a new User.
@@ -50,7 +51,7 @@ public class User {
   public String getName() {
     return name;
   }
-  
+
   /** Returns the password hash of this User. */
   public String getPasswordHash() {
     return passwordHash;
@@ -69,5 +70,15 @@ public class User {
   /** Return the About Me of a user. */
   public String getAboutMe() {
     return aboutMe;
+  }
+
+/** sets if the user is admin */
+  public void setAdmin(boolean a){
+    this.admin = a;
+  }
+
+  /** returns true if the user is admin */
+  public boolean getAdmin(){
+    return admin;
   }
 }
