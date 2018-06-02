@@ -22,8 +22,6 @@ public class Event {
    * NOTE: At minimum, must store Username
    */
   private final List<String> information;
-  // private UserStore userStore;
-  // private ConversationStore conversationStore;
   
   /**
    * Constructs a new Event
