@@ -1,9 +1,10 @@
 <nav>
+  <% String navBarUser = (String)request.getSession().getAttribute("user"); %>
   <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
   <a href="/conversations">Conversations</a>
-  <% if(request.getSession().getAttribute("user") != null){ %>
-    <a href="/profile/<%=request.getSession().getAttribute("user") %>">
-      Hello <%= request.getSession().getAttribute("user") %>!</a>
+  <% if(navBarUser != null){ %>
+    <a href="/profile/<%=navBarUser %>">
+      Hello <%= navBarUser %>!</a>
   <% } else{ %>
     <a href="/login">Login</a>
   <% } %>
