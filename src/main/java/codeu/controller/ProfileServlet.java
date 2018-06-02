@@ -63,17 +63,16 @@ public class ProfileServlet extends HttpServlet {
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
-	
     
     User subject = userStore.getUser(subjectName);
-
+ 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
       // TODO respond with 404
       response.sendRedirect("/");
       return;
     }
-
+ 
     request.setAttribute("subject", subjectName);
     UUID subjectId = subject.getId();
 
@@ -93,13 +92,14 @@ public class ProfileServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
  
     String username = (String) request.getSession().getAttribute("user");
-    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
-
+ 
     if(username == null){
       // user not logged in
       response.sendRedirect("/login");
       return;
     }
+ 
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
