@@ -172,7 +172,7 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         String type = (String) entity.getProperty("type");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        List<String> information = (List<String>) entity.getProperty("information");
+        @SuppressWarnings("unchecked") List<String> information = (List<String>) entity.getProperty("information");
         Event event = new Event(uuid, type, creationTime, information);
         events.add(event);
       } catch (Exception e) {
