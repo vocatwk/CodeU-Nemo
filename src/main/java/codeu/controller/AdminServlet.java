@@ -16,10 +16,10 @@ import org.mindrot.jbcrypt.BCrypt;
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
 
-  private UserStore UserStore;
+  private UserStore userStore;
   private ConversationStore ConversationStore;
   private MessageStore MessageStore;
-
+  private List<String> adminList = new ArrayList<>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -28,7 +28,7 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void init() throws ServletException {
     super.init();
-    setUserStore(UserStore.getInstance());
+    setUserStore(userStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
   }
@@ -37,8 +37,8 @@ public class AdminServlet extends HttpServlet {
    * Sets the UserStore used by this servlet. This function provides a common setup method for use
    * by the test framework or the servlet's init() function.
    */
-  void setUserStore(UserStore UserStore) {
-    this.UserStore = UserStore;
+  void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
   }
 
   void setConversationStore(ConversationStore ConversationStore) {
@@ -54,26 +54,31 @@ public class AdminServlet extends HttpServlet {
       throws IOException, ServletException {
       String username = (String)request.getSession().getAttribute("user");
       if (username == null) {
-        // user is not logged in, don't let them create a conversation
+        // user is not logged in, don't let them access the admin page
         response.sendRedirect("/");
         return;
       }
-
-      User user = UserStore.getUser(username);
-
+      User user = userStore.getUser(username);
       if (user == null) {
         // user was not found, don't let them access the admin page
-        System.out.println("User not found: " + username);
         response.sendRedirect("/");
         return;
       }
-
+      adminList.add("admin");
       if (user.getAdmin() == true) {
-      /* an attempt to grab information from the stores to display on the page if the user is admin*/
-          int numOfUsers = UserStore.getInstance().getAllUsers().size();
+        if (!adminList.contains(user.getName())){
+          adminList.add(user.getName());
+        }
+      }
+
+      request.setAttribute("adminList", adminList);
+      if (adminList.contains(user.getName())) {
+      /* an attempt to grab information from the stores to display on the page
+      if the user is admin*/
+          List<User> userList = UserStore.getInstance().getAllUsers();
+          int numOfUsers = userList.size();
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
           int numOfMessages = MessageStore.getInstance().getAllMessages().size();
-          List<User> userList = UserStore.getInstance().getAllUsers();
           //TODO additonal stats
           //String mostActiveUser = userList.get
           //String newestUser = userList.
@@ -84,9 +89,8 @@ public class AdminServlet extends HttpServlet {
           request.setAttribute("numOfConvos", numOfConvos);
           request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 
-        } else if (user.getAdmin() == false) {
+        } else if (!adminList.contains(user.getName())) {
             /* rediects user to homepage if not admin*/
-          System.out.println("User not an Admin: " + username);
           response.sendRedirect("/");
           return;
   }

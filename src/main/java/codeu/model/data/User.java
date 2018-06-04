@@ -72,10 +72,13 @@ public class User {
     return aboutMe;
   }
 
+  /** Sets if the user is admin. */
   public void setAdmin(boolean a){
     isAdmin = a;
   }
-    public boolean getAdmin(){
+  
+  /** Returns true if the user is admin. Returns false if not */
+  public boolean getAdmin(){
       return isAdmin;
 }
 }

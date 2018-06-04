@@ -15,7 +15,9 @@
 --%>
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
-
+<% List<String> adminList = (List<String>) request.getAttribute("adminList");
+  String user = request.getSession().getAttribute("user");
+  %>
 <!DOCTYPE html>
 <html>
 <head>

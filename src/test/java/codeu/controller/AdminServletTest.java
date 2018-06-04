@@ -65,7 +65,7 @@ public class AdminServletTest {
 
     Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
 
-    UUID fakeConversationId = UUID.randomUUID();
+
     List<Conversation> fakeConversationList = new ArrayList<>();
     fakeConversationList.add(
         new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
@@ -73,7 +73,7 @@ public class AdminServletTest {
 
     List<Message> fakeMessageList = new ArrayList<>();
     fakeMessageList.add(
-        new Message(UUID.randomUUID(),fakeConversationId, UUID.randomUUID(),"test_message",Instant.now()));
+        new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
     Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
     AdminServlet.doGet(mockRequest, mockResponse);
 
@@ -100,7 +100,7 @@ public class AdminServletTest {
 
   @Test
   public void testDoGet_isAdmin() throws IOException, ServletException {
-  Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("test_username");
 
     int fakenumOfUsers = mockUserStore.getAllUsers().size();
     int fakenumOfConvos = mockConversationStore.getAllConversations().size();
