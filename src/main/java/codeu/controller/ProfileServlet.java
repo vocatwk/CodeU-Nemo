@@ -116,6 +116,9 @@ public class ProfileServlet extends HttpServlet {
     //set user's about me and update it in dataStore
     subject.setAboutMe(cleanedAboutMe);
     userStore.updateUser(subject);
+    // TODO figure out how to update the event
+    // Might need to implement getEvent()
+    // eventStore.updateEvent(event);
 
     response.sendRedirect("/profile/" + subject.getName());
   }
