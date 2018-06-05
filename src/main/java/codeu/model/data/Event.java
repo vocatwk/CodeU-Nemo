@@ -35,9 +35,7 @@ public class Event {
     this.id = id;
     this.type = type;
     this.creation = creation;
-    this.information = new ArrayList<>();
-    for (String entry : information)
-      this.information.add(entry);
+    this.information = information;
   }
 
   /** Returns the ID of this User. */
