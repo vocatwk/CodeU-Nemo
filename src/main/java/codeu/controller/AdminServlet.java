@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
+import java.util.UUID;
+
 
 /** Servlet class responsible for the Admin page. */
 public class AdminServlet extends HttpServlet {
@@ -19,7 +21,7 @@ public class AdminServlet extends HttpServlet {
   private UserStore userStore;
   private ConversationStore ConversationStore;
   private MessageStore MessageStore;
-  private List<String> adminList = new ArrayList<>();
+  private List<String> adminList = new ArrayList<String>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -64,7 +66,7 @@ public class AdminServlet extends HttpServlet {
         response.sendRedirect("/");
         return;
       }
-      adminList.add("admin");
+      //This is a tester to see if it prints = adminList.add("admin");
       if (user.getAdmin() == true) {
         if (!adminList.contains(user.getName())){
           adminList.add(user.getName());
@@ -79,14 +81,22 @@ public class AdminServlet extends HttpServlet {
           int numOfUsers = userList.size();
           int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
           int numOfMessages = MessageStore.getInstance().getAllMessages().size();
-          //TODO additonal stats
-          //String mostActiveUser = userList.get
-          //String newestUser = userList.
-          //String wordiestUser = userList
+          String newestUser = userList.get(userList.size()-1).getName();
+          String mostActiveUser = "";
+          for(int i =0; i< numOfUsers; i++){
+            UUID userId = userList.get(i).getId();
+              int mostMessages=0;
+            if (MessageStore.getMessagesFromAuthor(userId).size() > mostMessages){
+              mostMessages = MessageStore.getMessagesFromAuthor(userId).size();
+              mostActiveUser = userStore.getInstance().getUser(userId).getName();
+            }
+          }
 
           request.setAttribute("numOfUsers", numOfUsers);
           request.setAttribute("numOfMessages", numOfMessages);
           request.setAttribute("numOfConvos", numOfConvos);
+          request.setAttribute("newestUser", newestUser);
+          request.setAttribute("mostActiveUser", mostActiveUser);
           request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 
         } else if (!adminList.contains(user.getName())) {

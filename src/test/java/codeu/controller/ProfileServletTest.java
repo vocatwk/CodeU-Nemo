@@ -13,6 +13,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -22,9 +23,11 @@ public class ProfileServletTest {
   private ProfileServlet profileServlet;
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
+  private HttpSession mockSession;
   private RequestDispatcher mockRequestDispatcher;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
+  private User mockUser;
 
   @Before
   public void setup() {
@@ -32,16 +35,22 @@ public class ProfileServletTest {
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
     mockResponse = Mockito.mock(HttpServletResponse.class);
+    mockSession = Mockito.mock(HttpSession.class);
 
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/profile.jsp"))
         .thenReturn(mockRequestDispatcher);
+
+    Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
     mockMessageStore = Mockito.mock(MessageStore.class);
     profileServlet.setMessageStore(mockMessageStore);
 
     mockUserStore = Mockito.mock(UserStore.class);
     profileServlet.setUserStore(mockUserStore);
+
+    mockUser = Mockito.mock(User.class);
+
   }
 
   @Test
@@ -58,7 +67,6 @@ public class ProfileServletTest {
             "test message",
             Instant.now()));
 
-    User mockUser = Mockito.mock(User.class);
     Mockito.when(mockUserStore.getUser("testSubject")).thenReturn(mockUser);
     Mockito.when(mockUser.getId()).thenReturn(fakeUserId);
     Mockito.when(mockMessageStore.getMessagesFromAuthor(fakeUserId))
@@ -89,4 +97,46 @@ public class ProfileServletTest {
 
     Mockito.verify(mockResponse).sendRedirect("/");
   }
+
+  @Test
+  public void testDoPost_SelfProfile() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/me");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("me");
+
+    Mockito.when(mockUserStore.getUser("me")).thenReturn(mockUser);
+    Mockito.when(mockUser.getName()).thenReturn("me");
+
+    Mockito.when(mockRequest.getParameter("aboutMe")).thenReturn("someMessage");
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockUser).setAboutMe("someMessage");
+    Mockito.verify(mockUserStore).updateUser(mockUser);
+    Mockito.verify(mockResponse).sendRedirect("/profile/me");
+  }
+
+  @Test
+  public void testDoPost_OtherUserProfile() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/notMe");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("me");
+
+    Mockito.when(mockUserStore.getUser("notMe")).thenReturn(mockUser);
+    Mockito.when(mockUser.getName()).thenReturn("notMe");
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendRedirect("/login");
+  }
+
+  @Test
+  public void testDoPost_notLoggedIn() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/notMe");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendRedirect("/login");
+    Mockito.verify(mockUserStore, Mockito.never()).getUser("notMe");
+  }
+
 }
