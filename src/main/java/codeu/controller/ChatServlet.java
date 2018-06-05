@@ -173,8 +173,8 @@ public class ChatServlet extends HttpServlet {
     messageInformation.add(conversationTitle);
     messageInformation.add(cleanedMessageContent);
     Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
-    eventStore.add(messageEvent);
-    
+    eventStore.addEvent(messageEvent);
+
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
