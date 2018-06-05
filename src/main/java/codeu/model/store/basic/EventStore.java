@@ -64,6 +64,13 @@ public class EventStore {
   }
 
   /**
+   * Update an existing Event.
+   */
+  public void updateEvent(Event event) {
+    persistentStorageAgent.writeThrough(event);
+  }
+
+  /**
    * Sets the List of Events stored by this EventStore. This should only be called once, when the data
    * is loaded from Datastore.
    */
