@@ -61,6 +61,7 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
       String username = (String)request.getSession().getAttribute("user");
       if (username == null) {
         // user is not logged in, don't let them access the admin page
@@ -73,8 +74,8 @@ public class AdminServlet extends HttpServlet {
         // user was not found, don't let them access the admin page
         response.sendRedirect("/");
         return;
-      }      
-      //adminList.add("admin");
+      }
+      adminList.add("admin");
       if (user.getIsAdmin() == true) {
         if (!adminList.contains(user.getName())){
           adminList.add(user.getName());
