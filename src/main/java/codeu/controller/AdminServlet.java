@@ -19,9 +19,9 @@ import java.util.UUID;
 public class AdminServlet extends HttpServlet {
 
   private UserStore userStore;
-  private ConversationStore ConversationStore;
-  private MessageStore MessageStore;
-  private List<String> adminList = new ArrayList<String>();
+  private ConversationStore conversationStore;
+  private MessageStore messageStore;
+  private List<String> adminList = new ArrayList<>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -31,8 +31,8 @@ public class AdminServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     setUserStore(userStore.getInstance());
-    setConversationStore(ConversationStore.getInstance());
-    setMessageStore(MessageStore.getInstance());
+    setConversationStore(conversationStore.getInstance());
+    setMessageStore(messageStore.getInstance());
   }
 
   /**
@@ -42,13 +42,20 @@ public class AdminServlet extends HttpServlet {
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
-
-  void setConversationStore(ConversationStore ConversationStore) {
-    this.ConversationStore = ConversationStore;
+  /**
+   * Sets the ConversationStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setConversationStore(ConversationStore conversationStore) {
+    this.conversationStore = conversationStore;
   }
 
-  void setMessageStore(MessageStore MessageStore) {
-    this.MessageStore = MessageStore;
+  /**
+   * Sets the MessageStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
+   */
+  void setMessageStore(MessageStore messageStore) {
+    this.messageStore = messageStore;
   }
 
   @Override
@@ -61,13 +68,14 @@ public class AdminServlet extends HttpServlet {
         return;
       }
       User user = userStore.getUser(username);
+
       if (user == null) {
         // user was not found, don't let them access the admin page
         response.sendRedirect("/");
         return;
-      }
-      //This is a tester to see if it prints = adminList.add("admin");
-      if (user.getAdmin() == true) {
+      }      
+      //adminList.add("admin");
+      if (user.getIsAdmin() == true) {
         if (!adminList.contains(user.getName())){
           adminList.add(user.getName());
         }
@@ -79,15 +87,15 @@ public class AdminServlet extends HttpServlet {
       if the user is admin*/
           List<User> userList = UserStore.getInstance().getAllUsers();
           int numOfUsers = userList.size();
-          int numOfConvos = ConversationStore.getInstance().getAllConversations().size();
-          int numOfMessages = MessageStore.getInstance().getAllMessages().size();
+          int numOfConvos = conversationStore.getInstance().getAllConversations().size();
+          int numOfMessages = messageStore.getInstance().getAllMessages().size();
           String newestUser = userList.get(userList.size()-1).getName();
           String mostActiveUser = "";
           for(int i =0; i< numOfUsers; i++){
             UUID userId = userList.get(i).getId();
               int mostMessages=0;
-            if (MessageStore.getMessagesFromAuthor(userId).size() > mostMessages){
-              mostMessages = MessageStore.getMessagesFromAuthor(userId).size();
+            if (messageStore.getMessagesFromAuthor(userId).size() > mostMessages){
+              mostMessages = messageStore.getMessagesFromAuthor(userId).size();
               mostActiveUser = userStore.getInstance().getUser(userId).getName();
             }
           }

@@ -40,6 +40,8 @@
       <input type="password" name="password" id="password">
       <br/><br/>
       <button type="submit">Submit</button>
+      <br/><br/>
+      <button id="isAdmin" onclick="adminRequest()">Admin</button>
     </form>
   </div>
 </body>

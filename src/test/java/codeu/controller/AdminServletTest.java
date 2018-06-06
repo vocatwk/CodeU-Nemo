@@ -81,7 +81,7 @@ public class AdminServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
-      if(fakeUser.getAdminTrue() == true ){
+      if(fakeUser.getIsAdmin() == true ){
         if(fakeAdminList.contains(fakeUser.getName())){
         fakeAdminList.add(fakeUser.getName());
         }
