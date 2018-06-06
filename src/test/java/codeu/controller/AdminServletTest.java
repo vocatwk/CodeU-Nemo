@@ -75,6 +75,7 @@ public class AdminServletTest {
     Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
 
     AdminServlet.doGet(mockRequest, mockResponse);
+
     List<String> fakeAdminList = new ArrayList<>();
 
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
