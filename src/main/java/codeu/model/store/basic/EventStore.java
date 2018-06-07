@@ -59,7 +59,14 @@ public class EventStore {
    * to add a new event, not to update an existing event.
    */
   public void addEvent(Event event) {
-    events.add(event);
+    events.add(0, event);
+    persistentStorageAgent.writeThrough(event);
+  }
+
+  /**
+   * Update an existing Event.
+   */
+  public void updateEvent(Event event) {
     persistentStorageAgent.writeThrough(event);
   }
 
