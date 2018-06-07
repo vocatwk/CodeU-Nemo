@@ -117,6 +117,7 @@ public class ChatServlet extends HttpServlet {
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
       // user is not logged in, don't let them add a message
+      // or make conversation private
       response.sendRedirect("/login");
       return;
     }
@@ -124,6 +125,7 @@ public class ChatServlet extends HttpServlet {
     User user = userStore.getUser(username);
     if (user == null) {
       // user was not found, don't let them add a message
+      // or make conversation private
       response.sendRedirect("/login");
       return;
     }
@@ -138,20 +140,31 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    String type = request.getParameter("type");
     String messageContent = request.getParameter("message");
 
-    // this removes any HTML from the message content
-    String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
+    if(type != null){
+      if(!conversation.getType().equals(type)){
+        conversation.makePrivate();
+        conversationStore.updateConversation(conversation);
+        System.out.println("Done!");
+      }
+    }
+    else if(messageContent != null) {
 
-    Message message =
-        new Message(
-            UUID.randomUUID(),
-            conversation.getId(),
-            user.getId(),
-            cleanedMessageContent,
-            Instant.now());
+      // this removes any HTML from the message content
+      String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
 
-    messageStore.addMessage(message);
+      Message message =
+          new Message(
+              UUID.randomUUID(),
+              conversation.getId(),
+              user.getId(),
+              cleanedMessageContent,
+              Instant.now());
+
+      messageStore.addMessage(message);
+    }
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
