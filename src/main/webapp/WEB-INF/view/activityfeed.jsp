@@ -24,7 +24,8 @@ List<Event> events = (List<Event>) request.getAttribute("events");
     <div id="activity">
       <ul>
         <%
-        for (Event event : events) {
+        for (int i = events.size() - 1; i >= 0; i--) {
+          Event event = events.get(i);
           Date date = Date.from(event.getCreationTime());
           List<String> information = event.getInformation();
           String userName = information.get(0);
