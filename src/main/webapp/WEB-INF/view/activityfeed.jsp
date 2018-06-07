@@ -33,10 +33,17 @@ List<Event> events = (List<Event>) request.getAttribute("events");
           <li>
             <b><%= date %></b>
           <%
-          if(event.getType().equals("User")) {
+          if (event.getType().equals("User")) {
           %>
             <a href="/profile/<%= userName %>"><%= userName %></a> joined!
           </li>
+          <%
+          }
+          else if (event.getType().equals("About Me")) {
+            String aboutMe = information.get(1);
+          %>
+            <a href="/profile/<%= userName %>"><%= userName%></a> updated their About Me:
+            "<%= aboutMe %>"
           <%
           }
           else {
