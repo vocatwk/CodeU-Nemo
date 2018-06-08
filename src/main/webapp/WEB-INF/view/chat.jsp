@@ -21,6 +21,7 @@
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
+String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 %>
 
 <!DOCTYPE html>
@@ -46,13 +47,9 @@ String user = (String) request.getSession().getAttribute("user");
     };
 
     // show contents of dropDown menu
-    function showDrop() {
+    function toggleSettingsDropdown() {
       var dropDiv = document.getElementById("SettingDropDown");
-      if(dropDiv.style.display === "none") {
-        dropDiv.style.display = "block";
-      } else {
-        dropDiv.style.display = "none";
-      }
+      dropDiv.style.display = dropDiv.style.display === "none"? "block" : "none";
     };
   </script>
 </head>
@@ -64,13 +61,13 @@ String user = (String) request.getSession().getAttribute("user");
 
     <h1>
       <%= conversation.getTitle() %>
-      <i onclick="showDrop()" class="fa fa-cog"> </i>
+      <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
       <a href="" style="float: right">&#8635;</a>
     </h1>
     
     <div id="SettingDropDown" style="display: none">
       <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="submit"  name="type" value="private" />
+        <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
       </form>
     </div>
 

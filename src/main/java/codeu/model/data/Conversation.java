@@ -26,7 +26,7 @@ public class Conversation {
   public final UUID owner;
   public final Instant creation;
   public final String title;
-  private String type;
+  private Boolean isPrivate;
 
   /**
    * Constructs a new Conversation.
@@ -41,7 +41,7 @@ public class Conversation {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.type = "public";
+    this.isPrivate = false;
   }
 
   /** Returns the ID of this Conversation. */
@@ -65,15 +65,15 @@ public class Conversation {
   }
 
   /** Returns the type of this conversation. */
-  public String getType() {
-    return type;
+  public Boolean isPrivate() {
+    return isPrivate;
   }
 
   public void makePublic() {
-    this.type = "public";
+    this.isPrivate = false;
   }
 
   public void makePrivate() {
-    this.type = "private";
+    this.isPrivate = true;
   }
 }

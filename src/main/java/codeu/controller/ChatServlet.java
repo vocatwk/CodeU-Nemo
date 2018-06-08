@@ -101,6 +101,7 @@ public class ChatServlet extends HttpServlet {
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
+    request.setAttribute("isPrivate", conversation.isPrivate());
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -144,11 +145,13 @@ public class ChatServlet extends HttpServlet {
     String messageContent = request.getParameter("message");
 
     if(type != null){
-      if(!conversation.getType().equals(type)){
+      if(type.equals("make private")){
         conversation.makePrivate();
-        conversationStore.updateConversation(conversation);
-        System.out.println("Done!");
       }
+      else{
+        conversation.makePublic();
+      }
+      conversationStore.updateConversation(conversation);
     }
     else if(messageContent != null) {
 

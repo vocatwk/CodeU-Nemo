@@ -98,6 +98,7 @@ public class ChatServletTest {
 
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
     Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
+    Mockito.verify(mockRequest).setAttribute("isPrivate",false);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -223,14 +224,14 @@ public class ChatServletTest {
         new User(
           UUID.randomUUID(),
           "test_username",
-          "testHash",
+          "test_Hash",
           Instant.now()));
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
     Mockito.when(mockRequest.getParameter("type"))
-        .thenReturn("private");
-    Mockito.when(mockConversation.getType()).thenReturn("public");
+        .thenReturn("make private");
+    Mockito.when(mockConversation.isPrivate()).thenReturn(false);
     
     chatServlet.doPost(mockRequest, mockResponse);
 
@@ -240,26 +241,26 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPost_makePrivatePrivate() throws IOException, ServletException {
+  public void testDoPost_makePrivatePublic() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(
         new User(
           UUID.randomUUID(),
           "test_username",
-          "testHash",
+          "test_Hash",
           Instant.now()));
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
     Mockito.when(mockRequest.getParameter("type"))
-        .thenReturn("private");
-    Mockito.when(mockConversation.getType()).thenReturn("private");
+        .thenReturn("make public");
+    Mockito.when(mockConversation.isPrivate()).thenReturn(true);
     
     chatServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockConversation, Mockito.never()).makePrivate();
-    Mockito.verify(mockConversationStore, Mockito.never()).updateConversation(mockConversation);
+    Mockito.verify(mockConversation).makePublic();
+    Mockito.verify(mockConversationStore).updateConversation(mockConversation);
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 }
