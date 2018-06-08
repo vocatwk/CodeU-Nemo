@@ -2,6 +2,7 @@ package codeu.model.store.basic;
 
 import codeu.model.data.Event;
 import codeu.model.store.persistence.PersistentStorageAgent;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,20 @@ public class EventStore {
   /** Access the current set of users known to the application. */
   public List<Event> getAllEvents() {
     return events;
+  }
+
+  /**
+   * Access the Event object with the given UUID.
+   *
+   * @return null if the UUID does not match any existing Event.
+   */
+  public Event getEvent(UUID id) {
+    for (Event event : events) {
+      if (event.getId().equals(id)) {
+        return event;
+      }
+    }
+    return null;
   }
 
   /**
