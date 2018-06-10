@@ -80,6 +80,16 @@ public class EventStoreTest {
     Mockito.verify(mockPersistentStorageAgent).writeThrough(inputEvent);
   }
 
+  @Test
+  public void testGetAllEvents_inReverseOrder() {
+    List<Event> resultEvents = eventStore.getAllEvents();
+
+    assertEquals(EVENT_FOUR, resultEvents.get(3));
+    assertEquals(EVENT_THREE, resultEvents.get(2));
+    assertEquals(EVENT_TWO, resultEvents.get(1));
+    assertEquals(EVENT_ONE, resultEvents.get(0));
+  }
+
   private void assertEquals(Event expectedEvent, Event actualEvent) {
     Assert.assertEquals(expectedEvent.getId(), actualEvent.getId());
     Assert.assertEquals(expectedEvent.getType(), actualEvent.getType());
