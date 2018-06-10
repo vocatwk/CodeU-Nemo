@@ -9,6 +9,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
@@ -151,74 +152,37 @@ public class PersistentDataStoreTest {
 
   @Test
   public void testSaveAndLoadEvents() throws PersistentDataStoreException {
-    UUID idOne = UUID.randomUUID();
-    String typeOne = "User";
-    Instant creationOne = Instant.ofEpochMilli(1000);
-    List<String> informationOne = new ArrayList<>();
-    informationOne.add("user_one");
-    Event userEvent = 
-        new Event(idOne, typeOne, creationOne, informationOne);
+    List<String> informationOne = Arrays.asList("user_1");
+    List<String> informationTwo = Arrays.asList("user_2", "about_me");
+    List<String> informationThree = Arrays.asList("user_3", "conversation_1_title");
+    List<String> informationFour = Arrays.asList("user_4", "conversation_2_title", "message_content");
 
-    UUID idTwo = UUID.randomUUID();
-    String typeTwo = "About Me";
-    Instant creationTwo = Instant.ofEpochMilli(2000);
-    List<String> informationTwo = new ArrayList<>();
-    informationTwo.add("user_two");
-    informationTwo.add("about_me");
-    Event aboutMeEvent = 
-        new Event(idTwo, typeTwo, creationTwo, informationTwo);
-
-    UUID idThree = UUID.randomUUID();
-    String typeThree = "Conversation";
-    Instant creationThree = Instant.ofEpochMilli(3000);
-    List<String> informationThree = new ArrayList<>();
-    informationThree.add("user_three");
-    informationThree.add("conversation_one_title");
-    Event conversationEvent =
-        new Event(idThree, typeThree, creationThree, informationThree);
-
-    UUID idFour = UUID.randomUUID();
-    String typeFour = "Message";
-    Instant creationFour = Instant.ofEpochMilli(4000);
-    List<String> informationFour = new ArrayList<>();
-    informationFour.add("user_four");
-    informationFour.add("conversation_two_title");
-    informationFour.add("message_content");
-    Event messageEvent = 
-        new Event(idFour, typeFour, creationFour, informationFour);
+    List<String> eventTypes = Arrays.asList("User", "About Me", "Conversation", "Message");
+    List<List<String>> informationLists = Arrays.asList(informationOne, informationTwo, informationThree, informationFour);
+    List<Event> events = new ArrayList<Event>();
+    // generate test events
+    for (int i = 0; i < 4; i++) {
+      events.add(new Event(
+        UUID.randomUUID(), 
+        eventTypes.get(i), 
+        Instant.ofEpochMilli(1000 * (i + 1)), 
+        informationLists.get(i)));  
+    }
 
     // save
-    persistentDataStore.writeThrough(userEvent);
-    persistentDataStore.writeThrough(aboutMeEvent);
-    persistentDataStore.writeThrough(conversationEvent);
-    persistentDataStore.writeThrough(messageEvent);
+    for (Event event : events)
+      persistentDataStore.writeThrough(event);
 
     // load
     List<Event> resultEvents = persistentDataStore.loadEvents();
 
     // confirm that what we saved matches what we loaded
-    Event resultEventOne = resultEvents.get(0);
-    Assert.assertEquals(idOne, resultEventOne.getId());
-    Assert.assertEquals(typeOne, resultEventOne.getType());
-    Assert.assertEquals(creationOne, resultEventOne.getCreationTime());
-    Assert.assertEquals(informationOne, resultEventOne.getInformation());
-
-    Event resultEventTwo = resultEvents.get(1);
-    Assert.assertEquals(idTwo, resultEventTwo.getId());
-    Assert.assertEquals(typeTwo, resultEventTwo.getType());
-    Assert.assertEquals(creationTwo, resultEventTwo.getCreationTime());
-    Assert.assertEquals(informationTwo, resultEventTwo.getInformation());
-
-    Event resultEventThree = resultEvents.get(2);
-    Assert.assertEquals(idThree, resultEventThree.getId());
-    Assert.assertEquals(typeThree, resultEventThree.getType());
-    Assert.assertEquals(creationThree, resultEventThree.getCreationTime());
-    Assert.assertEquals(informationThree, resultEventThree.getInformation());
-
-    Event resultEventFour = resultEvents.get(3);
-    Assert.assertEquals(idFour, resultEventFour.getId());
-    Assert.assertEquals(typeFour, resultEventFour.getType());
-    Assert.assertEquals(creationFour, resultEventFour.getCreationTime());
-    Assert.assertEquals(informationFour, resultEventFour.getInformation());
+    for (int i = 0; i < 4; i++) {
+      Event currentEvent = resultEvents.get(i);
+      Assert.assertEquals(events.get(i).getId(), currentEvent.getId());
+      Assert.assertEquals(eventTypes.get(i), currentEvent.getType());
+      Assert.assertEquals(Instant.ofEpochMilli(1000 * (i + 1)), currentEvent.getCreationTime());
+      Assert.assertEquals(informationLists.get(i), currentEvent.getInformation());
+    }
   }
 }
