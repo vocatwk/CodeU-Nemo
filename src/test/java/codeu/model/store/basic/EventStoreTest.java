@@ -18,13 +18,13 @@ public class EventStoreTest {
   private PersistentStorageAgent mockPersistentStorageAgent;
 
   private final List<String> INFORMATION_ONE = 
-      new ArrayList<>(Arrays.asList("user_one"));
+      Arrays.asList("user_one");
   private final List<String> INFORMATION_TWO = 
-      new ArrayList<>(Arrays.asList("user_two", "about_me"));
+      Arrays.asList("user_two", "about_me");
   private final List<String> INFORMATION_THREE = 
-      new ArrayList<>(Arrays.asList("user_three", "conversation_title"));
+      Arrays.asList("user_three", "conversation_title");
   private final List<String> INFORMATION_FOUR = 
-      new ArrayList<>(Arrays.asList("user_four", "conversation_title", "message_content"));
+      Arrays.asList("user_four", "conversation_title", "message_content");
 
   private final Event EVENT_ONE = 
       new Event(UUID.randomUUID(), "User", Instant.now(), INFORMATION_ONE);
@@ -40,7 +40,7 @@ public class EventStoreTest {
     mockPersistentStorageAgent = Mockito.mock(PersistentStorageAgent.class);
     eventStore = EventStore.getTestInstance(mockPersistentStorageAgent);
 
-    final List<Event> eventList = new ArrayList<>();
+    final List<Event> eventList = new ArrayList<Event>();
     eventList.add(EVENT_ONE);
     eventList.add(EVENT_TWO);
     eventList.add(EVENT_THREE);
