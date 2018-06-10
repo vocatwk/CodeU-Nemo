@@ -17,9 +17,11 @@ package codeu.controller;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class ChatServletTest {
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
+  private EventStore mockEventStore;
 
   @Before
   public void setup() {
@@ -68,6 +71,9 @@ public class ChatServletTest {
 
     mockUserStore = Mockito.mock(UserStore.class);
     chatServlet.setUserStore(mockUserStore);
+
+    mockEventStore = Mockito.mock(EventStore.class);
+    chatServlet.setEventStore(mockEventStore);
   }
 
   @Test
@@ -178,6 +184,15 @@ public class ChatServletTest {
     Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
     Assert.assertEquals("Test message.", messageArgumentCaptor.getValue().getContent());
 
+    ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("Message", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test_username");
+    testInformation.add("test_conversation");
+    testInformation.add("Test message.");
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
+
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 
@@ -208,6 +223,15 @@ public class ChatServletTest {
     Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
     Assert.assertEquals(
         "Contains html and  content.", messageArgumentCaptor.getValue().getContent());
+
+    ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("Message", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test_username");
+    testInformation.add("test_conversation");
+    testInformation.add("Contains html and  content.");
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }

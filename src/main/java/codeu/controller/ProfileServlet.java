@@ -2,10 +2,14 @@ package codeu.controller;
 
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,12 +26,16 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Events. */
+  private EventStore eventStore;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
     super.init();
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setEventStore(EventStore.getInstance());
   }
 
   /**
@@ -44,6 +52,14 @@ public class ProfileServlet extends HttpServlet {
    */
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setEventStore(EventStore eventStore) {
+    this.eventStore = eventStore;
   }
 
   /**
@@ -116,9 +132,13 @@ public class ProfileServlet extends HttpServlet {
     //set user's about me and update it in dataStore
     subject.setAboutMe(cleanedAboutMe);
     userStore.updateUser(subject);
-    // TODO figure out how to update the event
-    // Might need to implement getEvent()
-    // eventStore.updateEvent(event);
+    
+    List<String> aboutMeInformation = new ArrayList<>();
+    aboutMeInformation.add(subject.getName());
+    aboutMeInformation.add(subject.getAboutMe());
+    Event aboutMeEvent = new Event(
+        UUID.randomUUID(), "About Me", Instant.now(), aboutMeInformation);
+    eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
   }

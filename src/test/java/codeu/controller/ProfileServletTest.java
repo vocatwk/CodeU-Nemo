@@ -2,8 +2,10 @@ package codeu.controller;
 
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 public class ProfileServletTest {
@@ -27,6 +31,7 @@ public class ProfileServletTest {
   private RequestDispatcher mockRequestDispatcher;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
+  private EventStore mockEventStore;
   private User mockUser;
 
   @Before
@@ -48,6 +53,9 @@ public class ProfileServletTest {
 
     mockUserStore = Mockito.mock(UserStore.class);
     profileServlet.setUserStore(mockUserStore);
+
+    mockEventStore = Mockito.mock(EventStore.class);
+    profileServlet.setEventStore(mockEventStore);
 
     mockUser = Mockito.mock(User.class);
 
@@ -112,6 +120,22 @@ public class ProfileServletTest {
 
     Mockito.verify(mockUser).setAboutMe("someMessage");
     Mockito.verify(mockUserStore).updateUser(mockUser);
+
+    ArgumentCaptor<User> userArgumentCaptor = 
+        ArgumentCaptor.forClass(User.class);
+    Mockito.verify(mockUserStore).updateUser(userArgumentCaptor.capture());
+    Assert.assertEquals("me", userArgumentCaptor.getValue().getName());
+    Assert.assertEquals(null, userArgumentCaptor.getValue().getAboutMe());
+
+    ArgumentCaptor<Event> eventArgumentCaptor = 
+        ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("About Me", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("me");
+    testInformation.add(null);
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
+
     Mockito.verify(mockResponse).sendRedirect("/profile/me");
   }
 

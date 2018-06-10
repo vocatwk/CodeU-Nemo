@@ -2,6 +2,7 @@ package codeu.model.store.basic;
 
 import codeu.model.data.Event;
 import codeu.model.store.persistence.PersistentStorageAgent;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,18 +56,25 @@ public class EventStore {
   }
 
   /**
+   * Access the Event object with the given UUID.
+   *
+   * @return null if the UUID does not match any existing Event.
+   */
+  public Event getEvent(UUID id) {
+    for (Event event : events) {
+      if (event.getId().equals(id)) {
+        return event;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Add a new event to the current set of events known to the application. This should only be called
    * to add a new event, not to update an existing event.
    */
   public void addEvent(Event event) {
-    events.add(0, event);
-    persistentStorageAgent.writeThrough(event);
-  }
-
-  /**
-   * Update an existing Event.
-   */
-  public void updateEvent(Event event) {
+    events.add(event);
     persistentStorageAgent.writeThrough(event);
   }
 
