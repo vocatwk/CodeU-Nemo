@@ -66,11 +66,10 @@ public class EventStoreTest {
   public void testAddEvent() {
     UUID eventId = UUID.randomUUID();
     List<String> testInformation = 
-        new ArrayList<>(
-          Arrays.asList(
-            "test_username", 
-            "test_conversation_title", 
-            "test_message_content"));
+        Arrays.asList(
+          "test_username", 
+          "test_conversation_title", 
+          "test_message_content");
     Event inputEvent = new Event(eventId, "Message", Instant.now(), testInformation);
 
     eventStore.addEvent(inputEvent);
