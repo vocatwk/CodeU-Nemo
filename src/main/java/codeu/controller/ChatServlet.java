@@ -182,14 +182,14 @@ public class ChatServlet extends HttpServlet {
               Instant.now());
 
       messageStore.addMessage(message);
-    }
 
-    List<String> messageInformation = new ArrayList<>();
-    messageInformation.add(user.getName());
-    messageInformation.add(conversationTitle);
-    messageInformation.add(cleanedMessageContent);
-    Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
-    eventStore.addEvent(messageEvent);
+      List<String> messageInformation = new ArrayList<>();
+      messageInformation.add(user.getName());
+      messageInformation.add(conversationTitle);
+      messageInformation.add(cleanedMessageContent);
+      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+      eventStore.addEvent(messageEvent);
+    }
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
