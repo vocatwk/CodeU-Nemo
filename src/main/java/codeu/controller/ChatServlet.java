@@ -116,6 +116,7 @@ public class ChatServlet extends HttpServlet {
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
+    request.setAttribute("isPrivate", conversation.isPrivate());
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -132,6 +133,7 @@ public class ChatServlet extends HttpServlet {
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
       // user is not logged in, don't let them add a message
+      // or make conversation private
       response.sendRedirect("/login");
       return;
     }
@@ -139,6 +141,7 @@ public class ChatServlet extends HttpServlet {
     User user = userStore.getUser(username);
     if (user == null) {
       // user was not found, don't let them add a message
+      // or make conversation private
       response.sendRedirect("/login");
       return;
     }
@@ -153,27 +156,40 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    String type = request.getParameter("type");
     String messageContent = request.getParameter("message");
 
-    // this removes any HTML from the message content
-    String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
+    if(type != null){
+      if(type.equals("make private")){
+        conversation.makePrivate();
+      }
+      else{
+        conversation.makePublic();
+      }
+      conversationStore.updateConversation(conversation);
+    }
+    else if(messageContent != null) {
 
-    Message message =
-        new Message(
-            UUID.randomUUID(),
-            conversation.getId(),
-            user.getId(),
-            cleanedMessageContent,
-            Instant.now());
+      // this removes any HTML from the message content
+      String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
 
-    messageStore.addMessage(message);
+      Message message =
+          new Message(
+              UUID.randomUUID(),
+              conversation.getId(),
+              user.getId(),
+              cleanedMessageContent,
+              Instant.now());
 
-    List<String> messageInformation = new ArrayList<>();
-    messageInformation.add(user.getName());
-    messageInformation.add(conversationTitle);
-    messageInformation.add(cleanedMessageContent);
-    Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
-    eventStore.addEvent(messageEvent);
+      messageStore.addMessage(message);
+
+      List<String> messageInformation = new ArrayList<>();
+      messageInformation.add(user.getName());
+      messageInformation.add(conversationTitle);
+      messageInformation.add(cleanedMessageContent);
+      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+      eventStore.addEvent(messageEvent);
+    }
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
