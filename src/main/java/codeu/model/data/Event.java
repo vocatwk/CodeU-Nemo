@@ -17,7 +17,7 @@ public class Event {
   /** 
    * information stores the following as necessary:
    * 1. Username
-   * 2. Conversation Title
+   * 2. Updated "About Me"/Conversation Title based on type
    * 3. Message Content
    * NOTE: At minimum, must store Username
    */

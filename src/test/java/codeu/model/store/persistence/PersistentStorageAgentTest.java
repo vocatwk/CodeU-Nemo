@@ -3,8 +3,11 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -45,6 +48,12 @@ public class PersistentStorageAgentTest {
   }
 
   @Test
+  public void testLoadEvents() throws PersistentDataStoreException {
+    persistentStorageAgent.loadEvents();
+    Mockito.verify(mockPersistentDataStore).loadEvents();
+  }
+
+  @Test
   public void testWriteThroughUser() {
     User user =
         new User(
@@ -71,5 +80,17 @@ public class PersistentStorageAgentTest {
             UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "test content", Instant.now());
     persistentStorageAgent.writeThrough(message);
     Mockito.verify(mockPersistentDataStore).writeThrough(message);
+  }
+
+  @Test
+  public void testWriteThroughEvent() {
+    List<String> information = new ArrayList<>();
+    information.add("test_username");
+    information.add("test_conversation_title");
+    information.add("test_message_content");
+    Event event = 
+        new Event(UUID.randomUUID(), "Message", Instant.now(), information);
+    persistentStorageAgent.writeThrough(event);
+    Mockito.verify(mockPersistentDataStore).writeThrough(event);
   }
 }

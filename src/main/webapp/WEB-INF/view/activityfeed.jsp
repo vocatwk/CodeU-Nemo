@@ -1,16 +1,8 @@
-<%@ page import="codeu.model.data.User" %>
-<%@ page import="codeu.model.data.Conversation" %>
-<%@ page import="codeu.model.data.Message" %>
-<%@ page import="java.time.Instant" %>
+<%@ page import="codeu.model.data.Event" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.Map" %>
 <%
-Map<Instant, Object> sortedEventsMap = 
-  (Map<Instant, Object>) request.getAttribute("sortedEventsMap");
-List<User> users = (List<User>) request.getAttribute("users");
-List<Conversation> conversations = 
-  (List<Conversation>) request.getAttribute("conversations");
+List<Event> events = (List<Event>) request.getAttribute("events");
 %>
 
 <!DOCTYPE html>
@@ -32,69 +24,51 @@ List<Conversation> conversations =
     <div id="activity">
       <ul>
         <%
-        for(Map.Entry<Instant, Object> entry : sortedEventsMap.entrySet()) {
-          Date date = Date.from(entry.getKey());
+        for (int i = events.size() - 1; i >= 0; i--) {
+          Event event = events.get(i);
+          Date date = Date.from(event.getCreationTime());
+          List<String> information = event.getInformation();
+          String userName = information.get(0);
         %>
           <li>
-            <b><%= date %>:</b>
+            <b><%= date %></b>
           <%
-          if(entry.getValue() instanceof User) {
-            User user = (User) entry.getValue();
+          if (event.getType().equals("User")) {
           %>
-            <a href="/profile/<%= user.getName() %>"><%= user.getName() %></a> 
-              joined!
+            <a href="/profile/<%= userName %>"><%= userName %></a> joined!
           </li>
           <%
           }
-          else if (entry.getValue() instanceof Conversation) {
-            Conversation conversation = (Conversation) entry.getValue();
-            User conversationOwner = null;
-            for(User user : users) {
-              if (user.getId().equals(conversation.getOwnerId())) {
-                conversationOwner = user;
-                break;
-              } 
-            }
+          else if (event.getType().equals("About Me")) {
+            String aboutMe = information.get(1);
           %>
-            <a href="/profile/<%= conversationOwner.getName() %>">
-              <%= conversationOwner.getName() %></a> 
-              created a new conversation: 
-            <a href="/chat/<%= conversation.getTitle() %>">
-              <%= conversation.getTitle() %></a>
-          </li>
+            <a href="/profile/<%= userName %>"><%= userName%></a> updated their About Me:
+            "<%= aboutMe %>"
           <%
           }
-          else if (entry.getValue() instanceof Message) {
-            Message message = (Message) entry.getValue();
-            User messageAuthor = null;
-            Conversation messageConversation = null;
-            for(User user : users) {
-              if (user.getId().equals(message.getAuthorId())) {
-                messageAuthor = user;
-                break;
+          else {
+            String conversationTitle = information.get(1);
+              if (event.getType().equals("Conversation")) {
+              %>
+                <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
+                <a href="/chat/<%= conversationTitle %>"><%= conversationTitle %></a>
+          </li>
+              <%
+              }
+              else if (event.getType().equals("Message")) {
+                String messageContent = information.get(2);
+              %>
+                <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
+                <a href="/chat/<%= conversationTitle %>"><%= conversationTitle %></a>: "<%= messageContent %>"
+          </li>
+              <%
               }
             }
-            for(Conversation conversation : conversations) {
-              if (conversation.getId().equals(message.getConversationId())) {
-                messageConversation = conversation;
-                break;
-              }
-            }
-          %>
-            <a href="/profile/<%= messageAuthor.getName() %>">
-              <%= messageAuthor.getName() %></a>
-            sent a message in
-            <a href="/chat/<%= messageConversation.getTitle() %>">
-              <%=messageConversation.getTitle()%></a>: 
-              "<%= message.getContent() %>"
-          </li>
-          <%
           }
-        }
-        %>
-      </ul>
+          %>
+      </ul> 
     </div>
-
+    
   </div>
   
 </body>

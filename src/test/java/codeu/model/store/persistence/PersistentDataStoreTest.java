@@ -3,10 +3,13 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.time.Instant;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
@@ -145,5 +148,41 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(authorTwo, resultMessageTwo.getAuthorId());
     Assert.assertEquals(contentTwo, resultMessageTwo.getContent());
     Assert.assertEquals(creationTwo, resultMessageTwo.getCreationTime());
+  }
+
+  @Test
+  public void testSaveAndLoadEvents() throws PersistentDataStoreException {
+    List<String> informationOne = Arrays.asList("user_1");
+    List<String> informationTwo = Arrays.asList("user_2", "about_me");
+    List<String> informationThree = Arrays.asList("user_3", "conversation_1_title");
+    List<String> informationFour = Arrays.asList("user_4", "conversation_2_title", "message_content");
+
+    List<String> eventTypes = Arrays.asList("User", "About Me", "Conversation", "Message");
+    List<List<String>> informationLists = Arrays.asList(informationOne, informationTwo, informationThree, informationFour);
+    List<Event> events = new ArrayList<Event>();
+    // generate test events
+    for (int i = 0; i < 4; i++) {
+      events.add(new Event(
+        UUID.randomUUID(), 
+        eventTypes.get(i), 
+        Instant.ofEpochMilli(1000 * (i + 1)), 
+        informationLists.get(i)));  
+    }
+
+    // save
+    for (Event event : events)
+      persistentDataStore.writeThrough(event);
+
+    // load
+    List<Event> resultEvents = persistentDataStore.loadEvents();
+
+    // confirm that what we saved matches what we loaded
+    for (int i = 0; i < 4; i++) {
+      Event currentEvent = resultEvents.get(i);
+      Assert.assertEquals(events.get(i).getId(), currentEvent.getId());
+      Assert.assertEquals(eventTypes.get(i), currentEvent.getType());
+      Assert.assertEquals(Instant.ofEpochMilli(1000 * (i + 1)), currentEvent.getCreationTime());
+      Assert.assertEquals(informationLists.get(i), currentEvent.getInformation());
+    }
   }
 }
