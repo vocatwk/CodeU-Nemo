@@ -3,34 +3,25 @@ package codeu.model.data;
 import codeu.model.data.User;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
-import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.ConversationStore;
 import java.time.Instant;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
+import codeu.model.data.Event;
+import codeu.model.store.basic.EventStore;
 
 public class Notification{
-  private final List<String> Notification;
-  private UserStore userStore;
-  private ConversationStore conversationStore;
-  private MessageStore messageStore;
+  private final List<String> notification;
   private User receiver;
   private User sender;
+  private UUID id;
+  private Object notification;
 
-  public Notification(User receiver, Object notification, User sender ){
+  public Notification(UUID id, User receiver, User sender, Object notification, ){
       this.receiver = receiver;
       this.sender = sender;
-
-  }
-  private void setUserStore(UserStore userStore) {
-    this.userStore = userStore;
-  }
-  private void setConversationStore(ConversationStore conversationStore) {
-    this.conversationStore = conversationStore;
-  }
-  private void setMessageStore(MessageStore messageStore){
-    this.messageStore = messageStore;
+      this.id = id;
+      this.notification = notification;
 
   }
 
@@ -42,5 +33,8 @@ public class Notification{
     return sender;
   }
 
+  public List<String> getNotification(){
+    return notification;
+  }
 
 }
