@@ -16,8 +16,10 @@ package codeu.controller;
 
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class ConversationServletTest {
   private RequestDispatcher mockRequestDispatcher;
   private ConversationStore mockConversationStore;
   private UserStore mockUserStore;
+  private EventStore mockEventStore;
 
   @Before
   public void setup() {
@@ -62,6 +65,9 @@ public class ConversationServletTest {
 
     mockUserStore = Mockito.mock(UserStore.class);
     conversationServlet.setUserStore(mockUserStore);
+
+    mockEventStore = Mockito.mock(EventStore.class);
+    conversationServlet.setEventStore(mockEventStore);
   }
 
   @Test
@@ -164,6 +170,15 @@ public class ConversationServletTest {
         ArgumentCaptor.forClass(Conversation.class);
     Mockito.verify(mockConversationStore).addConversation(conversationArgumentCaptor.capture());
     Assert.assertEquals(conversationArgumentCaptor.getValue().getTitle(), "test_conversation");
+
+    ArgumentCaptor<Event> eventArgumentCaptor = 
+        ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("Conversation", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test_username");
+    testInformation.add("test_conversation");
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }

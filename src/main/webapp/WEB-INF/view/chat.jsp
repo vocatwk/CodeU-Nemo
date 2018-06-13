@@ -21,6 +21,7 @@
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
+String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 %>
 
 <!DOCTYPE html>
@@ -28,6 +29,7 @@ String user = (String) request.getSession().getAttribute("user");
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style>
     #chat {
@@ -43,6 +45,12 @@ String user = (String) request.getSession().getAttribute("user");
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
+
+    // show contents of dropDown menu
+    function toggleSettingsDropdown() {
+      var dropDiv = document.getElementById("SettingDropDown");
+      dropDiv.style.display = dropDiv.style.display === "none"? "block" : "none";
+    };
   </script>
 </head>
 <body onload="scrollChat()">
@@ -51,8 +59,17 @@ String user = (String) request.getSession().getAttribute("user");
 
   <div id="container">
 
-    <h1><%= conversation.getTitle() %>
-      <a href="" style="float: right">&#8635;</a></h1>
+    <h1>
+      <%= conversation.getTitle() %>
+      <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
+      <a href="" style="float: right">&#8635;</a>
+    </h1>
+    
+    <div id="SettingDropDown" style="display: none">
+      <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+        <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
+      </form>
+    </div>
 
     <hr/>
 
