@@ -61,6 +61,10 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+        adminList.add("admin");
+        adminList.add("admin1");
+        adminList.add("admin2");
+        adminList.add("admin3");
 
       String username = (String)request.getSession().getAttribute("user");
       if (username == null) {
@@ -69,27 +73,31 @@ public class AdminServlet extends HttpServlet {
         return;
       }
       User user = userStore.getUser(username);
+      if (adminList.contains(username){
+        User adminUser = userStore.getUser(username);
+        adminUser.setisAdmin(true);
+      }
 
       if (user == null) {
         // user was not found, don't let them access the admin page
         response.sendRedirect("/");
         return;
       }
-      adminList.add("admin");
-      if (user.getIsAdmin() == true) {
-        if (!adminList.contains(user.getName())){
-          adminList.add(user.getName());
-        }
-      }
+
 
       request.setAttribute("adminList", adminList);
       if (adminList.contains(user.getName())) {
       /* an attempt to grab information from the stores to display on the page
       if the user is admin*/
-          List<User> userList = UserStore.getInstance().getAllUsers();
-          int numOfUsers = userList.size();
-          int numOfConvos = conversationStore.getInstance().getAllConversations().size();
-          int numOfMessages = messageStore.getInstance().getAllMessages().size();
+          List<User> userList = userStore.getAllUsers();
+          int numOfUsers = userStore.getNumOfUsers();
+          int numOfConvos = conversationStore.getNumOfConversations();
+          int numOfMessages = messageStore.getNumOfMessages();
+
+          request.setAttribute("numOfUsers", numOfUsers);
+          request.setAttribute("numOfMessages", numOfMessages);
+          request.setAttribute("numOfConvos", numOfConvos);
+
           String newestUser = userList.get(userList.size()-1).getName();
           String mostActiveUser = "";
           for(int i =0; i< numOfUsers; i++){
@@ -99,13 +107,20 @@ public class AdminServlet extends HttpServlet {
               mostMessages = messageStore.getMessagesFromAuthor(userId).size();
               mostActiveUser = userStore.getInstance().getUser(userId).getName();
             }
+            if(userInfo.getIsAdmin() == true){
+              numOfAdmins ++;
+            }
+            if(mostActiveUser == null){
+              mostActiveUser = "We need activity";
+            }
+            }
           }
 
-          request.setAttribute("numOfUsers", numOfUsers);
-          request.setAttribute("numOfMessages", numOfMessages);
-          request.setAttribute("numOfConvos", numOfConvos);
+
+          }
           request.setAttribute("newestUser", newestUser);
           request.setAttribute("mostActiveUser", mostActiveUser);
+          request.setAttribute("numOfAdmins", numOfAdmins);
           request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
 
         } else if (!adminList.contains(user.getName())) {
