@@ -32,9 +32,13 @@ public class NotificationStore{
     return notification;
   }
 
-  public List<Message> NotificationForUser(UUID authorId) {
+  public void addNotification(Notification notification) {
+    notifications.add(notification);
+    persistentStorageAgent.writeThrough(notification);
+  }
+  public List<Notification> NotificationForUser(UUID authorId) {
 
-    List<Message> notificationForUser = new ArrayList<>();
+    List<Notification> notificationForUser = new ArrayList<>();
 
     for (Notification notification : notifications) {
       if (notification.getAuthorId().equals(authorId)) {
