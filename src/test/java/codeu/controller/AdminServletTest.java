@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.junit.Assert;
 
 public class AdminServletTest {
 
@@ -30,6 +31,8 @@ public class AdminServletTest {
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private AdminServlet AdminServlet;
+  private User mockUser;
+  private Conversation mockConversation;
 
     @Before
     public void setup() {
@@ -53,67 +56,37 @@ public class AdminServletTest {
 
       mockMessageStore = Mockito.mock(MessageStore.class);
       AdminServlet.setMessageStore(mockMessageStore);
+
+      mockUser = Mockito.mock(User.class);
+      mockConversation = Mockito.mock(Conversation.class);
     }
 
   @Test
   public void testDoGet() throws IOException, ServletException {
 
-    List<User> fakeUserList = new ArrayList<>();
-    User fakeUser = new User( UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
-    fakeUserList.add(fakeUser);
+      List<User> fakeUserList = new ArrayList<>();
+      User fakeUser = new User( UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
+      UUID fakeUserId = UUID.randomUUID();
+      fakeUserList.add(fakeUser);
 
-    Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
+      Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
 
-    List<Conversation> fakeConversationList = new ArrayList<>();
-    fakeConversationList.add(
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
-    Mockito.when(mockConversationStore.getAllConversations()).thenReturn(fakeConversationList);
+      List<Conversation> fakeConversationList = new ArrayList<>();
+      fakeConversationList.add(
+          new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
+        Mockito.when(mockConversationStore.getAllConversations()).thenReturn(fakeConversationList);
 
-    List<Message> fakeMessageList = new ArrayList<>();
-    fakeMessageList.add(
-        new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
-    Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
+      List<Message> fakeMessageList = new ArrayList<>();
+      fakeMessageList.add(
+          new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
+        Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
 
-    AdminServlet.doGet(mockRequest, mockResponse);
 
-    List<String> fakeAdminList = new ArrayList<>();
+      Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+      Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+      Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
 
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
-
-      if(fakeUser.getIsAdmin() == true ){
-        if(fakeAdminList.contains(fakeUser.getName())){
-        fakeAdminList.add(fakeUser.getName());
-        }
-      }
-    if(fakeAdminList.contains(fakeUser.getName())){
-      Mockito.verify(mockMessageStore).getAllMessages().size();
-      Mockito.verify(mockConversationStore).getAllConversations().size();
-      Mockito.verify(mockUserStore).getAllUsers().size();
-
-      String FakeMostActiveUser = "";
-      int fakeNumOfUsers = mockUserStore.getAllUsers().size();
-      int fakeNumOfConvos = mockConversationStore.getAllConversations().size();
-      int fakeNumOfMessages = mockMessageStore.getAllMessages().size();
-
-      for(int i =0; i< fakeNumOfUsers; i++){
-        UUID fakeUserId = fakeUserList.get(i).getId();
-        int fakeMostMessages=0;
-        if (mockMessageStore.getMessagesFromAuthor(fakeUserId).size() > fakeMostMessages){
-          Mockito.verify(mockMessageStore).getMessagesFromAuthor(fakeUserId).size();
-          Mockito.verify(mockUserStore).getInstance().getUser(fakeUserId).getName();
-          fakeMostMessages = mockMessageStore.getMessagesFromAuthor(fakeUserId).size();
-          FakeMostActiveUser = mockUserStore.getInstance().getUser(fakeUserId).getName();
-        }
-      }
-
-      Mockito.verify(mockRequest).setAttribute("numOfUsers", fakeNumOfUsers);
-      Mockito.verify(mockRequest).setAttribute("numOfMessages", fakeNumOfMessages);
-      Mockito.verify(mockRequest).setAttribute("numOfConvos", fakeNumOfConvos);
-      Mockito.verify(mockRequest).setAttribute("mostActiveUser", FakeMostActiveUser);
-      Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
     }
-  }
 
 
   @Test
@@ -122,7 +95,7 @@ public class AdminServletTest {
 
     AdminServlet.doGet(mockRequest, mockResponse);
     Mockito.verify(mockResponse).sendRedirect("/");
-  }
+}
 
   @Test
   public void testDoGet_InvalidUser() throws IOException, ServletException {
@@ -131,6 +104,83 @@ public class AdminServletTest {
 
     AdminServlet.doGet(mockRequest, mockResponse);
     Mockito.verify(mockResponse).sendRedirect("/");
+  }
+  @Test
+  public void testDoGet_isAdminFalse() throws IOException, ServletException{
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    AdminServlet.doGet(mockRequest, mockResponse);
+    Mockito.when(mockUser.getIsAdmin()).thenReturn(false);
+    Mockito.verify(mockResponse).sendRedirect("/");
+  }
+
+  public void testDoGet_getStats() throws IOException, ServletException{
+    List<String> fakeAdminList = new ArrayList<>();
+    fakeAdminList.add("test_username");
+
+    List<User> fakeUserList = new ArrayList<>();
+    User fakeUser = new User( UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
+    UUID fakeUserId = UUID.randomUUID();
+    fakeUserList.add(fakeUser);
+
+    Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
+
+    List<Conversation> fakeConversationList = new ArrayList<>();
+    fakeConversationList.add(
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
+      Mockito.when(mockConversationStore.getAllConversations()).thenReturn(fakeConversationList);
+
+    List<Message> fakeMessageList = new ArrayList<>();
+    fakeMessageList.add(
+        new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
+      Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
+
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
+    Mockito.when(mockUser.getIsAdmin()).thenReturn(true);
+
+    AdminServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.when(mockUserStore.getNumOfUsers()).thenReturn(fakeUserList.size());
+    Mockito.when(mockConversationStore.getNumOfConversations()).thenReturn(fakeConversationList.size());
+    Mockito.when(mockMessageStore.getNumOfMessages()).thenReturn(fakeMessageList.size());
+    Mockito.verify(mockUserStore).getNumOfUsers();
+    Mockito.verify(mockConversationStore).getNumOfConversations();
+    Mockito.verify(mockMessageStore).getNumOfMessages();
+
+    Mockito.verify(mockRequest).setAttribute("numOfUsers", fakeUserList.size());
+    Mockito.verify(mockRequest).setAttribute("numOfConvos", fakeMessageList.size());
+    Mockito.verify(mockRequest).setAttribute("numOfMessages", fakeConversationList.size());
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    Mockito.when(mockUser.getIsAdmin()).thenReturn(true);
+    Mockito.when(mockUserStore.getNumOfUsers()).thenReturn(fakeUserList.size());
+
+    AdminServlet.doGet(mockRequest, mockResponse);
+
+    String fakeNewestUser = fakeUserList.get(fakeUserList.size()-1).getName();
+    String fakeMostActiveUser = "";
+    int fakeNumOfAdmins = 0;
+
+    for(int i =0; i< fakeUserList.size(); i++){
+      User fakeUserInfo = fakeUserList.get(i);
+      UUID fakeUserId2 = fakeUserInfo.getId();
+      int userMessagesListSize = mockMessageStore.getMessagesFromAuthor(fakeUserId2).size();
+      int mostMessages=0;
+      if (userMessagesListSize > mostMessages){
+        mostMessages = mockMessageStore.getMessagesFromAuthor(fakeUserId2).size();
+        fakeMostActiveUser = mockUserStore.getInstance().getUser(fakeUserId2).getName();
+      }
+    }
+
+
+    Mockito.verify(mockRequest).setAttribute("newestUser", fakeNewestUser);
+    Mockito.verify(mockRequest).setAttribute("numOfAdmins", fakeNumOfAdmins);
+    Mockito.verify(mockRequest).setAttribute("mostActiveUser", fakeMostActiveUser);
   }
 
 }

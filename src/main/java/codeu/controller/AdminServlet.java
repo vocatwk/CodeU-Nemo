@@ -73,9 +73,9 @@ public class AdminServlet extends HttpServlet {
         return;
       }
       User user = userStore.getUser(username);
-      if (adminList.contains(username){
+      if (adminList.contains(username)){
         User adminUser = userStore.getUser(username);
-        adminUser.setisAdmin(true);
+        adminUser.setIsAdmin(true);
       }
 
       if (user == null) {
@@ -83,10 +83,12 @@ public class AdminServlet extends HttpServlet {
         response.sendRedirect("/");
         return;
       }
+      if (user.getIsAdmin() == false) {
+        /* rediects user to homepage if not admin*/
+        response.sendRedirect("/");
+        return;
+      } else if(user.getIsAdmin()==true){
 
-
-      request.setAttribute("adminList", adminList);
-      if (adminList.contains(user.getName())) {
       /* an attempt to grab information from the stores to display on the page
       if the user is admin*/
           List<User> userList = userStore.getAllUsers();
@@ -106,26 +108,14 @@ public class AdminServlet extends HttpServlet {
             if (messageStore.getMessagesFromAuthor(userId).size() > mostMessages){
               mostMessages = messageStore.getMessagesFromAuthor(userId).size();
               mostActiveUser = userStore.getInstance().getUser(userId).getName();
-            }
-            if(userInfo.getIsAdmin() == true){
-              numOfAdmins ++;
-            }
-            if(mostActiveUser == null){
+            }else if(mostActiveUser == null){
               mostActiveUser = "We need activity";
             }
             }
-          }
+            request.setAttribute("newestUser", newestUser);
+            request.setAttribute("mostActiveUser", mostActiveUser);
+            request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+        }
+    }
 
-
-          }
-          request.setAttribute("newestUser", newestUser);
-          request.setAttribute("mostActiveUser", mostActiveUser);
-          request.setAttribute("numOfAdmins", numOfAdmins);
-          request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-
-        } else if (!adminList.contains(user.getName())) {
-            /* rediects user to homepage if not admin*/
-          response.sendRedirect("/");
-          return;
-  }
-}}
+}

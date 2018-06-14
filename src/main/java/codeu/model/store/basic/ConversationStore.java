@@ -118,6 +118,6 @@ public class ConversationStore {
   }
 
   public int getNumOfConversations(){
-    return conversation.size();
+    return conversations.size();
   }
 }

@@ -18,6 +18,7 @@
 		<p> Current number of Messages: <%= request.getAttribute("numOfMessages") %></p>
 		<p> Current number of Conversations: <%= request.getAttribute("numOfConvos") %></p>
     <p> Most active user: <%= request.getAttribute("mostActiveUser") %></p>
+    <p> Newest User: <%= request.getAttribute("newestUser") %> </p>
   </div>
 </body>
 </html>
