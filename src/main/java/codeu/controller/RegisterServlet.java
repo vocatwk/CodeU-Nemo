@@ -3,6 +3,8 @@ package codeu.controller;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,12 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 
 public class RegisterServlet extends HttpServlet {
 
   /** Store class that gives access to Users. */
   private UserStore userStore;
+
+  /** Store class that gives access to Events. */
+  private EventStore eventStore;
 
   /**
    * Set up state for handling registration-related requests. This method is only called when
@@ -27,6 +34,7 @@ public class RegisterServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     setUserStore(UserStore.getInstance());
+    setEventStore(EventStore.getInstance());
   }
 
   /**
@@ -35,6 +43,14 @@ public class RegisterServlet extends HttpServlet {
    */
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setEventStore(EventStore eventStore) {
+    this.eventStore = eventStore;
   }
 
   @Override
@@ -66,6 +82,11 @@ public class RegisterServlet extends HttpServlet {
 
     User user = new User(UUID.randomUUID(), username, hashedPassword, Instant.now());
     userStore.addUser(user);
+
+    List<String> userInformation = new ArrayList<>();
+    userInformation.add(user.getName());
+    Event userEvent = new Event(UUID.randomUUID(), "User", user.getCreationTime(), userInformation);
+    eventStore.addEvent(userEvent);
 
     response.sendRedirect("/login");
   }
