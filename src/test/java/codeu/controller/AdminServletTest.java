@@ -164,7 +164,6 @@ public class AdminServletTest {
 
     String fakeNewestUser = fakeUserList.get(fakeUserList.size()-1).getName();
     String fakeMostActiveUser = "";
-    int fakeNumOfAdmins = 0;
 
     for(int i =0; i< fakeUserList.size(); i++){
       User fakeUserInfo = fakeUserList.get(i);
@@ -177,9 +176,7 @@ public class AdminServletTest {
       }
     }
 
-
     Mockito.verify(mockRequest).setAttribute("newestUser", fakeNewestUser);
-    Mockito.verify(mockRequest).setAttribute("numOfAdmins", fakeNumOfAdmins);
     Mockito.verify(mockRequest).setAttribute("mostActiveUser", fakeMostActiveUser);
   }
 
