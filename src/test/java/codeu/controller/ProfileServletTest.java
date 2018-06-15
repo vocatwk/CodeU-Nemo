@@ -63,6 +63,11 @@ public class ProfileServletTest {
 
   @Test
   public void testDoGet() throws IOException, ServletException {
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
+    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
+        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/testSubject");
   
     UUID fakeUserId = UUID.randomUUID();
@@ -88,7 +93,35 @@ public class ProfileServletTest {
   }
 
   @Test
+  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
+    
+    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
+
+    profileServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendRedirect("/");
+  }
+
+  @Test
+  public void testDoGet_InvalidUser() throws IOException, ServletException {
+    
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("nonExistingUsername");
+    Mockito.when(mockUserStore.getUser("nonExistingUsername")).thenReturn(null);
+
+    profileServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendRedirect("/");
+  }
+
+
+
+  @Test
   public void testDoGet_badUrl() throws IOException, ServletException {
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
+    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
+        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile");
 
     profileServlet.doGet(mockRequest, mockResponse);
@@ -98,6 +131,11 @@ public class ProfileServletTest {
 
   @Test
   public void testDoGet_BadProfile() throws IOException, ServletException {
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
+    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
+        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/doesNotExist");
     Mockito.when(mockUserStore.getUser("doesNotExist")).thenReturn(null);
 
@@ -108,6 +146,11 @@ public class ProfileServletTest {
 
   @Test
   public void testDoPost_SelfProfile() throws IOException, ServletException {
+
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
+    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
+        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/me");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("me");
 
@@ -149,7 +192,7 @@ public class ProfileServletTest {
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockResponse).sendRedirect("/login");
+    Mockito.verify(mockResponse).sendRedirect("/");
   }
 
   @Test
@@ -159,7 +202,7 @@ public class ProfileServletTest {
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockResponse).sendRedirect("/login");
+    Mockito.verify(mockResponse).sendRedirect("/");
     Mockito.verify(mockUserStore, Mockito.never()).getUser("notMe");
   }
 

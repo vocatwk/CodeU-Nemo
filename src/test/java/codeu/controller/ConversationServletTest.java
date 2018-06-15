@@ -72,6 +72,11 @@ public class ConversationServletTest {
 
   @Test
   public void testDoGet() throws IOException, ServletException {
+    
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
+    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
+        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
+
     List<Conversation> fakeConversationList = new ArrayList<>();
     fakeConversationList.add(
         new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
@@ -82,6 +87,32 @@ public class ConversationServletTest {
     Mockito.verify(mockRequest).setAttribute("conversations", fakeConversationList);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
+  
+  @Test
+  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
+    
+    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
+
+    conversationServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockConversationStore, Mockito.never())
+        .getAllConversations();
+    Mockito.verify(mockResponse).sendRedirect("/");
+  }
+
+  @Test
+  public void testDoGet_InvalidUser() throws IOException, ServletException {
+    
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("nonExistingUsername");
+    Mockito.when(mockUserStore.getUser("nonExistingUsername")).thenReturn(null);
+
+    conversationServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockConversationStore, Mockito.never())
+        .getAllConversations();
+    Mockito.verify(mockResponse).sendRedirect("/");
+  }
+
 
   @Test
   public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {

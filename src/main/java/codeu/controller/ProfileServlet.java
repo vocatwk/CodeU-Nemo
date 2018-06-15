@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -70,6 +71,21 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    String username = (String) request.getSession().getAttribute("user");
+    if (username == null) {
+      // user is not logged in, don't let them access profile page
+      response.sendRedirect("/");
+      return;
+    }
+
+    User user = userStore.getUser(username);
+    if (user == null) {
+      // user was not found, don't let them create access profile page
+      response.sendRedirect("/");
+      return;
+    }
+
     String requestUrl = request.getRequestURI();
 
     if(requestUrl.length() <= "/profile/".length()){
@@ -111,16 +127,23 @@ public class ProfileServlet extends HttpServlet {
  
     if(username == null){
       // user not logged in
-      response.sendRedirect("/login");
+      response.sendRedirect("/");
       return;
     }
- 
-    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
-    if(!username.equals(subject.getName())){
+    User user = userStore.getUser(username);
+    if (user == null) {
+      // user was not found
+      response.sendRedirect("/");
+      return;
+    }
+
+    String subjectName = requestUrl.substring("/profile/".length());
+
+    if(!username.equals(subjectName)){
       // user is trying to edit another user's profile
       // TODO respond with access denied
-      response.sendRedirect("/login");
+      response.sendRedirect("/");
       return;
     }
  
@@ -130,16 +153,16 @@ public class ProfileServlet extends HttpServlet {
     String cleanedAboutMe = Jsoup.clean(aboutMe, Whitelist.none());
 
     //set user's about me and update it in dataStore
-    subject.setAboutMe(cleanedAboutMe);
-    userStore.updateUser(subject);
+    user.setAboutMe(cleanedAboutMe);
+    userStore.updateUser(user);
     
     List<String> aboutMeInformation = new ArrayList<>();
-    aboutMeInformation.add(subject.getName());
-    aboutMeInformation.add(subject.getAboutMe());
+    aboutMeInformation.add(user.getName());
+    aboutMeInformation.add(user.getAboutMe());
     Event aboutMeEvent = new Event(
         UUID.randomUUID(), "About Me", Instant.now(), aboutMeInformation);
     eventStore.addEvent(aboutMeEvent);
 
-    response.sendRedirect("/profile/" + subject.getName());
+    response.sendRedirect("/profile/" + user.getName());
   }
 }
