@@ -15,13 +15,14 @@ public class Notification{
   private User receiver;
   private User sender;
   private UUID id;
-  private Object notification;
+  private Object thingTheNotifcationIsAbout;
+  private List<Object> notification;
 
-  public Notification(UUID id, User receiver, User sender, Object notification, ){
+  public Notification(UUID id, User receiver, User sender, Object thingTheNotifcationIsAbout){
       this.receiver = receiver;
       this.sender = sender;
       this.id = id;
-      this.notification = notification;
+      this.thingTheNotifcationIsAbout = thingTheNotifcationIsAbout;
 
   }
 
@@ -33,8 +34,11 @@ public class Notification{
     return sender;
   }
 
-  public List<String> getNotification(){
-    return notification;
+  public List<Object> getNotification(){
+    notification.add(receiver);
+    notification.add(sender);
+    notification.add(id);
+    notification.add(thingTheNotifcationIsAbout);
   }
 
 }
