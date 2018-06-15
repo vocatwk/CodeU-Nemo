@@ -20,7 +20,7 @@
     <p> Most active user: <%= request.getAttribute("mostActiveUser") %></p>
     <p> Newest User: <%= request.getAttribute("newestUser") %> </p>
     <p> Number of Admins: <%= request.getAttribute("numOfAdmins")%> </p>
-    <p> User creation time: <%= request.getAttribute("userTime") %> </p>
+    <p> User creation time: <%= request.getAttribute("timeCreated") %> </p>
   </div>
 </body>
 </html>

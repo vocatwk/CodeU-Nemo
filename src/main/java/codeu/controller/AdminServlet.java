@@ -92,28 +92,24 @@ public class AdminServlet extends HttpServlet {
           request.setAttribute("numOfConvos", numOfConvos);
 
           int mostMessages=0;
-          User newestUser = userList.get(userStore.getNumOfUsers()-1);//.getName();
+          String newestUser = userList.get(userList.size()-1).getName();
           String mostActiveUser = "";
           int numOfAdmins = adminList.size();
 
           for(int i =0; i< numOfUsers; i++){
             UUID userId = userList.get(i).getId();
-            int userMessagesListSize = messageStore.getMessagesFromAuthor(userId).size();
-            if( userList.get(i) <= newestUser.getCreationTime()){
-              int userTime = userList.get(i).getCreationTime();
-            }
+            int userMessagesListSize = messageStore.getMessagesFromAuthorSize(userId);
             if (userMessagesListSize > mostMessages){
               mostMessages = userMessagesListSize;
-              mostActiveUser = userStore.getUser(userId).getName();
-            }else if(mostActiveUser == null){
+              User activeUser = userStore.getUser(userId);
+              mostActiveUser = activeUser.getName();
+            } else if(mostActiveUser == null){
               mostActiveUser = "We need activity";
             }
-            }
-
-            request.setAttribute("timeCreated",userTime )
+          }
 
             request.setAttribute("numOfAdmins", numOfAdmins);
-            //request.setAttribute("newestUser", newestUser);
+            request.setAttribute("newestUser", newestUser);
             request.setAttribute("mostActiveUser", mostActiveUser);
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }

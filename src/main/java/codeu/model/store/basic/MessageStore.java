@@ -114,4 +114,16 @@ public class MessageStore {
     return messages.size();
   }
 
+  public int getMessagesFromAuthorSize(UUID authorId) {
+
+    List<Message> messagesFromAuthor = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getAuthorId().equals(authorId)) {
+        messagesFromAuthor.add(message);
+      }
+    }
+
+    return messagesFromAuthor.size();
+  }
 }
