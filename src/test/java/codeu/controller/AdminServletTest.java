@@ -66,7 +66,6 @@ public class AdminServletTest {
 
       List<User> fakeUserList = new ArrayList<>();
       User fakeUser = new User( UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
-      UUID fakeUserId = UUID.randomUUID();
       fakeUserList.add(fakeUser);
 
       Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
@@ -114,13 +113,13 @@ public class AdminServletTest {
     Mockito.verify(mockResponse).sendRedirect("/");
   }
 
+  @Test
   public void testDoGet_getStats() throws IOException, ServletException{
     List<String> fakeAdminList = new ArrayList<>();
     fakeAdminList.add("test_username");
 
     List<User> fakeUserList = new ArrayList<>();
     User fakeUser = new User( UUID.randomUUID(), "test_username", "fakePasswordHash", Instant.now());
-    UUID fakeUserId = UUID.randomUUID();
     fakeUserList.add(fakeUser);
 
     Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
@@ -146,6 +145,7 @@ public class AdminServletTest {
     Mockito.when(mockUserStore.getNumOfUsers()).thenReturn(fakeUserList.size());
     Mockito.when(mockConversationStore.getNumOfConversations()).thenReturn(fakeConversationList.size());
     Mockito.when(mockMessageStore.getNumOfMessages()).thenReturn(fakeMessageList.size());
+
     Mockito.verify(mockUserStore).getNumOfUsers();
     Mockito.verify(mockConversationStore).getNumOfConversations();
     Mockito.verify(mockMessageStore).getNumOfMessages();
@@ -155,12 +155,6 @@ public class AdminServletTest {
     Mockito.verify(mockRequest).setAttribute("numOfMessages", fakeConversationList.size());
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
 
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
-    Mockito.when(mockUser.getIsAdmin()).thenReturn(true);
-    Mockito.when(mockUserStore.getNumOfUsers()).thenReturn(fakeUserList.size());
-
-    AdminServlet.doGet(mockRequest, mockResponse);
 
     String fakeNewestUser = fakeUserList.get(fakeUserList.size()-1).getName();
     String fakeMostActiveUser = "";

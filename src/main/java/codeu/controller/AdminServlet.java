@@ -74,8 +74,7 @@ public class AdminServlet extends HttpServlet {
       }
       User user = userStore.getUser(username);
       if (adminList.contains(username)){
-        User adminUser = userStore.getUser(username);
-        adminUser.setIsAdmin(true);
+        user.setIsAdmin(true);
       }
 
       if (user == null) {
@@ -87,7 +86,7 @@ public class AdminServlet extends HttpServlet {
         /* rediects user to homepage if not admin*/
         response.sendRedirect("/");
         return;
-      } else if(user.getIsAdmin()==true){
+      }
 
       /* an attempt to grab information from the stores to display on the page
       if the user is admin*/
@@ -100,22 +99,27 @@ public class AdminServlet extends HttpServlet {
           request.setAttribute("numOfMessages", numOfMessages);
           request.setAttribute("numOfConvos", numOfConvos);
 
+          int mostMessages=0;
           String newestUser = userList.get(userList.size()-1).getName();
           String mostActiveUser = "";
+          int numOfAdmins = adminList.size();
+
           for(int i =0; i< numOfUsers; i++){
             UUID userId = userList.get(i).getId();
-              int mostMessages=0;
-            if (messageStore.getMessagesFromAuthor(userId).size() > mostMessages){
+            int userMessagesListSize = messageStore.getMessagesFromAuthor(userId).size();
+            if (userMessagesListSize > mostMessages){
               mostMessages = messageStore.getMessagesFromAuthor(userId).size();
-              mostActiveUser = userStore.getInstance().getUser(userId).getName();
+              mostActiveUser = userStore.getUser(userId).getName();
             }else if(mostActiveUser == null){
               mostActiveUser = "We need activity";
             }
             }
+
+            request.setAttribute("numOfAdmins", numOfAdmins);
             request.setAttribute("newestUser", newestUser);
             request.setAttribute("mostActiveUser", mostActiveUser);
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }
-    }
+
 
 }
