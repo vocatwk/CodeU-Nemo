@@ -21,7 +21,7 @@ public class AdminServlet extends HttpServlet {
   private UserStore userStore;
   private ConversationStore conversationStore;
   private MessageStore messageStore;
-  private List<String> adminList = new ArrayList<String>();
+  private List<String> adminList = new ArrayList<>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -92,23 +92,28 @@ public class AdminServlet extends HttpServlet {
           request.setAttribute("numOfConvos", numOfConvos);
 
           int mostMessages=0;
-          String newestUser = userList.get(userList.size()-1).getName();
+          User newestUser = userList.get(userStore.getNumOfUsers()-1);//.getName();
           String mostActiveUser = "";
           int numOfAdmins = adminList.size();
 
           for(int i =0; i< numOfUsers; i++){
             UUID userId = userList.get(i).getId();
             int userMessagesListSize = messageStore.getMessagesFromAuthor(userId).size();
+            if( userList.get(i) <= newestUser.getCreationTime()){
+              int userTime = userList.get(i).getCreationTime();
+            }
             if (userMessagesListSize > mostMessages){
-              mostMessages = messageStore.getMessagesFromAuthor(userId).size();
+              mostMessages = userMessagesListSize;
               mostActiveUser = userStore.getUser(userId).getName();
             }else if(mostActiveUser == null){
               mostActiveUser = "We need activity";
             }
             }
 
+            request.setAttribute("timeCreated",userTime )
+
             request.setAttribute("numOfAdmins", numOfAdmins);
-            request.setAttribute("newestUser", newestUser);
+            //request.setAttribute("newestUser", newestUser);
             request.setAttribute("mostActiveUser", mostActiveUser);
             request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }
