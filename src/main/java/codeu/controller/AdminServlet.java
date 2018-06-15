@@ -19,9 +19,9 @@ import java.util.UUID;
 public class AdminServlet extends HttpServlet {
 
   private UserStore userStore;
-  private ConversationStore conversationStore;
-  private MessageStore messageStore;
-  private List<String> adminList = new ArrayList<>();
+  private ConversationStore ConversationStore;
+  private MessageStore MessageStore;
+  private List<String> adminList = new ArrayList<String>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -31,8 +31,8 @@ public class AdminServlet extends HttpServlet {
   public void init() throws ServletException {
     super.init();
     setUserStore(userStore.getInstance());
-    setConversationStore(conversationStore.getInstance());
-    setMessageStore(messageStore.getInstance());
+    setConversationStore(ConversationStore.getInstance());
+    setMessageStore(MessageStore.getInstance());
   }
 
   /**
@@ -42,20 +42,13 @@ public class AdminServlet extends HttpServlet {
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
-  /**
-   * Sets the ConversationStore used by this servlet. This function provides a common setup method for use
-   * by the test framework or the servlet's init() function.
-   */
-  void setConversationStore(ConversationStore conversationStore) {
-    this.conversationStore = conversationStore;
+
+  void setConversationStore(ConversationStore ConversationStore) {
+    this.ConversationStore = ConversationStore;
   }
 
-  /**
-   * Sets the MessageStore used by this servlet. This function provides a common setup method for
-   * use by the test framework or the servlet's init() function.
-   */
-  void setMessageStore(MessageStore messageStore) {
-    this.messageStore = messageStore;
+  void setMessageStore(MessageStore MessageStore) {
+    this.MessageStore = MessageStore;
   }
 
   @Override
@@ -73,10 +66,13 @@ public class AdminServlet extends HttpServlet {
         return;
       }
       User user = userStore.getUser(username);
+<<<<<<< HEAD
       if (adminList.contains(username)){
         user.setIsAdmin(true);
       }
 
+=======
+>>>>>>> parent of afb1bd2... added admin tab to navbar. Admin tab should only show when user is an admin
       if (user == null) {
         // user was not found, don't let them access the admin page
         response.sendRedirect("/");

@@ -80,6 +80,7 @@ public class AdminServletTest {
           new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
         Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
 
+      AdminServlet.doGet(mockRequest, mockResponse);
 
       Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
       Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);

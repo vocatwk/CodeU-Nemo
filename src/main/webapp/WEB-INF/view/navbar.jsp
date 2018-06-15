@@ -1,6 +1,3 @@
-<%@ page import="codeu.model.data.User" %>
-<%@ page import="codeu.model.store.basic.UserStore" %>
-
 <nav>
   <% String navBarUser = (String)request.getSession().getAttribute("user"); %>
   <% User user = UserStore.getInstance().getUser(navBarUser);%>

@@ -40,14 +40,6 @@
       <input type="password" name="password" id="password">
       <br/><br/>
       <button type="submit">Submit</button>
-      <br/><br/>
-      <%-- TODO make a button that requests the user to become an admin --%>
-      <button id="isAdmin" onclick= "<%= request.getAttribute("username")%>" >Admin </button>
-        <% String userIfAdmin = (String) request.getAttribute("username"); %>
-        <% List<String> adminList = (List<String>) request.getAttribute("adminList");%>
-        <% if(!adminList.contains(userIfAdmin)){%>
-          
-        <%}%>
     </form>
   </div>
 </body>
