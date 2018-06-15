@@ -81,14 +81,6 @@ public class AdminServletTest {
           new Message(UUID.randomUUID(),UUID.randomUUID(), UUID.randomUUID(),"test_message",Instant.now()));
         Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
 
-      List<String> fakeAdminList = new ArrayList<>();
-      fakeAdminList.add("admin");
-      fakeAdminList.add("admin1");
-      fakeAdminList.add("admin2");
-      fakeAdminList.add("admin3");
-
-
-
 
       Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
       Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
