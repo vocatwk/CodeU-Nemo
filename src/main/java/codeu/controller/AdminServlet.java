@@ -19,8 +19,8 @@ import java.util.UUID;
 public class AdminServlet extends HttpServlet {
 
   private UserStore userStore;
-  private ConversationStore ConversationStore;
-  private MessageStore MessageStore;
+  private ConversationStore conversationStore;
+  private MessageStore messageStore;
   private List<String> adminList = new ArrayList<String>();
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
@@ -30,7 +30,7 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void init() throws ServletException {
     super.init();
-    setUserStore(userStore.getInstance());
+    setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
   }
@@ -43,12 +43,12 @@ public class AdminServlet extends HttpServlet {
     this.userStore = userStore;
   }
 
-  void setConversationStore(ConversationStore ConversationStore) {
-    this.ConversationStore = ConversationStore;
+  void setConversationStore(ConversationStore conversationStore) {
+    this.conversationStore = conversationStore;
   }
 
-  void setMessageStore(MessageStore MessageStore) {
-    this.MessageStore = MessageStore;
+  void setMessageStore(MessageStore messageStore) {
+    this.messageStore = messageStore;
   }
 
   @Override
@@ -66,13 +66,9 @@ public class AdminServlet extends HttpServlet {
         return;
       }
       User user = userStore.getUser(username);
-<<<<<<< HEAD
       if (adminList.contains(username)){
         user.setIsAdmin(true);
       }
-
-=======
->>>>>>> parent of afb1bd2... added admin tab to navbar. Admin tab should only show when user is an admin
       if (user == null) {
         // user was not found, don't let them access the admin page
         response.sendRedirect("/");
