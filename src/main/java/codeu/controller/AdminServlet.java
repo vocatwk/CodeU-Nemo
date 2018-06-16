@@ -21,7 +21,7 @@ public class AdminServlet extends HttpServlet {
   private UserStore userStore;
   private ConversationStore conversationStore;
   private MessageStore messageStore;
-  private List<String> adminList = new ArrayList<>();
+  private List<String> adminList = List.of("admin","admin1", "admin2","admin3");;
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -54,10 +54,6 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        adminList.add("admin");
-        adminList.add("admin1");
-        adminList.add("admin2");
-        adminList.add("admin3");
 
       String username = (String)request.getSession().getAttribute("user");
       if (username == null) {
@@ -82,36 +78,33 @@ public class AdminServlet extends HttpServlet {
 
       /* an attempt to grab information from the stores to display on the page
       if the user is admin*/
-          List<User> userList = userStore.getAllUsers();
-          int numOfUsers = userStore.getNumOfUsers();
-          int numOfConvos = conversationStore.getNumOfConversations();
-          int numOfMessages = messageStore.getNumOfMessages();
+      List<User> userList = userStore.getAllUsers();
+      int numOfUsers = userStore.getNumOfUsers();
+      int numOfConvos = conversationStore.getNumOfConversations();
+      int numOfMessages = messageStore.getNumOfMessages();
 
-          request.setAttribute("numOfUsers", numOfUsers);
-          request.setAttribute("numOfMessages", numOfMessages);
-          request.setAttribute("numOfConvos", numOfConvos);
+      request.setAttribute("numOfUsers", numOfUsers);
+      request.setAttribute("numOfMessages", numOfMessages);
+      request.setAttribute("numOfConvos", numOfConvos);
 
-          int mostMessages=0;
-          String newestUser = userList.get(userList.size()-1).getName();
-          String mostActiveUser = "";
-          int numOfAdmins = adminList.size();
+      int mostMessages=0;
+      String newestUser = userList.get(userList.size()-1).getName();
+      String mostActiveUser = "";
+      int numOfAdmins = adminList.size();
 
-          for(int i =0; i< numOfUsers; i++){
-            UUID userId = userList.get(i).getId();
-            int userMessagesListSize = messageStore.getMessagesFromAuthorSize(userId);
-            if (userMessagesListSize > mostMessages){
-              mostMessages = userMessagesListSize;
-              User activeUser = userStore.getUser(userId);
-              mostActiveUser = activeUser.getName();
-            } else if(mostActiveUser == null){
-              mostActiveUser = "We need activity";
-            }
+      for (User userIsActive : userStore.getAllUsers()) {
+        UUID userId = userIsActive.getId();
+        int userMessagesListSize = messageStore.getMessagesFromAuthor(userId).size();
+        if (userMessagesListSize > mostMessages){
+            mostMessages = userMessagesListSize;
+            mostActiveUser = userIsActive.getName();
           }
+      }
 
-            request.setAttribute("numOfAdmins", numOfAdmins);
-            request.setAttribute("newestUser", newestUser);
-            request.setAttribute("mostActiveUser", mostActiveUser);
-            request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
+      request.setAttribute("numOfAdmins", numOfAdmins);
+      request.setAttribute("newestUser", newestUser);
+      request.setAttribute("mostActiveUser", mostActiveUser);
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
         }
 
 
