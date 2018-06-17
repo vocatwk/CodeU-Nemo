@@ -35,6 +35,13 @@ nav a {
   text-decoration: none;
 }
 
+nav form {
+  display: inline-block;
+  margin: 15px;
+  border: none;
+  box-sizing:border-box;
+}
+
 #navTitle {
   font-size: 36px;
 }
@@ -64,8 +71,15 @@ button {
   overflow-y: scroll;
 }
 
-/*This if for the Activity Feed Page*/
+/* This is for the Activity Feed Page */
 #activity {
+  background-color: white;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+/* This is for the Search Results Page */
+#results {
   background-color: white;
   height: 500px;
   overflow-y: scroll;

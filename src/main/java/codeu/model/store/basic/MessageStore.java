@@ -65,8 +65,7 @@ public class MessageStore {
     messages = new ArrayList<>();
   }
 
-  /** Access the current set of messages known to the application.
-  TODO: Remove once messages are grouped to user in activity feed. */
+  /** Access the current set of messages known to the application. */
   public List<Message> getAllMessages() {
     return messages;
   }
