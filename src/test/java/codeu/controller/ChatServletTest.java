@@ -80,11 +80,6 @@ public class ChatServletTest {
 
   @Test
   public void testDoGet() throws IOException, ServletException {
- 
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
-    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
-        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
-
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
 
     UUID fakeConversationId = UUID.randomUUID();
@@ -113,34 +108,7 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
-    
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    chatServlet.doGet(mockRequest, mockResponse);
-
-    Mockito.verify(mockResponse).sendRedirect("/");
-  }
-
-  @Test
-  public void testDoGet_InvalidUser() throws IOException, ServletException {
-    
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("nonExistingUsername");
-    Mockito.when(mockUserStore.getUser("nonExistingUsername")).thenReturn(null);
-
-    chatServlet.doGet(mockRequest, mockResponse);
-
-    Mockito.verify(mockResponse).sendRedirect("/");
-  }
-
-
-  @Test
   public void testDoGet_badConversation() throws IOException, ServletException {
-
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("ExistingUsername");
-    Mockito.when(mockUserStore.getUser("ExistingUsername")).thenReturn(
-        new User(UUID.randomUUID(),"ExistingUserName", "randomPswdHash", Instant.now()));
-
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/bad_conversation");
     Mockito.when(mockConversationStore.getConversationWithTitle("bad_conversation"))
         .thenReturn(null);

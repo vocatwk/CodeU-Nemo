@@ -31,7 +31,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -100,21 +99,6 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-
-    String username = (String) request.getSession().getAttribute("user");
-    if (username == null) {
-      // user is not logged in, don't let them access chat page
-      response.sendRedirect("/");
-      return;
-    }
-
-    User user = userStore.getUser(username);
-    if (user == null) {
-      // user was not found, don't let them create access chat page
-      response.sendRedirect("/");
-      return;
-    }
-
     String requestUrl = request.getRequestURI();
     String conversationTitle = requestUrl.substring("/chat/".length());
 

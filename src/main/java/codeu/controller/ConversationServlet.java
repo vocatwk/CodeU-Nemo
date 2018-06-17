@@ -85,21 +85,6 @@ public class ConversationServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    
-    String username = (String) request.getSession().getAttribute("user");
-    if (username == null) {
-      // user is not logged in, don't let them access conversation page
-      response.sendRedirect("/");
-      return;
-    }
-
-    User user = userStore.getUser(username);
-    if (user == null) {
-      // user was not found, don't let them create access conversation page
-      response.sendRedirect("/");
-      return;
-    }
-
     List<Conversation> conversations = conversationStore.getAllConversations();
     request.setAttribute("conversations", conversations);
     request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);

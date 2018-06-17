@@ -21,6 +21,8 @@
 </head>
 <body>
 
+  <%@ include file="navbar.jsp" %>
+
   <div id="container">
     <h1>Register</h1>
 
