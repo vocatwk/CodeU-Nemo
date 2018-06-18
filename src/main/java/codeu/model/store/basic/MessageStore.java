@@ -110,4 +110,8 @@ public class MessageStore {
     this.messages = messages;
   }
 
+  public int getNumOfMessages(){
+    return messages.size();
+  }
+
 }
