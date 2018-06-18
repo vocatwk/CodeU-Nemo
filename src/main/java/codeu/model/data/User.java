@@ -73,21 +73,13 @@ public class User {
   }
 
   /** Sets if the user is admin. */
-<<<<<<< HEAD
-  public void setAdminTrue(boolean a){
-=======
   public void setIsAdmin(boolean a){
->>>>>>> 108acee914183106e5112d04c06b5d1b843d6554
     isAdmin = a;
   }
 
   /** Returns true if the user is admin. Returns false if not */
-<<<<<<< HEAD
-  public boolean getAdminTrue(){
-    return isAdmin;
-=======
   public boolean getIsAdmin(){
       return isAdmin;
->>>>>>> 108acee914183106e5112d04c06b5d1b843d6554
 }
+
 }
