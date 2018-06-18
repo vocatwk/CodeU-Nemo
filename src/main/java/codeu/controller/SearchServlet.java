@@ -30,9 +30,9 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void init() throws ServletException {
     super.init();
-    setUserStore(userStore.getInstance());
-    setConversationStore(conversationStore.getInstance());
-    setMessageStore(messageStore.getInstance());
+    setUserStore(UserStore.getInstance());
+    setConversationStore(ConversationStore.getInstance());
+    setMessageStore(MessageStore.getInstance());
   }
 
   /**
