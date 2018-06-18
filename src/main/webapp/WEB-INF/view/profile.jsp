@@ -55,11 +55,11 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 
       <ul>
         <% for (Message message : messages) { %>
-          <li> <strong> <%= Date.from(message.getCreationTime()) %>: 
+          <li> <strong> <%= Date.from(message.getCreationTime()) %>:
                </strong> <%= message.getContent() %> </li>
         <% } %>
       </ul>
- 
+
     </div>
 
   </div>
