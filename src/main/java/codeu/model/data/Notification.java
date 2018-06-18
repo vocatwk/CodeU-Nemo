@@ -15,14 +15,14 @@ public class Notification{
   private User receiver;
   private User sender;
   private UUID id;
-  private Object thingTheNotifcationIsAbout;
+  private Event theNotification;
   private boolean seenNotifcation;
 
-  public Notification(UUID id, User receiver, User sender, Object thingTheNotifcationIsAbout){
+  public Notification(UUID id, User receiver, User sender, Event theNotification){
       this.receiver = receiver;
       this.sender = sender;
       this.id = id;
-      this.thingTheNotifcationIsAbout = thingTheNotifcationIsAbout;
+      this.theNotification = theNotification;
 
   }
 
@@ -43,6 +43,7 @@ public class Notification{
     notification.add(receiver.getName());
     notification.add(sender.getName());
     notification.add(id.toString());
+    notification.add(theNotification.getType());
 
     return notification;
   }
@@ -50,7 +51,7 @@ public class Notification{
  public boolean sawNotification(boolean seenNotifcation){
    this.seenNotifcation = seenNotifcation;
  }
- 
+
   public boolean isNotificationSeen(){
     return seenNotifcation
   }
