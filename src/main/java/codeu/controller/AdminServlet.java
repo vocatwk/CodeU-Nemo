@@ -23,7 +23,7 @@ public class AdminServlet extends HttpServlet {
   private UserStore userStore;
   private ConversationStore conversationStore;
   private MessageStore messageStore;
-  private ArrayList<String> adminList = new ArrayList<String>(Arrays.asList("admin","admin1","admin2","admin3"));
+  private List<String> adminList = Arrays.asList("admin","admin1","admin2","admin3");
 
 
   @Override
