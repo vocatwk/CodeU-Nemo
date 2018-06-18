@@ -31,7 +31,7 @@ public class AdminServlet extends HttpServlet {
     super.init();
     setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
-    setMessageStore(MessageStore.getInstance());xs
+    setMessageStore(MessageStore.getInstance());
   }
 
   /**
