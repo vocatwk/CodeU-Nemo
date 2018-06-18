@@ -104,7 +104,7 @@ public class AdminServletTest {
       Mockito.verify(mockRequest).setAttribute("numOfUsers", fakeUserList.size());
       Mockito.verify(mockRequest).setAttribute("numOfConvos", fakeMessageList.size());
       Mockito.verify(mockRequest).setAttribute("numOfMessages", fakeConversationList.size());
-      //Mockito.verify(mockRequest).setAttribute("numOfAdmins", 4);
+      Mockito.verify(mockRequest).setAttribute("numOfAdmins", 4);
       Mockito.verify(mockRequest).setAttribute("newestUser", fakeNewestUser);
       Mockito.verify(mockRequest).setAttribute("mostActiveUser", fakeMostActiveUser);
       Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);

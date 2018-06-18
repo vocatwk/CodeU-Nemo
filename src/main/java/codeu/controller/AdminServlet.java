@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import java.util.UUID;
+import java.util.Arrays;
+
 
 
 /** Servlet class responsible for the Admin page. */
@@ -21,7 +23,9 @@ public class AdminServlet extends HttpServlet {
   private UserStore userStore;
   private ConversationStore conversationStore;
   private MessageStore messageStore;
-  private List<String> adminList = List.of("admin","admin1", "admin2","admin3");;
+  private ArrayList<String> adminList = new ArrayList<String>(Arrays.asList("admin","admin1","admin2","admin3"));
+
+  //private List<String> adminList = new ArrayList<String>["admin","admin1","admin2","admin3"];
   /**
    * Set up state for handling login-related requests. This method is only called when running in a
    * server, not when running in a test.
@@ -33,6 +37,11 @@ public class AdminServlet extends HttpServlet {
     setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
+    //adminList.add("admin");
+    //adminList.add("admin1");
+    //adminList.add("admin2");
+    //adminList.add("admin3");
+
   }
 
   /**
@@ -105,7 +114,7 @@ public class AdminServlet extends HttpServlet {
       request.setAttribute("newestUser", newestUser);
       request.setAttribute("mostActiveUser", mostActiveUser);
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
-        }
+    }
 
 
 }
