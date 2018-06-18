@@ -11,12 +11,11 @@ import codeu.model.data.Event;
 import codeu.model.store.basic.EventStore;
 
 public class Notification{
-  private final List<String> notification;
+  private  List<String> notification;
   private User receiver;
   private User sender;
   private UUID id;
   private Object thingTheNotifcationIsAbout;
-  private List<Object> notification;
 
   public Notification(UUID id, User receiver, User sender, Object thingTheNotifcationIsAbout){
       this.receiver = receiver;
@@ -34,11 +33,17 @@ public class Notification{
     return sender;
   }
 
-  public List<Object> getNotification(){
-    notification.add(receiver);
-    notification.add(sender);
-    notification.add(id);
-    notification.add(thingTheNotifcationIsAbout);
+  public UUID getId(){
+    return id;
+  }
+
+  public List<String> getNotification(){
+    notification = new ArrayList<>();
+    notification.add(receiver.getName());
+    notification.add(sender.getName());
+    notification.add(id.toString());
+
+    return notification;
   }
 
 }

@@ -163,7 +163,7 @@ public class PersistentDataStore {
    *     Datastore service
    */
   public List<Event> loadEvents() throws PersistentDataStoreException {
-    
+
     List<Event> events = new ArrayList<>();
 
     // Retrieve all events from the datastore.
@@ -185,7 +185,7 @@ public class PersistentDataStore {
         throw new PersistentDataStoreException(e);
       }
     }
-    
+
     return events;
   }
 
@@ -232,4 +232,3 @@ public class PersistentDataStore {
     datastore.put(eventEntity);
   }
 }
-
