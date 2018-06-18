@@ -94,7 +94,7 @@ public class MessageStore {
   public List<Message> getMessagesFromAuthor(UUID authorId) {
 
     List<Message> messagesFromAuthor = new ArrayList<>();
-    
+
     for (Message message : messages) {
       if (message.getAuthorId().equals(authorId)) {
         messagesFromAuthor.add(message);
@@ -108,4 +108,9 @@ public class MessageStore {
   public void setMessages(List<Message> messages) {
     this.messages = messages;
   }
+
+  public int getNumOfMessages(){
+    return messages.size();
+  }
+
 }
