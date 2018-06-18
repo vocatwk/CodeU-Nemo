@@ -25,23 +25,13 @@ public class AdminServlet extends HttpServlet {
   private MessageStore messageStore;
   private ArrayList<String> adminList = new ArrayList<String>(Arrays.asList("admin","admin1","admin2","admin3"));
 
-  //private List<String> adminList = new ArrayList<String>["admin","admin1","admin2","admin3"];
-  /**
-   * Set up state for handling login-related requests. This method is only called when running in a
-   * server, not when running in a test.
-   */
 
   @Override
   public void init() throws ServletException {
     super.init();
     setUserStore(UserStore.getInstance());
     setConversationStore(ConversationStore.getInstance());
-    setMessageStore(MessageStore.getInstance());
-    //adminList.add("admin");
-    //adminList.add("admin1");
-    //adminList.add("admin2");
-    //adminList.add("admin3");
-
+    setMessageStore(MessageStore.getInstance());xs
   }
 
   /**
