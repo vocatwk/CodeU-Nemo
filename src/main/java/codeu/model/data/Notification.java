@@ -16,6 +16,7 @@ public class Notification{
   private User sender;
   private UUID id;
   private Object thingTheNotifcationIsAbout;
+  private boolean seenNotifcation;
 
   public Notification(UUID id, User receiver, User sender, Object thingTheNotifcationIsAbout){
       this.receiver = receiver;
@@ -45,5 +46,14 @@ public class Notification{
 
     return notification;
   }
+
+ public boolean sawNotification(boolean seenNotifcation){
+   this.seenNotifcation = seenNotifcation;
+ }
+ 
+  public boolean isNotificationSeen(){
+    return seenNotifcation
+  }
+
 
 }
