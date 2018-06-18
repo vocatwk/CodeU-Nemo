@@ -8,7 +8,6 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
