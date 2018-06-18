@@ -23,7 +23,6 @@ public class Notification{
       this.sender = sender;
       this.id = id;
       this.theNotification = theNotification;
-
   }
 
   public User getReceiver(){
@@ -53,7 +52,7 @@ public class Notification{
  }
 
   public boolean isNotificationSeen(){
-    return seenNotifcation
+    return seenNotifcation;
   }
 
 
