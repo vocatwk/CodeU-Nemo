@@ -131,20 +131,7 @@ public class ChatServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String username = (String) request.getSession().getAttribute("user");
-    if (username == null) {
-      // user is not logged in, don't let them add a message
-      // or make conversation private
-      response.sendRedirect("/login");
-      return;
-    }
-
     User user = userStore.getUser(username);
-    if (user == null) {
-      // user was not found, don't let them add a message
-      // or make conversation private
-      response.sendRedirect("/login");
-      return;
-    }
 
     String requestUrl = request.getRequestURI();
     String conversationTitle = requestUrl.substring("/chat/".length());

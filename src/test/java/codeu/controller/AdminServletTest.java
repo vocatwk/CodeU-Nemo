@@ -111,24 +111,7 @@ public class AdminServletTest {
 
 
     }
-
-
-  @Test
-  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    AdminServlet.doGet(mockRequest, mockResponse);
-    Mockito.verify(mockResponse).sendRedirect("/");
-}
-
-  @Test
-  public void testDoGet_InvalidUser() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(null);
-
-    AdminServlet.doGet(mockRequest, mockResponse);
-    Mockito.verify(mockResponse).sendRedirect("/");
-  }
+  
   @Test
   public void testDoGet_isAdminFalse() throws IOException, ServletException{
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
