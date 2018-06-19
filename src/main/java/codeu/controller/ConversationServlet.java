@@ -100,19 +100,7 @@ public class ConversationServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String username = (String) request.getSession().getAttribute("user");
-    if (username == null) {
-      // user is not logged in, don't let them create a conversation
-      response.sendRedirect("/conversations");
-      return;
-    }
-
     User user = userStore.getUser(username);
-    if (user == null) {
-      // user was not found, don't let them create a conversation
-      System.out.println("User not found: " + username);
-      response.sendRedirect("/conversations");
-      return;
-    }
 
     String conversationTitle = request.getParameter("conversationTitle");
     if (!conversationTitle.matches("[\\w*]*")) {

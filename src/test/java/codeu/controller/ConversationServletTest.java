@@ -84,29 +84,6 @@ public class ConversationServletTest {
   }
 
   @Test
-  public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    conversationServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockConversationStore, Mockito.never())
-        .addConversation(Mockito.any(Conversation.class));
-    Mockito.verify(mockResponse).sendRedirect("/conversations");
-  }
-
-  @Test
-  public void testDoPost_InvalidUser() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(null);
-
-    conversationServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockConversationStore, Mockito.never())
-        .addConversation(Mockito.any(Conversation.class));
-    Mockito.verify(mockResponse).sendRedirect("/conversations");
-  }
-
-  @Test
   public void testDoPost_BadConversationName() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("bad !@#$% name");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
