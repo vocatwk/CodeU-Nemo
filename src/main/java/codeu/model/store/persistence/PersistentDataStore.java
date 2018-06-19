@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Notification;
 import codeu.model.store.persistence.PersistentDataStoreException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -191,6 +192,39 @@ public class PersistentDataStore {
 
     return events;
   }
+
+  public List<User> loadNotificationss() throws PersistentDataStoreException {
+
+    List<Notification> notifications = new ArrayList<>();
+
+    // Retrieve all users from the datastore.
+    Query query = new Query("chat-notifications");
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
+        String sender = (String) entity.getProperty("sender");
+        String receiver = (String) entity.getProperty("receiver");
+        Event theNotification = entity.getProperty("event");
+        Notifications notification = new notification(uuid, sender, receiver, creationTime);
+        String aboutMe = (String) entity.getProperty("about_me");
+        boolean isAdmin = (boolean) entity.getProperty("is_admin");
+        Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        if(aboutMe != null) user.setAboutMe(aboutMe);
+        if(isAdmin == true) user.setIsAdmin(isAdmin);
+        notifications.add(notification);
+      } catch (Exception e) {
+        // In a production environment, errors should be very rare. Errors which may
+        // occur include network errors, Datastore service errors, authorization errors,
+        // database entity definition mismatches, or service mismatches.
+        throw new PersistentDataStoreException(e);
+      }
+    }
+
+    return users;
+  }
+
 
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
