@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet class responsible for the chat page. */
+/** Servlet class responsible for the signout link. */
 public class SignoutServlet extends HttpServlet {
 
   
