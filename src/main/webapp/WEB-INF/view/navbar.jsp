@@ -9,7 +9,7 @@
   <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
   <a href="/conversations">Conversations</a>
   <% if(navBarUsername != null){ %>
-    <a href="/profile/<%=navBarUser %>">
+    <a href="/profile/<%=navBarUsername %>">
       Hello <%= navBarUsername %>!</a>
   <% } else{ %>
     <a href="/login">Login</a>
