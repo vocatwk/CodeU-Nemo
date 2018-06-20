@@ -1,4 +1,4 @@
-# CodeU Example Project
+# CodeU - Nemo
 
 Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
