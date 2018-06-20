@@ -55,19 +55,9 @@ public class AdminServlet extends HttpServlet {
       throws IOException, ServletException {
 
       String username = (String)request.getSession().getAttribute("user");
-      if (username == null) {
-        // user is not logged in, don't let them access the admin page
-        response.sendRedirect("/");
-        return;
-      }
       User user = userStore.getUser(username);
       if (adminList.contains(username)){
         user.setIsAdmin(true);
-      }
-      if (user == null) {
-        // user was not found, don't let them access the admin page
-        response.sendRedirect("/");
-        return;
       }
       if (user.getIsAdmin() == false) {
         /* rediects user to homepage if not admin*/

@@ -26,6 +26,16 @@
     <listener-class>codeu.controller.ServerStartupListener</listener-class>
   </listener>
 
+  <filter>
+    <filter-name>SessionFilter</filter-name>
+    <filter-class>codeu.controller.SessionFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>SessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>codeu.controller.LoginServlet</servlet-class>

@@ -105,16 +105,9 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
     String requestUrl = request.getRequestURI();
- 
-    String username = (String) request.getSession().getAttribute("user");
- 
-    if(username == null){
-      // user not logged in
-      response.sendRedirect("/login");
-      return;
-    }
- 
+    String username = (String) request.getSession().getAttribute("user"); 
     User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){

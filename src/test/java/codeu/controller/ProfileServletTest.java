@@ -151,16 +151,4 @@ public class ProfileServletTest {
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
-
-  @Test
-  public void testDoPost_notLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/notMe");
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    profileServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockResponse).sendRedirect("/login");
-    Mockito.verify(mockUserStore, Mockito.never()).getUser("notMe");
-  }
-
 }
