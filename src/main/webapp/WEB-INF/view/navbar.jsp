@@ -13,6 +13,7 @@
   <% } %>
   <a href="/about.jsp">About</a>
   <a href="/activityfeed">Activity Feed</a>
+  <a href="/signout" style="float: right"> Sign out </a>
   <%if(navBarUser != null && navUser.getIsAdmin() == true){%>
       <a href="/admin"> Admin Page</a>
   <%}%>
