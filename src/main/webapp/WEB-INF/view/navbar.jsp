@@ -16,7 +16,9 @@
   <% } %>
   <a href="/about.jsp">About</a>
   <a href="/activityfeed">Activity Feed</a>
-  <a href="/logout" style="float: right"> Log out </a>
+  <form action="/logout" method="POST" style="float: right">
+      <input type="submit" value="Log out"/>
+  </form>
   <%if(navBarUsername != null && navBarUser.getIsAdmin() == true){%>
       <a href="/admin"> Admin Page</a>
   <%}%>
