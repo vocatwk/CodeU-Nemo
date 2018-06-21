@@ -117,28 +117,7 @@ public class ChatServletTest {
 
     Mockito.verify(mockResponse).sendRedirect("/conversations");
   }
-
-  @Test
-  public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    chatServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockMessageStore, Mockito.never()).addMessage(Mockito.any(Message.class));
-    Mockito.verify(mockResponse).sendRedirect("/login");
-  }
-
-  @Test
-  public void testDoPost_InvalidUser() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(null);
-
-    chatServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockMessageStore, Mockito.never()).addMessage(Mockito.any(Message.class));
-    Mockito.verify(mockResponse).sendRedirect("/login");
-  }
-
+  
   @Test
   public void testDoPost_ConversationNotFound() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
