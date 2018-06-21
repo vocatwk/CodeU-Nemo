@@ -207,12 +207,11 @@ public class PersistentDataStore {
         String sender = (String) entity.getProperty("sender");
         String receiver = (String) entity.getProperty("receiver");
         Event theNotification = entity.getProperty("event");
-        Notifications notification = new notification(uuid, sender, receiver, creationTime);
-        String aboutMe = (String) entity.getProperty("about_me");
-        boolean isAdmin = (boolean) entity.getProperty("is_admin");
-        Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        if(aboutMe != null) user.setAboutMe(aboutMe);
-        if(isAdmin == true) user.setIsAdmin(isAdmin);
+        Notifications notification = new notification(uuid, sender, receiver, theNotification);
+        boolean seenNotifcation = (boolean) entity.getProperty("seen_notifcation");
+        Instant lastSeen = Instant.parse((String) entity.getProperty("last_seen"));
+        if(lastSeen != null) user.setAboutMe(lastSeen);
+        if(seenNotifcation == true) user.setIsAdmin(isAdmin);
         notifications.add(notification);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -269,4 +268,17 @@ public class PersistentDataStore {
     eventEntity.setProperty("information", event.getInformation());
     datastore.put(eventEntity);
   }
+
+  /** Write a Notification object to the Datastore service. */
+  public void writeThrough(Notification notification) {
+    Entity notificationEntity = new Entity("chat-notification", event.getId().toString());
+    notificationEntity.setProperty("uuid", notification.getId().toString());
+    notificationEntity.setProperty("sender", notification.getSender().toString());
+    notificationEntity.setProperty("receiver", notification.getReceiver().toString());
+    notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
+    notificationEntity.setProperty("last_seen", notification.getTimeSeen());
+    datastore.put(eventEntity);
+  }
+
+
 }

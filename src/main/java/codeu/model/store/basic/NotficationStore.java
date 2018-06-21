@@ -11,7 +11,9 @@ import java.util.UUID;
  * saves to PersistentStorageAgent. It's a singleton so all servlet classes can access the same
  * instance.
  */
-public class NotificationStore{
+
+public class NotificationStore {
+
   private static NotificationStore instance;
   /** Singleton instance of NotifcationStore. */
 

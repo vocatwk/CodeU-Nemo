@@ -27,7 +27,7 @@ public class Notification{
       this.id = id;
       this.theNotification = theNotification;
       seenNotifcation = false;
-      
+
   }
 
   public User getReceiver(){
@@ -42,21 +42,11 @@ public class Notification{
     return id;
   }
 
-  public List<String> getNotification(){
-    notification = new ArrayList<>();
-    notification.add(receiver.getName());
-    notification.add(sender.getName());
-    notification.add(id.toString());
-    notification.add(theNotification.getType());
-
-    return notification;
-  }
-
- public void sawNotification(boolean seenNotifcation){
+ public void setSeenNotification(boolean seenNotifcation){
    this.seenNotifcation = seenNotifcation;
  }
 
-  public boolean isNotificationSeen(){
+  public boolean getSeenNotification(){
     return seenNotifcation;
   }
 
