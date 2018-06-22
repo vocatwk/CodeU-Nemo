@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.Gson;
 
 /** Servlet class responsible for the search feature. */
 public class SearchServlet extends HttpServlet {
@@ -64,11 +65,19 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
+    System.out.println("In doPost()");
     String searchRequest = (String)request.getParameter("searchRequest");
     request.setAttribute("searchRequest", searchRequest);
 
     List<User> users = userStore.getUsers(searchRequest);
     request.setAttribute("users", users);
+
+    String json = new Gson().toJson(users);
+    System.out.println("Response Type: " + response.getContentType());
+    response.setContentType("application/json");
+    System.out.println("Response Type: " + response.getContentType());
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write(json);
 
     // List<Conversation> conversations = conversationStore.getAllConversations();
     // request.setAttribute("conversations", conversations);

@@ -27,10 +27,30 @@ List<User> allUsers = UserStore.getInstance().getAllUsers();
       dropDiv.style.display = "block"
     }
   }
+
+  function keypressed() {
+    fetch('/search?searchRequest=' + document.querySelector('#searchBar').value)
+      .then(
+        function(response) {
+          if (response.status !== 200) {
+            console.log("Looks like there was a problem. Status Code: " + 
+              response.status);
+            return;
+          }
+
+          response.json().then(function(data) {
+            console.log(data);
+          });
+        }
+      ) 
+      .catch(function(err) {
+        console.log("Fetch Error :-S", err);
+      });
+  }
 </script>
 
 <form action="/search" method="GET">
-  <input onkeyup="toggleDropDown()" type="text" autocomplete="off" name="searchRequest" id="searchBar"><button type="submit" onclick="return isEmpty();"><i class="fa fa-search"></i></button>
+  <input onkeyup="toggleDropDown()" onkeypress="keypressed()" type="text" autocomplete="off" name="searchRequest" id="searchBar"><button type="submit" onclick="return isEmpty();"><i class="fa fa-search"></i></button>
   <div id="dropDiv" style="display: none; background-color: grey;">
     <%
     for (User u : allUsers) {
