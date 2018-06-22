@@ -185,7 +185,6 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(cleanedMessageContent);
       Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
       eventStore.addEvent(messageEvent);
-      //(UUID id, User receiver, User sender, Event theNotification)
       Notification messageNotification = new Notification (UUID.randomUUID(), conversation.getOwnerId(), message.getAuthorId(), messageEvent);
     }
 
