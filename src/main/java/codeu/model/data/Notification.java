@@ -14,14 +14,14 @@ import java.time.Instant;
 
 public class Notification{
 
-  private User receiver;
-  private User sender;
+  private UUID receiver;
+  private UUID sender;
   private UUID id;
   private Event theNotification;
   private boolean seenNotification;
   private Instant lastSeen;
 
-  public Notification(UUID id, User receiver, User sender, Event theNotification){
+  public Notification(UUID id, UUID receiver, UUID sender, Event theNotification){
       this.receiver = receiver;
       this.sender = sender;
       this.id = id;
@@ -29,11 +29,11 @@ public class Notification{
       seenNotification = false;
   }
 
-  public User getReceiver(){
+  public UUID getReceiver(){
     return receiver;
   }
 
-  public User getSender(){
+  public UUID getSender(){
     return sender;
   }
 

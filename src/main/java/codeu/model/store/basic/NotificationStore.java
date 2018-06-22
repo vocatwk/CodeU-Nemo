@@ -85,19 +85,19 @@ public class NotificationStore {
   public List<Notification> deleteNotification(UUID id){
     for (Notification notification : notifications) {
       if (notification.getId().equals(id)) {
+        if(notification.getSeenNotification() == true){
           notifications.remove(notification);
+        }
       }
     }
     return notifications;
   }
 
-  /** Access the current set of notifications from the receiver. */
-
+  /** Access the current set of notifications from the user. */
   public List<Notification> NotificationForUser(UUID receiverId) {
     List<Notification> notificationForUser = new ArrayList<>();
     for (Notification notification : notifications) {
-      User receiver = notification.getReceiver();
-      if (receiver.getId().equals(receiverId)) {
+      if (notification.getReceiver().equals(receiverId)) {
         notificationForUser.add(notification);
       }
     }

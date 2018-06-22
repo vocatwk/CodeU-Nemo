@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Notification;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -184,6 +185,8 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(cleanedMessageContent);
       Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
       eventStore.addEvent(messageEvent);
+      //(UUID id, User receiver, User sender, Event theNotification)
+      Notification messageNotification = new Notification (UUID.randomUUID(), conversation.getOwnerId(), message.getAuthorId(), messageEvent);
     }
 
     // redirect to a GET request

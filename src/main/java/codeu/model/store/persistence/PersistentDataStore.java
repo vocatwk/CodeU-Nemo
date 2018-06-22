@@ -204,8 +204,8 @@ public class PersistentDataStore {
     for (Entity entity : results.asIterable()) {
       try {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
-        User sender = (User) entity.getProperty("sender");
-        User receiver = (User) entity.getProperty("receiver");
+        UUID sender = UUID.fromString((String) entity.getProperty("sender"));
+        UUID receiver = UUID.fromString((String) entity.getProperty("receiver"));
         Event theNotification = (Event) entity.getProperty("the_notification");
         Notification notification = new Notification(uuid, sender, receiver, theNotification);
         boolean seenNotification = (boolean) entity.getProperty("seen_notification");
