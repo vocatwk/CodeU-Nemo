@@ -49,6 +49,10 @@ public class Notification{
     return seenNotification;
   }
 
+  public Event getTheNotification(){
+    return theNotification;
+  }
+
   public void setTimeSeen(Instant lastSeen){
     this.lastSeen = lastSeen;
   }

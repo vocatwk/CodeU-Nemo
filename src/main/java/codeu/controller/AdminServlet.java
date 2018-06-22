@@ -41,12 +41,18 @@ public class AdminServlet extends HttpServlet {
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
-
+  /**
+   * Sets the ConversationStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
   void setConversationStore(ConversationStore conversationStore) {
     this.conversationStore = conversationStore;
   }
 
-
+  /**
+   * Sets the MessageStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
   void setMessageStore(MessageStore messageStore) {
     this.messageStore = messageStore;
   }

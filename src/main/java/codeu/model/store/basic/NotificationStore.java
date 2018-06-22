@@ -94,7 +94,7 @@ public class NotificationStore {
   }
 
   /** Access the current set of notifications from the user. */
-  public List<Notification> NotificationForUser(UUID receiverId) {
+  public List<Notification> NotificationsForUser(UUID receiverId) {
     List<Notification> notificationForUser = new ArrayList<>();
     for (Notification notification : notifications) {
       if (notification.getReceiver().equals(receiverId)) {
