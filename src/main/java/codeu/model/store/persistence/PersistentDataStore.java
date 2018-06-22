@@ -193,7 +193,7 @@ public class PersistentDataStore {
     return events;
   }
 
-  public List<User> loadNotificationss() throws PersistentDataStoreException {
+  public List<Notification> loadNotificationss() throws PersistentDataStoreException {
 
     List<Notification> notifications = new ArrayList<>();
 
@@ -204,14 +204,14 @@ public class PersistentDataStore {
     for (Entity entity : results.asIterable()) {
       try {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
-        String sender = (String) entity.getProperty("sender");
-        String receiver = (String) entity.getProperty("receiver");
-        Event theNotification = entity.getProperty("event");
-        Notifications notification = new notification(uuid, sender, receiver, theNotification);
-        boolean seenNotifcation = (boolean) entity.getProperty("seen_notifcation");
+        User sender = (User) entity.getProperty("sender");
+        User receiver = (User) entity.getProperty("receiver");
+        Event theNotification = (Event) entity.getProperty("the_notification");
+        Notification notification = new Notification(uuid, sender, receiver, theNotification);
+        boolean seenNotification = (boolean) entity.getProperty("seen_notification");
         Instant lastSeen = Instant.parse((String) entity.getProperty("last_seen"));
-        if(lastSeen != null) user.setAboutMe(lastSeen);
-        if(seenNotifcation == true) user.setIsAdmin(isAdmin);
+        if(lastSeen != null) notification.setTimeSeen(lastSeen);
+        if(seenNotification == true) notification.setSeenNotification(seenNotification);
         notifications.add(notification);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -221,7 +221,7 @@ public class PersistentDataStore {
       }
     }
 
-    return users;
+    return notifications;
   }
 
 
@@ -271,13 +271,13 @@ public class PersistentDataStore {
 
   /** Write a Notification object to the Datastore service. */
   public void writeThrough(Notification notification) {
-    Entity notificationEntity = new Entity("chat-notification", event.getId().toString());
+    Entity notificationEntity = new Entity("chat-notification", notification.getId().toString());
     notificationEntity.setProperty("uuid", notification.getId().toString());
-    notificationEntity.setProperty("sender", notification.getSender().toString());
-    notificationEntity.setProperty("receiver", notification.getReceiver().toString());
+    notificationEntity.setProperty("sender", notification.getSender());
+    notificationEntity.setProperty("receiver", notification.getReceiver());
     notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
     notificationEntity.setProperty("last_seen", notification.getTimeSeen());
-    datastore.put(eventEntity);
+    datastore.put(notificationEntity);
   }
 
 

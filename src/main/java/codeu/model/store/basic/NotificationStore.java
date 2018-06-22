@@ -81,7 +81,7 @@ public class NotificationStore {
    * Delete a seen notification from  the current set of notifications known to the application. This should only be
    * called to delete seen notification, not to delete unseen notification.
    */
-  public Notification deleteNotification(UUID id){
+  public List<Notification> deleteNotification(UUID id){
     for (Notification notification : notifications) {
       if (notification.getId().equals(id)) {
           notifications.remove(notification);
@@ -90,16 +90,18 @@ public class NotificationStore {
     return notifications;
   }
 
+//TODO implement a way that receivets get the their notification
   /** Access the current set of notifications from the receiver. */
-
-  public List<Notification> NotificationForUser(UUID authorId) {
+/*
+  public List<Notification> NotificationForUser(UUID notficationId) {
     List<Notification> notificationForUser = new ArrayList<>();
 
     for (Notification notification : notifications) {
-      if (notification.getAuthorId().equals(authorId)) {
+      if (user.getId().equals(authorId)) {
         notificationForUser.add(notification);
       }
     }
     return notificationForUser;
   }
+  */
 }

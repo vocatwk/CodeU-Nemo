@@ -13,12 +13,12 @@ import java.time.Instant;
 
 
 public class Notification{
-  private  List<String> notification;
+
   private User receiver;
   private User sender;
   private UUID id;
   private Event theNotification;
-  private boolean seenNotifcation;
+  private boolean seenNotification;
   private Instant lastSeen;
 
   public Notification(UUID id, User receiver, User sender, Event theNotification){
@@ -26,8 +26,7 @@ public class Notification{
       this.sender = sender;
       this.id = id;
       this.theNotification = theNotification;
-      seenNotifcation = false;
-
+      seenNotification = false;
   }
 
   public User getReceiver(){
@@ -42,12 +41,12 @@ public class Notification{
     return id;
   }
 
- public void setSeenNotification(boolean seenNotifcation){
-   this.seenNotifcation = seenNotifcation;
+ public void setSeenNotification(boolean seenNotification){
+   this.seenNotification = seenNotification;
  }
 
   public boolean getSeenNotification(){
-    return seenNotifcation;
+    return seenNotification;
   }
 
   public void setTimeSeen(Instant lastSeen){
