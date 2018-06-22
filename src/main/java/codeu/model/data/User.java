@@ -28,7 +28,6 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
-  private List<Notifcation> userNotifcations;
   /**
    * Constructs a new User.
    *
@@ -44,7 +43,6 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-    UserNotifcations = new ArrayList<>();
   }
 
   /** Returns the ID of this User. */
@@ -85,14 +83,6 @@ public class User {
   /** Returns true if the user is admin. Returns false if not */
   public boolean getIsAdmin(){
       return isAdmin;
-  }
-
-  public void addNotification(Notification notification){
-      userNotifcations.add(notifcation);
-  }
-
-  public List<Notification> getUserNotfications(){
-      return userNotifcations;
   }
 
 

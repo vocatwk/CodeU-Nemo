@@ -22,6 +22,7 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
+import codeu.model.store.basic.NotificationStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -49,6 +50,8 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  private NotificationStore notificationStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -57,6 +60,7 @@ public class ChatServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    setNotificationStore(NotificationStore.getInstance());
   }
 
   /**
@@ -89,6 +93,10 @@ public class ChatServlet extends HttpServlet {
    */
   void setEventStore(EventStore eventStore) {
     this.eventStore = eventStore;
+  }
+
+  void setNotificationStore(NotificationStore notificationStore) {
+    this.notificationStore = notificationStore;
   }
 
   /**

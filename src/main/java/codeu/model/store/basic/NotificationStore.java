@@ -5,6 +5,7 @@ import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import codeu.model.data.User;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -90,18 +91,17 @@ public class NotificationStore {
     return notifications;
   }
 
-//TODO implement a way that receivets get the their notification
   /** Access the current set of notifications from the receiver. */
-/*
-  public List<Notification> NotificationForUser(UUID notficationId) {
-    List<Notification> notificationForUser = new ArrayList<>();
 
+  public List<Notification> NotificationForUser(UUID receiverId) {
+    List<Notification> notificationForUser = new ArrayList<>();
     for (Notification notification : notifications) {
-      if (user.getId().equals(authorId)) {
+      User receiver = notification.getReceiver();
+      if (receiver.getId().equals(receiverId)) {
         notificationForUser.add(notification);
       }
     }
     return notificationForUser;
   }
-  */
+
 }
