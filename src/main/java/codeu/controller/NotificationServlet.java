@@ -1,12 +1,9 @@
 package codeu.controller;
 
 import codeu.model.data.User;
-import codeu.model.data.Notificationl
+import codeu.model.data.Notification;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.NotificationStore;
-import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +17,6 @@ import java.util.Arrays;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
-  private ConversationStore conversationStore;
-  private MessageStore messageStore;
-  private EventStore eventStore;
   private NotificationStore notificationStore;
 
   @Override
