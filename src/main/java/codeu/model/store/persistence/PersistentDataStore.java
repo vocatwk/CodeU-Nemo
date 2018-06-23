@@ -184,7 +184,7 @@ public class PersistentDataStore {
     return events;
   }
 
-  public List<Notification> loadNotificationss() throws PersistentDataStoreException {
+  public List<Notification> loadNotifications() throws PersistentDataStoreException {
 
     List<Notification> notifications = new ArrayList<>();
 
@@ -258,7 +258,7 @@ public class PersistentDataStore {
     eventEntity.setProperty("creation_time", event.getCreationTime().toString());
     eventEntity.setProperty("information", event.getInformation());
     datastore.put(eventEntity);
-
+  }
 
     /** Write a Notification object to the Datastore service. */
     public void writeThrough(Notification notification) {

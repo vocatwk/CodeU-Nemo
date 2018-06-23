@@ -124,4 +124,5 @@ public class PersistentStorageAgent {
   /** Write a Notification object to the Datastore service. */
   public void writeThrough(Notification notification) {
     persistentDataStore.writeThrough(notification);
+  }
 }
