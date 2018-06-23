@@ -18,10 +18,12 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Notification;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
+import codeu.model.store.basic.NotificationStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -49,6 +51,8 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  private NotificationStore notificationStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -57,6 +61,7 @@ public class ChatServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    setNotificationStore(NotificationStore.getInstance());
   }
 
   /**
@@ -89,6 +94,10 @@ public class ChatServlet extends HttpServlet {
    */
   void setEventStore(EventStore eventStore) {
     this.eventStore = eventStore;
+  }
+
+  void setNotificationStore(NotificationStore notificationStore) {
+    this.notificationStore = notificationStore;
   }
 
   /**
@@ -176,6 +185,8 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(cleanedMessageContent);
       Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
       eventStore.addEvent(messageEvent);
+      Notification messageNotification = new Notification (
+        UUID.randomUUID(), conversation.getOwnerId(), message.getAuthorId(), messageEvent);
     }
 
     // redirect to a GET request

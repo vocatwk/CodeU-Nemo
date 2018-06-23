@@ -16,6 +16,9 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import codeu.model.data.Notification;
+
 
 /** Class representing a registered user. */
 public class User {
@@ -80,5 +83,7 @@ public class User {
   /** Returns true if the user is admin. Returns false if not */
   public boolean getIsAdmin(){
       return isAdmin;
-}
+  }
+
+
 }
