@@ -16,6 +16,7 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.HashSet;
 
 /**
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
@@ -27,6 +28,7 @@ public class Conversation {
   public final Instant creation;
   public final String title;
   private Boolean isPrivate;
+  private HashSet<String> members;
 
   /**
    * Constructs a new Conversation.
@@ -42,6 +44,7 @@ public class Conversation {
     this.creation = creation;
     this.title = title;
     this.isPrivate = false;
+    this.members = new HashSet<String>();
   }
 
   /** Returns the ID of this Conversation. */
@@ -69,11 +72,33 @@ public class Conversation {
     return isPrivate;
   }
 
+  /** makes this conversation public. */
   public void makePublic() {
     this.isPrivate = false;
   }
 
+  /** makes this conversation private. */
   public void makePrivate() {
     this.isPrivate = true;
+  }
+
+  /** adds a member to this conversation. */
+  public void addMember(String username) {
+    members.add(username);
+  }
+
+  /** Returns the members of this conversation. */
+  public HashSet<String> getMembers() {
+    return members;
+  }
+
+  /** Checks if a user is a member of this conversation. */
+  public boolean containsMember(String username) {
+    return members.contains(username);
+  }
+
+  /** Removes a member of this conversation. */
+  public void removeMember(String username) {
+    members.remove(username);
   }
 }
