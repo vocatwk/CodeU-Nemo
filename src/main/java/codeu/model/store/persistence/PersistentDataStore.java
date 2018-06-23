@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Notification;
 import codeu.model.store.persistence.PersistentDataStoreException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -156,16 +157,8 @@ public class PersistentDataStore {
 
     return messages;
   }
-
-  /**
-   * Loads all Event objects from the Datastore service and returns them in a List, sorted in
-   * ascending order by creation time.
-   *
-   * @throws PersistentDataStoreException if an error was detected during the load from the
-   *     Datastore service
-   */
   public List<Event> loadEvents() throws PersistentDataStoreException {
-    
+
     List<Event> events = new ArrayList<>();
 
     // Retrieve all events from the datastore.
@@ -187,9 +180,41 @@ public class PersistentDataStore {
         throw new PersistentDataStoreException(e);
       }
     }
-    
+
     return events;
   }
+
+  public List<Notification> loadNotifications() throws PersistentDataStoreException {
+
+    List<Notification> notifications = new ArrayList<>();
+
+    // Retrieve all users from the datastore.
+    Query query = new Query("chat-notifications");
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
+        UUID sender = UUID.fromString((String) entity.getProperty("sender"));
+        UUID receiver = UUID.fromString((String) entity.getProperty("receiver"));
+        Event theNotification = (Event) entity.getProperty("the_notification");
+        Notification notification = new Notification(uuid, sender, receiver, theNotification);
+        boolean seenNotification = (boolean) entity.getProperty("seen_notification");
+        Instant lastSeen = Instant.parse((String) entity.getProperty("last_seen"));
+        if(lastSeen != null) notification.setTimeSeen(lastSeen);
+        if(seenNotification == true) notification.setSeenNotification(seenNotification);
+        notifications.add(notification);
+      } catch (Exception e) {
+        // In a production environment, errors should be very rare. Errors which may
+        // occur include network errors, Datastore service errors, authorization errors,
+        // database entity definition mismatches, or service mismatches.
+        throw new PersistentDataStoreException(e);
+      }
+    }
+
+    return notifications;
+  }
+
 
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
@@ -233,5 +258,16 @@ public class PersistentDataStore {
     eventEntity.setProperty("creation_time", event.getCreationTime().toString());
     eventEntity.setProperty("information", event.getInformation());
     datastore.put(eventEntity);
+  }
+
+    /** Write a Notification object to the Datastore service. */
+    public void writeThrough(Notification notification) {
+      Entity notificationEntity = new Entity("chat-notification", notification.getId().toString());
+      notificationEntity.setProperty("uuid", notification.getId().toString());
+      notificationEntity.setProperty("sender", notification.getSender());
+      notificationEntity.setProperty("receiver", notification.getReceiver());
+      notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
+      notificationEntity.setProperty("last_seen", notification.getTimeSeen());
+      datastore.put(notificationEntity);
   }
 }

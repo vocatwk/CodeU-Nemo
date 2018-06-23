@@ -17,7 +17,11 @@
 		<p> Current number of Users: <%= request.getAttribute("numOfUsers") %></p>
 		<p> Current number of Messages: <%= request.getAttribute("numOfMessages") %></p>
 		<p> Current number of Conversations: <%= request.getAttribute("numOfConvos") %></p>
+<<<<<<< HEAD
+    <p> Most active user: <%= request.getAttribute("mostActiveUser") %></p>
+=======
     <p> Most active user: <%= request.getAttribute("mostActiveUser") %></p>  
+>>>>>>> 7651b41ea8e53fc65a1eebafb410d4e3a21acdbc
     <p> Newest User: <%= request.getAttribute("newestUser") %> </p>
     <p> Number of Admins: <%= request.getAttribute("numOfAdmins")%> </p>
     <p> User creation time: <%= request.getAttribute("timeCreated") %> </p>
