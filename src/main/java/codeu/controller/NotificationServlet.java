@@ -23,10 +23,7 @@ public class NotificationServlet extends HttpServlet{
   public void init() throws ServletException {
     super.init();
     setUserStore(UserStore.getInstance());
-    setConversationStore(ConversationStore.getInstance());
-    setMessageStore(MessageStore.getInstance());
-    setEventStore(EventStore.getInstance());
-    setNotificationStore(NotifcationStore.getInstance());
+    setNotificationStore(NotificationStore.getInstance());
   }
   /**
    * Sets the UserStore used by this servlet. This function provides a common setup method for use
@@ -40,7 +37,7 @@ public class NotificationServlet extends HttpServlet{
    * Sets the NotificationStore used by this servlet. This function provides a common setup method for use
    * by the test framework or the servlet's init() function.
    */
-  void setNotificationStore(NotifcationStore notifcationStore){
+  void setNotificationStore(NotificationStore notificationStore){
     this.notificationStore = notificationStore;
   }
 
@@ -48,12 +45,11 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        String username = request.getAttribute("username");
-        List<User> allUsers = UserStore.getInstance().getAllUsers();
-        User userIsReciever = allUsers.getUser(username);
-        UUID userId = userIsReciever.getID();
-        List<Notification> allNotifications = NotifcationStore.getInstance().getAllNotification();
-        List<Notification> userNotifications = NotificationStore.NotificationsForUser(userId);
+        String username = request.getParameter("username");
+        User userIsReciever = userStore.getUser(username);
+        UUID userId = userIsReciever.getId();
+        List<Notification> allNotifications = notificationStore.getAllNotification();
+        List<Notification> userNotifications = notificationStore.NotificationsForUser(userId);
         request.setAttribute("userNotifications", userNotifications);
       }
 
