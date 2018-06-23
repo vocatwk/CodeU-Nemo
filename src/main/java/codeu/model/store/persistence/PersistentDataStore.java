@@ -211,4 +211,14 @@ public class PersistentDataStore {
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     datastore.put(conversationEntity);
   }
+  /** Write a Notification object to the Datastore service. */
+  public void writeThrough(Notification notification) {
+    Entity notificationEntity = new Entity("chat-notification", notification.getId().toString());
+    notificationEntity.setProperty("uuid", notification.getId().toString());
+    notificationEntity.setProperty("sender", notification.getSender());
+    notificationEntity.setProperty("receiver", notification.getReceiver());
+    notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
+    notificationEntity.setProperty("last_seen", notification.getTimeSeen());
+    datastore.put(notificationEntity);
+  }
 }
