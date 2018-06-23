@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Notification;
 import codeu.model.store.persistence.PersistentDataStore;
 import java.util.List;
 
@@ -119,7 +120,7 @@ public class PersistentStorageAgent {
   public void writeThrough(Event event) {
     persistentDataStore.writeThrough(event);
   }
-  
+
   /** Write a Notification object to the Datastore service. */
   public void writeThrough(Notification notification) {
     persistentDataStore.writeThrough(notification);
