@@ -13,28 +13,27 @@ import java.time.Instant;
 
 
 public class Notification{
-  private  List<String> notification;
-  private User receiver;
-  private User sender;
+
+  private UUID receiver;
+  private UUID sender;
   private UUID id;
   private Event theNotification;
-  private boolean seenNotifcation;
+  private boolean seenNotification;
   private Instant lastSeen;
 
-  public Notification(UUID id, User receiver, User sender, Event theNotification){
+  public Notification(UUID id, UUID receiver, UUID sender, Event theNotification){
       this.receiver = receiver;
       this.sender = sender;
       this.id = id;
       this.theNotification = theNotification;
-      seenNotifcation = false;
-
+      seenNotification = false;
   }
 
-  public User getReceiver(){
+  public UUID getReceiver(){
     return receiver;
   }
 
-  public User getSender(){
+  public UUID getSender(){
     return sender;
   }
 
@@ -42,22 +41,16 @@ public class Notification{
     return id;
   }
 
-  public List<String> getNotification(){
-    notification = new ArrayList<>();
-    notification.add(receiver.getName());
-    notification.add(sender.getName());
-    notification.add(id.toString());
-    notification.add(theNotification.getType());
-
-    return notification;
-  }
-
- public void sawNotification(boolean seenNotifcation){
-   this.seenNotifcation = seenNotifcation;
+ public void setSeenNotification(boolean seenNotification){
+   this.seenNotification = seenNotification;
  }
 
-  public boolean isNotificationSeen(){
-    return seenNotifcation;
+  public boolean getSeenNotification(){
+    return seenNotification;
+  }
+
+  public Event getTheNotification(){
+    return theNotification;
   }
 
   public void setTimeSeen(Instant lastSeen){
