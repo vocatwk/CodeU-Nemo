@@ -70,9 +70,9 @@ public class PersistentDataStore {
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         User user = new User(uuid, userName, passwordHash, creationTime);
         String aboutMe = (String) entity.getProperty("about_me");
-        boolean isAdmin = (boolean) entity.getProperty("is_admin");
+        Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
         if(aboutMe != null) user.setAboutMe(aboutMe);
-        if(isAdmin == true) user.setIsAdmin(isAdmin);
+        if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
