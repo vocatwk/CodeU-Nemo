@@ -17,6 +17,7 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.persistence.PersistentDataStoreException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -69,7 +70,9 @@ public class PersistentDataStore {
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         User user = new User(uuid, userName, passwordHash, creationTime);
         String aboutMe = (String) entity.getProperty("about_me");
+        Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
         if(aboutMe != null) user.setAboutMe(aboutMe);
+        if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -103,7 +106,10 @@ public class PersistentDataStore {
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        Boolean isPrivate = (Boolean) entity.getProperty("is_private");
+
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
+        if(isPrivate != null && isPrivate == true) conversation.makePrivate();
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -152,15 +158,32 @@ public class PersistentDataStore {
   }
   public List<Notification> loadNotificationss() throws PersistentDataStoreException {
 
+<<<<<<< HEAD
     List<Notification> notifications = new ArrayList<>();
 
     // Retrieve all users from the datastore.
     Query query = new Query("chat-notifications");
+=======
+  /**
+   * Loads all Event objects from the Datastore service and returns them in a List, sorted in
+   * ascending order by creation time.
+   *
+   * @throws PersistentDataStoreException if an error was detected during the load from the
+   *     Datastore service
+   */
+  public List<Event> loadEvents() throws PersistentDataStoreException {
+
+    List<Event> events = new ArrayList<>();
+
+    // Retrieve all events from the datastore.
+    Query query = new Query("chat-events").addSort("creation_time", SortDirection.ASCENDING);
+>>>>>>> 7651b41ea8e53fc65a1eebafb410d4e3a21acdbc
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
       try {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
+<<<<<<< HEAD
         UUID sender = UUID.fromString((String) entity.getProperty("sender"));
         UUID receiver = UUID.fromString((String) entity.getProperty("receiver"));
         Event theNotification = (Event) entity.getProperty("the_notification");
@@ -170,6 +193,13 @@ public class PersistentDataStore {
         if(lastSeen != null) notification.setTimeSeen(lastSeen);
         if(seenNotification == true) notification.setSeenNotification(seenNotification);
         notifications.add(notification);
+=======
+        String type = (String) entity.getProperty("type");
+        Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        @SuppressWarnings("unchecked") List<String> information = (List<String>) entity.getProperty("information");
+        Event event = new Event(uuid, type, creationTime, information);
+        events.add(event);
+>>>>>>> 7651b41ea8e53fc65a1eebafb410d4e3a21acdbc
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
         // occur include network errors, Datastore service errors, authorization errors,
@@ -177,9 +207,16 @@ public class PersistentDataStore {
         throw new PersistentDataStoreException(e);
       }
     }
+<<<<<<< HEAD
 
     return notifications;
   }
+=======
+
+    return events;
+  }
+
+>>>>>>> 7651b41ea8e53fc65a1eebafb410d4e3a21acdbc
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
     Entity userEntity = new Entity("chat-users", user.getId().toString());
@@ -188,6 +225,7 @@ public class PersistentDataStore {
     userEntity.setProperty("password_hash", user.getPasswordHash());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("about_me", user.getAboutMe());
+    userEntity.setProperty("is_admin", user.getIsAdmin());
     datastore.put(userEntity);
   }
 
@@ -209,16 +247,28 @@ public class PersistentDataStore {
     conversationEntity.setProperty("owner_uuid", conversation.getOwnerId().toString());
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
+    conversationEntity.setProperty("is_private", conversation.isPrivate());
     datastore.put(conversationEntity);
   }
-  /** Write a Notification object to the Datastore service. */
-  public void writeThrough(Notification notification) {
-    Entity notificationEntity = new Entity("chat-notification", notification.getId().toString());
-    notificationEntity.setProperty("uuid", notification.getId().toString());
-    notificationEntity.setProperty("sender", notification.getSender());
-    notificationEntity.setProperty("receiver", notification.getReceiver());
-    notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
-    notificationEntity.setProperty("last_seen", notification.getTimeSeen());
-    datastore.put(notificationEntity);
+
+  /** Write a Event object to the Datastore service. */
+  public void writeThrough(Event event) {
+    Entity eventEntity = new Entity("chat-events", event.getId().toString());
+    eventEntity.setProperty("uuid", event.getId().toString());
+    eventEntity.setProperty("type", event.getType());
+    eventEntity.setProperty("creation_time", event.getCreationTime().toString());
+    eventEntity.setProperty("information", event.getInformation());
+    datastore.put(eventEntity);
+
+    
+    /** Write a Notification object to the Datastore service. */
+    public void writeThrough(Notification notification) {
+      Entity notificationEntity = new Entity("chat-notification", notification.getId().toString());
+      notificationEntity.setProperty("uuid", notification.getId().toString());
+      notificationEntity.setProperty("sender", notification.getSender());
+      notificationEntity.setProperty("receiver", notification.getReceiver());
+      notificationEntity.setProperty("seen_notifcation", notification.getSeenNotification());
+      notificationEntity.setProperty("last_seen", notification.getTimeSeen());
+      datastore.put(notificationEntity);
   }
 }

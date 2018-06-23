@@ -65,8 +65,7 @@ public class MessageStore {
     messages = new ArrayList<>();
   }
 
-  /** Access the current set of messages known to the application. This function 
-  is temporary for the Activiy Feed MVP. */
+  /** Access the current set of messages known to the application. */
   public List<Message> getAllMessages() {
     return messages;
   }
@@ -95,7 +94,7 @@ public class MessageStore {
   public List<Message> getMessagesFromAuthor(UUID authorId) {
 
     List<Message> messagesFromAuthor = new ArrayList<>();
-    
+
     for (Message message : messages) {
       if (message.getAuthorId().equals(authorId)) {
         messagesFromAuthor.add(message);
@@ -109,4 +108,9 @@ public class MessageStore {
   public void setMessages(List<Message> messages) {
     this.messages = messages;
   }
+
+  public int getNumOfMessages(){
+    return messages.size();
+  }
+
 }

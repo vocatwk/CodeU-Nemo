@@ -26,6 +26,16 @@
     <listener-class>codeu.controller.ServerStartupListener</listener-class>
   </listener>
 
+  <filter>
+    <filter-name>SessionFilter</filter-name>
+    <filter-class>codeu.controller.SessionFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>SessionFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>codeu.controller.LoginServlet</servlet-class>
@@ -55,7 +65,7 @@
     <servlet-name>ChatServlet</servlet-name>
     <url-pattern>/chat/*</url-pattern>
   </servlet-mapping>
-  
+
   <servlet>
     <servlet-name>RegisterServlet</servlet-name>
     <servlet-class>codeu.controller.RegisterServlet</servlet-class>
@@ -65,7 +75,7 @@
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
-  
+
   <servlet>
     <servlet-name>ProfileServlet</servlet-name>
     <servlet-class>codeu.controller.ProfileServlet</servlet-class>
@@ -86,4 +96,35 @@
     <url-pattern>/activityfeed</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>SearchServlet</servlet-name>
+    <servlet-class>codeu.controller.SearchServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SearchServlet</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AdminServlet</servlet-name>
+    <servlet-class>codeu.controller.AdminServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AdminServlet</servlet-name>
+    <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>codeu.controller.LogoutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+  
 </web-app>

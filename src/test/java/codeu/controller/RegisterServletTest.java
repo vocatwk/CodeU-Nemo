@@ -1,6 +1,8 @@
 package codeu.controller;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,7 +17,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
+
 
 public class RegisterServletTest {
 
@@ -61,6 +66,9 @@ public class RegisterServletTest {
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(false);
     registerServlet.setUserStore(mockUserStore);
 
+    EventStore mockEventStore = Mockito.mock(EventStore.class);
+    registerServlet.setEventStore(mockEventStore);
+
     registerServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
@@ -70,6 +78,14 @@ public class RegisterServletTest {
     Assert.assertThat(
         userArgumentCaptor.getValue().getPasswordHash(), CoreMatchers.containsString("$2a$10$"));
     Assert.assertEquals(60, userArgumentCaptor.getValue().getPasswordHash().length());
+
+    ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("User", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test username");
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }

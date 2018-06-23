@@ -3,10 +3,13 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.time.Instant;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 import org.junit.After;
 import org.junit.Assert;
@@ -42,14 +45,17 @@ public class PersistentDataStoreTest {
     String nameOne = "test_username_one";
     String passwordHashOne = "$2a$10$BNte6sC.qoL4AVjO3Rk8ouY6uFaMnsW8B9NjtHWaDNe8GlQRPRT1S";
     Instant creationOne = Instant.ofEpochMilli(1000);
+    boolean isAdminOne = true;
     User inputUserOne = new User(idOne, nameOne, passwordHashOne, creationOne);
+    inputUserOne.setIsAdmin(isAdminOne);
 
     UUID idTwo = UUID.fromString("10000001-2222-3333-4444-555555555555");
     String nameTwo = "test_username_two";
     String passwordHashTwo = "$2a$10$ttaMOMMGLKxBBuTN06VPvu.jVKif.IczxZcXfLcqEcFi1lq.sLb6i";
     Instant creationTwo = Instant.ofEpochMilli(2000);
+    boolean isAdminTwo = false;
     User inputUserTwo = new User(idTwo, nameTwo, passwordHashTwo, creationTwo);
-
+    inputUserTwo.setIsAdmin(isAdminTwo);
     // save
     persistentDataStore.writeThrough(inputUserOne);
     persistentDataStore.writeThrough(inputUserTwo);
@@ -63,12 +69,15 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(nameOne, resultUserOne.getName());
     Assert.assertEquals(passwordHashOne, resultUserOne.getPasswordHash());
     Assert.assertEquals(creationOne, resultUserOne.getCreationTime());
+    Assert.assertEquals(isAdminOne, resultUserOne.getIsAdmin());
 
     User resultUserTwo = resultUsers.get(1);
     Assert.assertEquals(idTwo, resultUserTwo.getId());
     Assert.assertEquals(nameTwo, resultUserTwo.getName());
     Assert.assertEquals(passwordHashTwo, resultUserTwo.getPasswordHash());
     Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
+    Assert.assertEquals(isAdminTwo, resultUserTwo.getIsAdmin());
+
   }
 
   @Test
@@ -145,5 +154,41 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(authorTwo, resultMessageTwo.getAuthorId());
     Assert.assertEquals(contentTwo, resultMessageTwo.getContent());
     Assert.assertEquals(creationTwo, resultMessageTwo.getCreationTime());
+  }
+
+  @Test
+  public void testSaveAndLoadEvents() throws PersistentDataStoreException {
+    List<String> informationOne = Arrays.asList("user_1");
+    List<String> informationTwo = Arrays.asList("user_2", "about_me");
+    List<String> informationThree = Arrays.asList("user_3", "conversation_1_title");
+    List<String> informationFour = Arrays.asList("user_4", "conversation_2_title", "message_content");
+
+    List<String> eventTypes = Arrays.asList("User", "About Me", "Conversation", "Message");
+    List<List<String>> informationLists = Arrays.asList(informationOne, informationTwo, informationThree, informationFour);
+    List<Event> events = new ArrayList<Event>();
+    // generate test events
+    for (int i = 0; i < 4; i++) {
+      events.add(new Event(
+        UUID.randomUUID(), 
+        eventTypes.get(i), 
+        Instant.ofEpochMilli(1000 * (i + 1)), 
+        informationLists.get(i)));  
+    }
+
+    // save
+    for (Event event : events)
+      persistentDataStore.writeThrough(event);
+
+    // load
+    List<Event> resultEvents = persistentDataStore.loadEvents();
+
+    // confirm that what we saved matches what we loaded
+    for (int i = 0; i < 4; i++) {
+      Event currentEvent = resultEvents.get(i);
+      Assert.assertEquals(events.get(i).getId(), currentEvent.getId());
+      Assert.assertEquals(eventTypes.get(i), currentEvent.getType());
+      Assert.assertEquals(Instant.ofEpochMilli(1000 * (i + 1)), currentEvent.getCreationTime());
+      Assert.assertEquals(informationLists.get(i), currentEvent.getInformation());
+    }
   }
 }
