@@ -42,6 +42,10 @@ nav form {
   box-sizing:border-box;
 }
 
+nav form button {
+  cursor: pointer;
+}
+
 #navTitle {
   font-size: 36px;
 }
@@ -78,9 +82,36 @@ button {
   overflow-y: scroll;
 }
 
+/*The following will probably not be needed.*/
 /* This is for the Search Results Page */
-#results {
+/*#results {
   background-color: white;
   height: 500px;
   overflow-y: scroll;
+}*/
+
+#result {
+  background-color: #eeeeee;
+  max-height: 82px;
+  overflow-y: auto;
+}
+
+.resultItem {
+  background-color: #eeeeee;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.resultItem a {
+  font-size: 16px;
+  color: black;
+  margin: 0;
+  padding: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.resultItem a:hover {
+  background-color: #AED6F1;
 }

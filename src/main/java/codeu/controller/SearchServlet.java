@@ -65,17 +65,14 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
-    System.out.println("In doPost()");
     String searchRequest = (String)request.getParameter("searchRequest");
-    request.setAttribute("searchRequest", searchRequest);
+    // request.setAttribute("searchRequest", searchRequest);
 
     List<User> users = userStore.getUsers(searchRequest);
-    request.setAttribute("users", users);
+    // request.setAttribute("users", users);
 
     String json = new Gson().toJson(users);
-    System.out.println("Response Type: " + response.getContentType());
     response.setContentType("application/json");
-    System.out.println("Response Type: " + response.getContentType());
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(json);
 
@@ -85,7 +82,7 @@ public class SearchServlet extends HttpServlet {
     // List<Message> messages = messageStore.getAllMessages();
     // request.setAttribute("messages", messages);
 
-    request.getRequestDispatcher("/WEB-INF/view/search.jsp").forward(request, response);
+    // request.getRequestDispatcher("/WEB-INF/view/dynamicsearch.json").forward(request, response);
   }
 
   /**
