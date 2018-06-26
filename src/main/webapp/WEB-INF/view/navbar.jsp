@@ -16,7 +16,7 @@
   <% } %>
   <a href="/about.jsp">About</a>
   <a href="/activityfeed">Activity Feed</a>
-  <a href="/notifcation"> Notifications</a>
+  <a href="/notifcations"> Notifications</a>
   <form action="/logout" method="POST" style="float: right">
       <input type="submit" value="Log out"/>
   </form>

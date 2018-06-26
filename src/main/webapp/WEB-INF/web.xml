@@ -126,14 +126,14 @@
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <servlet>
-    
+
     <servlet-name>NotificationServlet</servlet-name>
     <servlet-class>codeu.controller.NotificationServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>NotificationServlet</servlet-name>
-    <url-pattern>/notification</url-pattern>
+    <url-pattern>/notifications</url-pattern>
   </servlet-mapping>
 
 
