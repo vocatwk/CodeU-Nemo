@@ -39,7 +39,14 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
     }
   </style>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+
   <script>
+    $(document).ready(function(){
+          $("#adder").click(function() {
+            $("#addUserBox").toggle();
+          });
+    });
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
@@ -66,9 +73,16 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
     </h1>
     
     <div id="SettingDropDown" style="display: none">
-      <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+      <li> <form action="/chat/<%= conversation.getTitle() %>" method="POST">
         <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
-      </form>
+      </form> </li>
+      <li> <button id="adder"> Add User </button> </li>
+    </div>
+
+    <div id="addUserBox" style="display : none">
+      <div id="container">
+        <%@ include file="userSearchBar.jsp" %> 
+      </div>
     </div>
 
     <hr/>
