@@ -1,9 +1,7 @@
 package codeu.controller;
 
 import codeu.model.data.User;
-import codeu.model.data.Notification;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.NotificationStore;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,13 +15,11 @@ import java.util.Arrays;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
-  private NotificationStore notificationStore;
 
   @Override
   public void init() throws ServletException {
     super.init();
     setUserStore(UserStore.getInstance());
-    setNotificationStore(NotificationStore.getInstance());
   }
   /**
    * Sets the UserStore used by this servlet. This function provides a common setup method for use

@@ -3,7 +3,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.store.basic.NotificationStore" %>
 <%@ page import="codeu.model.data.Notification"%>
-<% List<Notification> notifications = (List<Notification>) request.getAttribute("userNotifications"); %>
 
 <!DOCTYPE html>
 <html>
