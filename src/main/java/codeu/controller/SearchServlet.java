@@ -66,23 +66,26 @@ public class SearchServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
     String searchRequest = (String)request.getParameter("searchRequest");
-    // request.setAttribute("searchRequest", searchRequest);
 
+    // TODO 
+    if (searchRequest == null) {
+      
+    }
+    
     List<User> users = userStore.getUsers(searchRequest);
-    // request.setAttribute("users", users);
-
-    String json = new Gson().toJson(users);
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    response.getWriter().write(json);
+    
+    if (users != null) {
+      String json = new Gson().toJson(users);
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
+    }
 
     // List<Conversation> conversations = conversationStore.getAllConversations();
-    // request.setAttribute("conversations", conversations);
-
+   
     // List<Message> messages = messageStore.getAllMessages();
-    // request.setAttribute("messages", messages);
-
-    // request.getRequestDispatcher("/WEB-INF/view/dynamicsearch.json").forward(request, response);
+   
+    // request.getRequestDispatcher("/WEB-INF/view/search.jsp").forward(request, response);
   }
 
   /**
