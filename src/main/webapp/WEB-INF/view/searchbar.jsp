@@ -35,11 +35,6 @@
               removeElementsByClass("resultItem");
               for (var user in data) {
                 var userName = data[user].name;
-                // Remove the div if necessary.
-                // This is to prevent having duplicate divs
-                if (document.contains(document.getElementById(userName))) {
-                  document.getElementById(userName).remove();
-                }
                 var div = document.createElement("div");
                 div.setAttribute("class", "resultItem");
                 div.setAttribute("id", userName);
