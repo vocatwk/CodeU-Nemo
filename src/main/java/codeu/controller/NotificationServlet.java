@@ -37,9 +37,6 @@ public class NotificationServlet extends HttpServlet{
    * Sets the NotificationStore used by this servlet. This function provides a common setup method for use
    * by the test framework or the servlet's init() function.
    */
-  void setNotificationStore(NotificationStore notificationStore){
-    this.notificationStore = notificationStore;
-  }
 
 //TODO Decide if other notification types beyond messages are needed
   @Override
@@ -48,9 +45,6 @@ public class NotificationServlet extends HttpServlet{
         String username = (String)request.getSession().getAttribute("user");
         User userIsReciever = userStore.getUser(username);
         UUID userId = userIsReciever.getId();
-        List<Notification> allNotifications = notificationStore.getAllNotification();
-        List<Notification> userNotifications = notificationStore.NotificationsForUser(userId);
-        request.setAttribute("userNotifications", userNotifications);
         request.getRequestDispatcher("/WEB-INF/view/notification.jsp").forward(request, response);
       }
 
