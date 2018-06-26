@@ -11,6 +11,9 @@ sent messages.
 * Nemo uses filters to determine if a user has access to a specific page of the app.
 Logged in users no longer have access to login/register page and users that aren't logged
 in have access to only those two pages.
+* Nemo has an Activity Feed that allows users to see when new users join, create
+ conversations, send messages, and update their About Me's.
+* Nemo has an dynamic search feature that allows users to search for other users. 
 
 ## Step 1: Download Java
 
