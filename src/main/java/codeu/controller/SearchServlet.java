@@ -69,17 +69,15 @@ public class SearchServlet extends HttpServlet {
 
     // TODO 
     if (searchRequest == null) {
-      
+
     }
     
     List<User> users = userStore.getUsers(searchRequest);
     
-    if (users != null) {
-      String json = new Gson().toJson(users);
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(json);
-    }
+    String json = new Gson().toJson(users);
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write(json);
 
     // List<Conversation> conversations = conversationStore.getAllConversations();
    
