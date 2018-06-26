@@ -50,8 +50,6 @@ nav a {
 
 #result {
   background-color: #eeeeee;
-  max-height: 82px;
-  overflow-y: auto;
   position: absolute;
   width: 100%;
 }
