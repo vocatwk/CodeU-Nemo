@@ -25,6 +25,7 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
+  private Instant lastSeenNotificationsTimestamp;
   /**
    * Constructs a new User.
    *
@@ -40,6 +41,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
+
   }
 
   /** Returns the ID of this User. */
@@ -80,5 +82,12 @@ public class User {
   /** Returns true if the user is admin. Returns false if not */
   public boolean getIsAdmin(){
       return isAdmin;
-}
+  }
+
+  public void setLastSeenNotificationTimestamp(Instant lastSeen){
+      lastSeenNotificationsTimestamp = lastSeen;
+  }
+  public Instant getLastSeenNotificationsTimestamp(){
+      return lastSeenNotificationsTimestamp;
+    }
 }
