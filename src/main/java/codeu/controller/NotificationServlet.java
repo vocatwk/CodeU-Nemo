@@ -2,8 +2,6 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-import codeu.model.data.Notification;
-//import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,7 +31,7 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        
+
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
