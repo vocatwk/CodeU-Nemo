@@ -43,21 +43,29 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
   <script>
     $(document).ready(function(){
-          $("#adder").click(function() {
-            $("#addUserBox").toggle();
-          });
+      $("#adder").click(function() {
+        $("#addUserBox").toggle();
+      });
     });
+
+    // show contents of drop down settings menu
+    function toggleSettingsDropdown(){
+      var dropDiv = document.getElementsByClassName("dropdown-content")[0];
+      if(dropDiv.style.display === "none"){
+          dropDiv.style.display = "block";
+      }
+      else{
+          var addUserBox = document.getElementById("addUserBox");
+          dropDiv.style.display = addUserBox.style.display = "none";
+      }
+    };
+
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
-    // show contents of dropDown menu
-    function toggleSettingsDropdown() {
-      var dropDiv = document.getElementById("SettingDropDown");
-      dropDiv.style.display = dropDiv.style.display === "none"? "block" : "none";
-    };
   </script>
 </head>
 <body onload="scrollChat()">
@@ -67,24 +75,28 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   <div id="container">
 
     <h1>
+      <!-- Conversation title -->
       <%= conversation.getTitle() %>
-      <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
+        
+      <!-- Setting button and content -->
+      <div id="dropdown-settings">
+        <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
+        <div class="dropdown-content" style="display:none">
+          <li> <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+            <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
+          </form> </li>
+          <li> <button id="adder"> Add User </button> </li>
+            <div id="addUserBox">
+              This is a placeholder text!
+            </div>
+        </div>
+      </div>
+
+      <!-- refresh button -->
       <a href="" style="float: right">&#8635;</a>
     </h1>
+
     
-    <div id="SettingDropDown" style="display: none">
-      <li> <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
-      </form> </li>
-      <li> <button id="adder"> Add User </button> </li>
-    </div>
-
-    <div id="addUserBox" style="display : none">
-      <div id="container">
-        <%@ include file="userSearchBar.jsp" %> 
-      </div>
-    </div>
-
     <hr/>
 
     <div id="chat">
