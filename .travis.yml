@@ -1,1 +1,9 @@
 language: java
+
+addons:
+  chrome: stable
+
+script:
+- mvn appengine:devserver_start
+- mvn test
+- mvn appengine:devserver_stop
