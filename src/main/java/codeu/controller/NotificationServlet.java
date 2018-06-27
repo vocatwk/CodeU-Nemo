@@ -33,15 +33,7 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        List<Notification> notificationsList = new ArrayList<Notification>();
-        String username = request.getSession().getAttribute("user");
-        User user = userStore.getUser(username);
-        Instant lastSeen = user.getLastSeenNotificationsTimestamp();
-        for(Notification notification: ){
-          if (lastSeen > notification.getTimeCreated()){
-            notificationsList.add(notification);
-          }
-        }
+        
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
