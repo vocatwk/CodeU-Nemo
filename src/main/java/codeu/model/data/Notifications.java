@@ -26,8 +26,9 @@ public class Notification{
       this.sender = sender;
       this.id = id;
       this.theNotification = theNotification;
-      seenNotification = false;
       this.timeCreated = timeCreated;
+      seenNotification = false;
+
   }
 
   public UUID getReceiver(){

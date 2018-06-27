@@ -32,8 +32,8 @@ public class NotificationServlet extends HttpServlet{
         String username = request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         Instant lastSeen = user.getLastSeenNotificationsTimestamp();
-
-        if lastSeen
+        for(Notifications notification: )
+          if (lastSeen >
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
