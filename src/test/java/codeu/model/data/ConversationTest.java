@@ -16,6 +16,7 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.HashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,12 +28,29 @@ public class ConversationTest {
     UUID owner = UUID.randomUUID();
     String title = "Test_Title";
     Instant creation = Instant.now();
+    Boolean isPrivate = true;
+    HashSet<String> members = new HashSet<>();
+    members.add("testUser1"); members.add("testUser2");
+    Boolean containsTestUser1 = true;
+    Boolean containsTestUser2 = true;
 
     Conversation conversation = new Conversation(id, owner, title, creation);
+    conversation.makePrivate();
+    conversation.addMember("testUser1");
+    conversation.addMember("testUser2");
 
     Assert.assertEquals(id, conversation.getId());
     Assert.assertEquals(owner, conversation.getOwnerId());
     Assert.assertEquals(title, conversation.getTitle());
     Assert.assertEquals(creation, conversation.getCreationTime());
+    Assert.assertEquals(isPrivate, conversation.isPrivate());
+    Assert.assertEquals(members, conversation.getMembers());
+    Assert.assertEquals(containsTestUser1, conversation.containsMember("testUser1"));
+
+    conversation.removeMember("testUser1");
+    containsTestUser1 = false;
+
+    Assert.assertEquals(containsTestUser1, conversation.containsMember("testUser1"));
+    Assert.assertEquals(containsTestUser2, conversation.containsMember("testUser2"));
   }
 }
