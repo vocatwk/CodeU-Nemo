@@ -32,12 +32,11 @@ public class ConversationTest {
     HashSet<String> members = new HashSet<>();
     members.add("testUser1"); members.add("testUser2");
     Boolean containsTestUser1 = true;
-    Boolean containsTestUser2 = true;
+    Boolean containsTestUser3 = true;
 
     Conversation conversation = new Conversation(id, owner, title, creation);
     conversation.makePrivate();
-    conversation.addMember("testUser1");
-    conversation.addMember("testUser2");
+    conversation.addMembers(members);
 
     Assert.assertEquals(id, conversation.getId());
     Assert.assertEquals(owner, conversation.getOwnerId());
@@ -48,9 +47,13 @@ public class ConversationTest {
     Assert.assertEquals(containsTestUser1, conversation.containsMember("testUser1"));
 
     conversation.removeMember("testUser1");
+    conversation.addMember("testUser3");
     containsTestUser1 = false;
+    members.add("testUser3");
+    members.remove("testUser1");
 
     Assert.assertEquals(containsTestUser1, conversation.containsMember("testUser1"));
-    Assert.assertEquals(containsTestUser2, conversation.containsMember("testUser2"));
+    Assert.assertEquals(containsTestUser3, conversation.containsMember("testUser3"));
+    Assert.assertEquals(members, conversation.getMembers());
   }
 }

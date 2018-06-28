@@ -17,6 +17,7 @@ package codeu.model.data;
 import java.time.Instant;
 import java.util.UUID;
 import java.util.HashSet;
+import java.util.Collection;
 
 /**
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
@@ -85,6 +86,11 @@ public class Conversation {
   /** adds a member to this conversation. */
   public void addMember(String username) {
     members.add(username);
+  }
+
+  /** adds a set of members to this conversation. */
+  public void addMembers(HashSet<String> usernames) {
+    members.addAll(usernames);
   }
 
   /** Returns the members of this conversation. */
