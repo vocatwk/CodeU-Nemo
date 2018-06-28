@@ -1,8 +1,6 @@
 <script type="text/javascript">
   // Iterates through fetched results
   function fetchResults() {
-    // Clear the resultItem divs
-    document.querySelector('#result').innerHTML = '';
     var searchBarValue = document.querySelector('#searchBar').value;
     if (searchBarValue.length > 0) {
       fetch('/search?searchRequest=' + searchBarValue, 
@@ -15,6 +13,8 @@
           }
           response.json().then(function(data) {
             if (data != null) {
+              // Start with no resultItem divs
+              document.querySelector('#result').innerHTML = '';
               for (var user in data) {
                 var userName = data[user].name;
                 var div = document.createElement("div");
@@ -26,12 +26,22 @@
                 document.getElementById("result").appendChild(div);
               }
             }
+            // Data is null
+            else {
+              // Clear the resultItem divs
+              document.querySelector('#result').innerHTML = '';
+            }
           });
         }
       ) 
       .catch(function(err) {
         console.log("Fetch Error :-S", err);
       });
+    }
+    // Search bar is empty
+    else {
+      // Clear the resultItem divs
+      document.querySelector('#result').innerHTML = '';
     }
   }
 </script>
