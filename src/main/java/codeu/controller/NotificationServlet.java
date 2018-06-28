@@ -30,14 +30,17 @@ public class NotificationServlet extends HttpServlet{
     this.userStore = userStore;
   }
 
-
 //TODO Decide if other notification types beyond messages are needed
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
         String username = request.getParameter("username");
         User user = userStore.getUser(username);
+        Instant userLookedAtPage = Instant.now();
+        user.setLastSeenNotificationTimestamp(userLookedAtPage);
+
         System.out.println(user.getLastSeenNotificationsTimestamp());
+
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
 
