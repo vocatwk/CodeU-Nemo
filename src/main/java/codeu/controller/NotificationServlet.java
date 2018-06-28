@@ -14,9 +14,6 @@ import java.time.Instant;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
-  private Instant timeUserVistedPage;
-
-
   @Override
   public void init() throws ServletException {
     super.init();
@@ -37,10 +34,9 @@ public class NotificationServlet extends HttpServlet{
         String username = request.getParameter("username");
         User user = userStore.getUser(username);
         Instant userLookedAtPage = Instant.now();
-        user.setLastSeenNotificationTimestamp(userLookedAtPage);
 
         System.out.println(user.getLastSeenNotificationsTimestamp());
-
+        user.setLastSeenNotificationTimestamp(userLookedAtPage);
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
 
