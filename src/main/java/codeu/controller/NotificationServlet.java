@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
-import java.util.ArrayList;
-import java.util.List;
 import java.time.Instant;
 
 public class NotificationServlet extends HttpServlet{
