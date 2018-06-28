@@ -40,10 +40,14 @@ public class SearchServlet extends HttpServlet {
       throws IOException, ServletException {
     String searchRequest = (String)request.getParameter("searchRequest");
 
-    // TODO: Determine what to do when searchRequest is null
-    
-    List<User> users = userStore.getUsers(searchRequest);
-    String json = new Gson().toJson(users);
+    String json;
+    if (searchRequest == null) {
+      json = new Gson().toJson([]);
+    }
+    else {
+      List<User> users = userStore.getUsers(searchRequest);
+      json = new Gson().toJson(users);
+    }
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(json);
