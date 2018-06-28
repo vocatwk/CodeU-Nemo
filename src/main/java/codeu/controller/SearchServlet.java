@@ -42,7 +42,7 @@ public class SearchServlet extends HttpServlet {
 
     String json;
     if (searchRequest == null) {
-      json = new Gson().toJson([]);
+      json = new Gson().toJson("[]");
     }
     else {
       List<User> users = userStore.getUsers(searchRequest);
