@@ -41,7 +41,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-
+    lastSeenNotificationsTimestamp = Instant.now();
   }
 
   /** Returns the ID of this User. */
