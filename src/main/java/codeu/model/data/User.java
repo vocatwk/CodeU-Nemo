@@ -87,6 +87,7 @@ public class User {
   public void setLastSeenNotificationTimestamp(Instant lastSeen){
       lastSeenNotificationsTimestamp = lastSeen;
   }
+  
   public Instant getLastSeenNotificationsTimestamp(){
       return lastSeenNotificationsTimestamp;
     }

@@ -12,7 +12,7 @@ import java.util.List;
  * instance.
  */
 public class EventStore {
-  
+
   /** Singleton instance of EventStore. */
   private static EventStore instance;
 

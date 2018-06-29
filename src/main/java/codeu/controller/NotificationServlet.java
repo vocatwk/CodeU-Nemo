@@ -40,9 +40,9 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        String username = request.getParameter("username");
+        String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
-        Instant userLookedAtPage= Instant.now();
+        Instant userLookedAtPage = Instant.now();
 
         System.out.println(userLookedAtPage);
 
