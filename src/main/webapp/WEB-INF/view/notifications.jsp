@@ -14,6 +14,14 @@
 <body>
   <%@ include file="navbar.jsp" %>
   <p> Hello! This is your notifcation page</p>
-  <% request.getAttribute("eventsToShow"); %>
+  <% List<Event> notifications = (List<Event>) request.getAttribute("eventsToShow"); %>
+  <div id="notifications">
+    <ul>
+      <% for (Event notification : notifications) { %>
+        <li> <strong> <%= Date.from(notification.getCreationTime()) %>:
+        </strong> <%= notifcation.getInformation() %> </li>
+      <% } %>
+    </ul>
+  </div>
 </body>
 </html>
