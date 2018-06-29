@@ -40,14 +40,7 @@ public class SearchServlet extends HttpServlet {
       throws IOException, ServletException {
     String searchRequest = (String)request.getParameter("searchRequest");
 
-    String json;
-    if (searchRequest == null) {
-      json = new Gson().toJson("[]");
-    }
-    else {
-      List<User> users = userStore.getUsers(searchRequest);
-      json = new Gson().toJson(users);
-    }
+    String json = new Gson().toJson(userStore.getUsers(searchRequest));
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(json);

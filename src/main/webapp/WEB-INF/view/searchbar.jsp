@@ -11,31 +11,22 @@
               return;
             }
             response.json().then(function(data) {
-              if (data != null) {
-                // Start with no resultItem divs
-                document.querySelector('#result').innerHTML = '';
-                for (var user in data) {
-                  var userName = data[user].name;
-                  var div = document.createElement("div");
-                  div.setAttribute("class", "resultItem");
-                  a = document.createElement("a");
-                  a.href = "/profile/" + userName;
-                  a.innerHTML = userName;
-                  div.appendChild(a);
-                  document.getElementById("result").appendChild(div);
-                }
-              }
-              // Data is null
-              else {
-                // Clear the resultItem divs
-                document.querySelector('#result').innerHTML = '';
+              // Start with no resultItem divs
+              document.querySelector('#result').innerHTML = '';
+              for (var user in data) {
+                var userName = data[user].name;
+                var div = document.createElement("div");
+                div.setAttribute("class", "resultItem");
+                a = document.createElement("a");
+                a.href = "/profile/" + userName;
+                a.innerHTML = userName;
+                div.appendChild(a);
+                document.getElementById("result").appendChild(div);
               }
             });
           }
         ) 
-        .catch(function(err) {
-          console.log("Fetch Error :-S", err);
-        });
+        .catch(err => console.log("Fetch Error :-S", err));
     }
     // Search bar is empty
     else {
