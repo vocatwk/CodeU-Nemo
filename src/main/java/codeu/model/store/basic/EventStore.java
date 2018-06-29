@@ -5,6 +5,7 @@ import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Instant;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -84,5 +85,16 @@ public class EventStore {
    */
   public void setEvents(List<Event> events) {
     this.events = events;
+  }
+
+  public List<Event> getEventsSince(Instant lastSeen){
+    List<Event> eventsToShow = new ArrayList<Event>();
+    for (Event event: events){
+      Instant eventCreationTime = event.getCreationTime();
+      if(eventCreationTime.isAfter(lastSeen)){
+        eventsToShow.add(event);
+      }
+    }
+    return eventsToShow;
   }
 }

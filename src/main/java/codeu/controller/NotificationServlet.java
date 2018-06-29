@@ -43,21 +43,12 @@ public class NotificationServlet extends HttpServlet{
         String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         Instant userLookedAtPage = Instant.now();
+        Instant lastSeen = user.getLastSeenNotificationsTimestamp();
 
-        System.out.println(userLookedAtPage);
-
-        List<Event> events = eventStore.getAllEvents();
-        List<Event> eventsToShow = new ArrayList<Event>();
-        for (Event event: events){
-          Instant eventCreationTime = event.getCreationTime();
-          Instant userSawNotifcations = user.getLastSeenNotificationsTimestamp();
-          if(eventCreationTime.isAfter(userSawNotifcations)){
-            eventsToShow.add(event);
-          }
-        }
+        List<Event> eventsToShow = eventStore.getEventsSince(lastSeen);
         user.setLastSeenNotificationTimestamp(userLookedAtPage);
 
-        request.setAttribute("eventsToShow", eventsToShow);
+        request.setAttribute("eventsToShow",eventsToShow);
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }

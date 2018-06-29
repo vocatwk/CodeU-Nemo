@@ -23,5 +23,6 @@
   <%if(navBarUsername != null && navBarUser.getIsAdmin() == true){%>
       <a href="/admin"> Admin Page</a>
   <%}%>
+  
   <%@ include file="searchbar.jsp" %>
 </nav>
