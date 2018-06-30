@@ -1,7 +1,7 @@
 <script type="text/javascript">
   // Iterates through fetched results
-  function fetchResults() {
-    var searchBarValue = document.querySelector('#searchBar').value;
+  function fetchResults(putResultsIn, forValue) {
+    var searchBarValue = document.querySelector('#' + forValue).value;
     if (searchBarValue.length > 0) {
       fetch('/search?searchRequest=' + searchBarValue, {credentials: "same-origin"})
         .then(
@@ -12,7 +12,7 @@
             }
             response.json().then(function(data) {
               // Start with no resultItem divs
-              document.querySelector('#result').innerHTML = '';
+              document.querySelector('#' + putResultsIn).innerHTML = '';
               for (var user in data) {
                 var userName = data[user].name;
                 var div = document.createElement("div");
@@ -21,7 +21,7 @@
                 a.href = "/profile/" + userName;
                 a.innerHTML = userName;
                 div.appendChild(a);
-                document.getElementById("result").appendChild(div);
+                document.getElementById(putResultsIn).appendChild(div);
               }
             });
           }
@@ -31,13 +31,13 @@
     // Search bar is empty
     else {
       // Clear the resultItem divs
-      document.querySelector('#result').innerHTML = '';
+      document.querySelector('#' + putResultsIn).innerHTML = '';
     }
   }
 </script>
 
 <div id ="searchDiv">
-  <input onkeyup="fetchResults()" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="searchBar">
+  <input onkeyup="fetchResults('result','searchBar')" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="searchBar">
   <div id="result">
     <!-- resultItem divs will go here -->
   </div>
