@@ -42,9 +42,18 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
 
   <script>
+
+    //open add user box
     $(document).ready(function(){
       $("#adder").click(function() {
-        $("#addUserBox").toggle();
+        $("#addUserBox").show();
+      });
+    });
+
+    // close add user box when user clicks on x or anywhere outside of the box
+    $(document).ready(function() {
+      $(".close").click(function() {
+        $("#addUserBox").hide();
       });
     });
 
@@ -55,7 +64,6 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
           dropDiv.style.display = "block";
       }
       else{
-          var addUserBox = document.getElementById("addUserBox");
           dropDiv.style.display = addUserBox.style.display = "none";
       }
     };
@@ -86,11 +94,10 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
             <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
           </form> </li>
           <li> <button id="adder"> Add User </button> </li>
-            <div id="addUserBox">
-              This is a placeholder text!
-            </div>
         </div>
       </div>
+
+      <%@ include file="addUserBox.jsp" %>
 
       <!-- refresh button -->
       <a href="" style="float: right">&#8635;</a>
