@@ -54,6 +54,12 @@ nav a {
   width: 100%;
 }
 
+#userResult {
+  background-color: #eeeeee;
+  position: absolute;
+  width: 100%;
+}
+
 .resultItem {
   background-color: #eeeeee;
   border: 1px solid black;
