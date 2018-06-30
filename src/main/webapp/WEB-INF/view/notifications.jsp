@@ -13,6 +13,6 @@
 </head>
 <body>
   <%@ include file="navbar.jsp" %>
-  <p> Hello User This is your notifcation page</p>
+  <p> Hello <% username %> This is your notifcation page</p>
 </body>
 </html>

@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
+import java.time.Instant;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
-
   @Override
   public void init() throws ServletException {
     super.init();
@@ -29,6 +29,12 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+        String username = request.getParameter("username");
+        User user = userStore.getUser(username);
+        Instant userLookedAtPage = Instant.now();
+
+        System.out.println(user.getLastSeenNotificationsTimestamp());
+        user.setLastSeenNotificationTimestamp(userLookedAtPage);
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
 

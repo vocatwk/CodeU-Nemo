@@ -101,22 +101,24 @@ public class UserStore {
   /**
   * Access the Users that contains the given username.
   * 
-  * Used with search requests. 
-  * 
-  * @return null if username does not match any existing user
+  * Used with search requests.
+  *
+  * @return empty list if username is null, empty, or there are no matches.
   */
   public List<User> getUsers(String username) {
     List<User> userResults = new ArrayList<User>();
+
+    // Check for condition to avoid iterating through all Users
+    if (username == null || username.trim().isEmpty()) {
+      return userResults;
+    }
+
     for (User user : users) {
       if (user.getName().contains(username)) {
         userResults.add(user);
       }
     }
-
-    if (!userResults.isEmpty())
-      return userResults;
-
-    return null;
+    return userResults;
   }
 
   /**
