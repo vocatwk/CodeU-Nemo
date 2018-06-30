@@ -1,45 +1,44 @@
-<%@ page import="codeu.model.data.User" %>
-<%@ page import="codeu.model.store.basic.UserStore" %>
-<%@ page import="java.util.List" %>
-<%
-List<User> allUsers = UserStore.getInstance().getAllUsers();
-%>
-
 <script type="text/javascript">
-  // Checks if the search request is empty.
-  function isEmpty() {
-    var searchBar = document.getElementById("searchBar");
-    if(searchBar.value.length < 1) {
-      alert("Please enter a valid search.");
-      return false;
+  // Iterates through fetched results
+  function fetchResults() {
+    var searchBarValue = document.querySelector('#searchBar').value;
+    if (searchBarValue.length > 0) {
+      fetch('/search?searchRequest=' + searchBarValue, {credentials: "same-origin"})
+        .then(
+          function(response) {
+            if (response.status !== 200) {
+              console.log("Looks like there was a problem. Status Code: " + response.status);
+              return;
+            }
+            response.json().then(function(data) {
+              // Start with no resultItem divs
+              document.querySelector('#result').innerHTML = '';
+              for (var user in data) {
+                var userName = data[user].name;
+                var div = document.createElement("div");
+                div.setAttribute("class", "resultItem");
+                a = document.createElement("a");
+                a.href = "/profile/" + userName;
+                a.innerHTML = userName;
+                div.appendChild(a);
+                document.getElementById("result").appendChild(div);
+              }
+            });
+          }
+        ) 
+        .catch(err => console.log("Fetch Error :-S", err));
     }
-    return true;
-  }
-
-  // Toggle drop down.
-  function toggleDropDown() {
-    var searchBar = document.getElementById("searchBar");
-    var dropDiv = document.getElementById("dropDiv");
-    if (searchBar.value == "") {
-      dropDiv.style.display = "none";
-    }
+    // Search bar is empty
     else {
-      dropDiv.style.display = "block"
+      // Clear the resultItem divs
+      document.querySelector('#result').innerHTML = '';
     }
   }
 </script>
 
-<form action="/search" method="GET">
-  <input onkeyup="toggleDropDown()" type="text" autocomplete="off" name="searchRequest" id="searchBar"><button type="submit" onclick="return isEmpty();"><i class="fa fa-search"></i></button>
-  <div id="dropDiv" style="display: none; background-color: grey;">
-    <%
-    for (User u : allUsers) {
-    String username = u.getName();
-    %>
-      <a href="/profile/<%= username %>"><%= username %></a>
-      <br>
-    <%
-    }
-    %>
+<div id ="searchDiv">
+  <input onkeyup="fetchResults()" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="searchBar">
+  <div id="result">
+    <!-- resultItem divs will go here -->
   </div>
-</form>
+</div>

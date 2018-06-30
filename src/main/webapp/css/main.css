@@ -31,20 +31,49 @@ nav a {
   color: white;
   display: inline-block;
   font-size: 24px;
-  margin: 15px;
+  margin: 10px;
   text-decoration: none;
-}
-
-nav form {
-  display: inline-block;
-  margin: 15px;
-  border: none;
-  box-sizing:border-box;
 }
 
 #navTitle {
   font-size: 36px;
 }
+
+/* This is for the search bar */
+#searchDiv {
+  display: inline-block;
+  margin: 10px;
+  border: none;
+  box-sizing:border-box;
+  position: relative;
+}
+
+#result {
+  background-color: #eeeeee;
+  position: absolute;
+  width: 100%;
+}
+
+.resultItem {
+  background-color: #eeeeee;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.resultItem a {
+  font-size: 16px;
+  color: black;
+  margin: 0;
+  padding: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.resultItem a:hover {
+  background-color: #AED6F1;
+}
+/* End of search bar */
 
 #container {
   margin-left: auto;
@@ -73,13 +102,6 @@ button {
 
 /* This is for the Activity Feed Page */
 #activity {
-  background-color: white;
-  height: 500px;
-  overflow-y: scroll;
-}
-
-/* This is for the Search Results Page */
-#results {
   background-color: white;
   height: 500px;
   overflow-y: scroll;
