@@ -87,14 +87,11 @@ public class EventStore {
     this.events = events;
   }
 
-  public List<Event> getEventsSince(Instant lastSeen){
+  public List<Event> getEventsSince(Event lastSeen){
     List<Event> eventsToShow = new ArrayList<Event>();
-    for (Event event: events){
-      Instant eventCreationTime = event.getCreationTime();
-      if(eventCreationTime.isAfter(lastSeen)){
-        eventsToShow.add(event);
-      }
-    }
+    int indexOfEvent = events.indexOf(lastSeen);
+    eventsToShow = events.subList(indexOfEvent,events.size());
     return eventsToShow;
   }
+
 }

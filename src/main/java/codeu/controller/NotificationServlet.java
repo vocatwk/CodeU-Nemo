@@ -13,6 +13,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
+import java.util.UUID;
+
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
@@ -31,7 +33,10 @@ public class NotificationServlet extends HttpServlet{
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
-
+  /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
   void setEventStore(EventStore eventStore){
     this.eventStore = eventStore;
   }
@@ -43,10 +48,11 @@ public class NotificationServlet extends HttpServlet{
         String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         Instant userLookedAtPage = Instant.now();
-        Instant lastSeen = user.getLastSeenNotificationsTimestamp();
+        UUID lastSeenId = user.getLastSeenNotifications();
+        Event lastSeen = eventStore.getEvent(lastSeenId);
 
         List<Event> eventsToShow = eventStore.getEventsSince(lastSeen);
-        user.setLastSeenNotificationTimestamp(userLookedAtPage);
+        user.setLastSeenNotifications(lastSeenId);
 
         request.setAttribute("eventsToShow",eventsToShow);
 
