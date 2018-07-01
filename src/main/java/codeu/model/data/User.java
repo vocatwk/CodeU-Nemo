@@ -25,7 +25,7 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
-  private UUID lastSeenNotifications;
+  private Instant lastSeenNotifications;
   /**
    * Constructs a new User.
    *
@@ -41,7 +41,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-    lastSeenNotifications = null;
+    lastSeenNotifications = Instant.now();
   }
 
   /** Returns the ID of this User. */
@@ -85,12 +85,12 @@ public class User {
   }
 
   /** Set the Instant the last time the user visted the notification page */
-  public void setLastSeenNotifications(UUID lastSeen){
+  public void setLastSeenNotifications(Instant lastSeen){
       lastSeenNotifications = lastSeen;
   }
 
   /** Returns the Instant the last time the user visted the notification page */
-  public UUID getLastSeenNotifications(){
+  public Instant getLastSeenNotifications(){
       return lastSeenNotifications;
     }
 }
