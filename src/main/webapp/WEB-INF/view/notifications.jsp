@@ -15,15 +15,16 @@
 <body>
   <%@ include file="navbar.jsp" %>
   <% List<Event> notifications = (List<Event>) request.getAttribute("eventsToShow"); %>
-
   <div id="notifications">
     <h2> Hello <%= username %>! This is your notifcation page </h2>
 
     <ul>
       <% for (Event notification : notifications) { %>
+      <% List<String> notificationInfo = notification.getInformation(); %>
+      <% String type = notification.getType(); %>
         <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
-            <%= notification.getType() %>
-            <%= notification.getInformation() %>
+            <%= type %>
+            <%= notificationInfo %>
 
         </li>
       <% } %>
