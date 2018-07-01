@@ -25,7 +25,7 @@
               }
             });
           }
-        ) 
+        )
         .catch(err => console.log("Fetch Error :-S", err));
     }
     // Search bar is empty
@@ -41,8 +41,4 @@
   <div id="result">
     <!-- resultItem divs will go here -->
   </div>
-<<<<<<< HEAD
-</form>
-=======
 </div>
->>>>>>> 96487ee0cecaf6be8757454013aace6008fcd33f
