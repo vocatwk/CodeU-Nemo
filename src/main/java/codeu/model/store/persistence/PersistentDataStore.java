@@ -111,8 +111,12 @@ public class PersistentDataStore {
         List<String> membersAsList = (List<String>) entity.getProperty("members");
 
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
-        if(isPrivate != null && isPrivate == true) conversation.makePrivate();
-        if(membersAsList != null) conversation.addMembers(new HashSet<>(membersAsList));
+        if(isPrivate != null && isPrivate == true) {
+          conversation.makePrivate();
+        }
+        if(membersAsList != null) {
+          conversation.addMembers(new HashSet<>(membersAsList));
+        }
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may

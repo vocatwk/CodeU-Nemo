@@ -38,14 +38,13 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script>
 
     //open add user box
     $(document).ready(function(){
-      $("#adder").click(function() {
+      $("#addUsersModalTrigger").click(function() {
         $("#addUserBox").show();
       });
     });
@@ -58,16 +57,12 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
     });
 
     // show contents of drop down settings menu
-    function toggleSettingsDropdown(){
-      var dropDiv = document.getElementsByClassName("dropdown-content")[0];
-      if(dropDiv.style.display === "none"){
-          dropDiv.style.display = "block";
-      }
-      else{
-          dropDiv.style.display = addUserBox.style.display = "none";
-      }
-    };
-
+    $(document).ready(function(){
+      $("#conversationSettings").click(function() {
+        $(".dropdown-content").toggle();
+      });
+    });
+    
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
@@ -88,12 +83,12 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
         
       <!-- Setting button and content -->
       <div id="dropdown-settings">
-        <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
+        <i id="conversationSettings" class="fa fa-cog"> </i>
         <div class="dropdown-content" style="display:none">
           <li> <form action="/chat/<%= conversation.getTitle() %>" method="POST">
             <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
           </form> </li>
-          <li> <button id="adder"> Add User </button> </li>
+          <li> <button id="addUsersModalTrigger"> Add User </button> </li>
         </div>
       </div>
 
