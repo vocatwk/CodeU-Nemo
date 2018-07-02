@@ -31,13 +31,15 @@ public class NotificationServlet extends HttpServlet{
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
-
+  /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
   void setEventStore(EventStore eventStore) {
     this.eventStore = eventStore;
   }
 
 
-//TODO Decide if other notification types beyond messages are needed
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {

@@ -84,9 +84,12 @@ public class User {
       return isAdmin;
   }
 
+/** Sets the time the user looked at the notifcation page */
   public void setLastSeenNotifications(Instant lastSeen){
       lastSeenNotificationsTimestamp = lastSeen;
   }
+  /** Gets the time the user looked at the notifcation page */
+
   public Instant getLastSeenNotifications(){
       return lastSeenNotificationsTimestamp;
     }

@@ -86,6 +86,7 @@ public class EventStore {
     this.events = events;
   }
 
+/** gets the events to be seen by the user */
   public List<Event> getEventsSince(Event lastSeen){
     List<Event> eventsToShow = new ArrayList<Event>();
     int indexOfEvent = events.indexOf(lastSeen);
