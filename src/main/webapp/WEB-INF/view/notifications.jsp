@@ -2,9 +2,9 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.Event" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Date" %>
-
-<%String username = (String) request.getSession().getAttribute("user");%>
+<%
+  String username = (String) request.getSession().getAttribute("user");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -14,10 +14,9 @@
 </head>
 <body>
   <%@ include file="navbar.jsp" %>
+  <p> Hello! This is your notifcation page</p>
   <% List<Event> notifications = (List<Event>) request.getAttribute("eventsToShow"); %>
   <div id="notifications">
-    <h2> Hello <%= username %>! This is your notifcation page </h2>
-
     <ul>
       <% for (Event notification : notifications) { %>
       <% List<String> notificationInfo = notification.getInformation(); %>
@@ -30,6 +29,5 @@
       <% } %>
     </ul>
   </div>
-
 </body>
 </html>
