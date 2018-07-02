@@ -84,10 +84,10 @@ public class User {
       return isAdmin;
   }
 
-  public void setLastSeenNotificationTimestamp(Instant lastSeen){
+  public void setLastSeenNotifications(Instant lastSeen){
       lastSeenNotificationsTimestamp = lastSeen;
   }
-  public Instant getLastSeenNotificationsTimestamp(){
+  public Instant getLastSeenNotifications(){
       return lastSeenNotificationsTimestamp;
     }
 }

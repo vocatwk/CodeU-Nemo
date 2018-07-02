@@ -12,7 +12,7 @@ import java.util.List;
  * instance.
  */
 public class EventStore {
-  
+
   /** Singleton instance of EventStore. */
   private static EventStore instance;
 
@@ -84,5 +84,12 @@ public class EventStore {
    */
   public void setEvents(List<Event> events) {
     this.events = events;
+  }
+
+  public List<Event> getEventsSince(Event lastSeen){
+    List<Event> eventsToShow = new ArrayList<Event>();
+    int indexOfEvent = events.indexOf(lastSeen);
+    eventsToShow = events.subList(indexOfEvent,events.size());
+    return eventsToShow;
   }
 }
