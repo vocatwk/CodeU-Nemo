@@ -24,7 +24,8 @@ public class User {
   private final String passwordHash;
   private final Instant creation;
   private String aboutMe;
-
+  private boolean isAdmin;
+  private Instant lastSeenNotificationsTimestamp;
   /**
    * Constructs a new User.
    *
@@ -39,6 +40,8 @@ public class User {
     this.passwordHash = passwordHash;
     this.creation = creation;
     aboutMe = "";
+    isAdmin = false;
+    lastSeenNotificationsTimestamp = Instant.now();
   }
 
   /** Returns the ID of this User. */
@@ -50,7 +53,7 @@ public class User {
   public String getName() {
     return name;
   }
-  
+
   /** Returns the password hash of this User. */
   public String getPasswordHash() {
     return passwordHash;
@@ -70,4 +73,21 @@ public class User {
   public String getAboutMe() {
     return aboutMe;
   }
+
+  /** Sets if the user is admin. */
+  public void setIsAdmin(boolean a){
+    isAdmin = a;
+  }
+
+  /** Returns true if the user is admin. Returns false if not */
+  public boolean getIsAdmin(){
+      return isAdmin;
+  }
+
+  public void setLastSeenNotificationTimestamp(Instant lastSeen){
+      lastSeenNotificationsTimestamp = lastSeen;
+  }
+  public Instant getLastSeenNotificationsTimestamp(){
+      return lastSeenNotificationsTimestamp;
+    }
 }

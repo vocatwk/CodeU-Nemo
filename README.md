@@ -1,7 +1,19 @@
-# CodeU Example Project
+# CodeU - Nemo
 
-This is an example chat application. It's complete and functional, but leaves
+Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
+
+Changes we've made since we started:
+
+* Nemo has profile pages for users where they can update their about Me's and view their
+sent messages.
+* Nemo has private and public conversations.
+* Nemo uses filters to determine if a user has access to a specific page of the app.
+Logged in users no longer have access to login/register page and users that aren't logged
+in have access to only those two pages.
+* Nemo has an Activity Feed that allows users to see when new users join, create
+ conversations, send messages, and update their About Me's.
+* Nemo has an dynamic search feature that allows users to search for other users. 
 
 ## Step 1: Download Java
 

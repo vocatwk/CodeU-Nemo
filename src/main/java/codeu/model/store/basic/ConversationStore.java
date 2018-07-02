@@ -16,6 +16,7 @@ package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
 import codeu.model.store.persistence.PersistentStorageAgent;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,14 +65,34 @@ public class ConversationStore {
     conversations = new ArrayList<>();
   }
 
-/** Access the current set of conversations known to the application. */
+  /** Access the current set of conversations known to the application. */
   public List<Conversation> getAllConversations() {
     return conversations;
   }
 
+  /**
+   * Access the Conversation object with the given UUID.
+   *
+   * @return null if the UUID does not match any existing Conversation.
+   */
+  public Conversation getConversation(UUID id) {
+    for (Conversation conversation : conversations) {
+      if (conversation.getId().equals(id)) {
+        return conversation;
+      }
+    }
+    return null;
+  }
+
+
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);
+    persistentStorageAgent.writeThrough(conversation);
+  }
+
+  /** Update conversation. */
+  public void updateConversation(Conversation conversation) {
     persistentStorageAgent.writeThrough(conversation);
   }
 
@@ -99,5 +120,8 @@ public class ConversationStore {
   /** Sets the List of Conversations stored by this ConversationStore. */
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
+  }
+  public int getNumOfConversations(){
+    return conversations.size();
   }
 }

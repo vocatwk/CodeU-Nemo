@@ -99,6 +99,29 @@ public class UserStore {
   }
 
   /**
+  * Access the Users that contains the given username.
+  * 
+  * Used with search requests.
+  *
+  * @return empty list if username is null, empty, or there are no matches.
+  */
+  public List<User> getUsers(String username) {
+    List<User> userResults = new ArrayList<User>();
+
+    // Check for condition to avoid iterating through all Users
+    if (username == null || username.trim().isEmpty()) {
+      return userResults;
+    }
+
+    for (User user : users) {
+      if (user.getName().contains(username)) {
+        userResults.add(user);
+      }
+    }
+    return userResults;
+  }
+
+  /**
    * Add a new user to the current set of users known to the application. This should only be called
    * to add a new user, not to update an existing user.
    */
@@ -131,5 +154,8 @@ public class UserStore {
   public void setUsers(List<User> users) {
     this.users = users;
   }
-}
+  public int getNumOfUsers(){
+    return users.size();
+  }
 
+}

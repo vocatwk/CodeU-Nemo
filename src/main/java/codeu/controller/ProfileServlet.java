@@ -2,10 +2,14 @@ package codeu.controller;
 
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Event;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,12 +26,16 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Events. */
+  private EventStore eventStore;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
     super.init();
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setEventStore(EventStore.getInstance());
   }
 
   /**
@@ -47,6 +55,14 @@ public class ProfileServlet extends HttpServlet {
   }
 
   /**
+   * Sets the EventStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setEventStore(EventStore eventStore) {
+    this.eventStore = eventStore;
+  }
+
+  /**
    * This function fires when a user navigates to the profile page. It gets the profile name from
    * the URL, finds the corresponding profile subject, and fetches the messages sent by that subject.
    * It then forwards to profile.jsp for rendering.
@@ -63,17 +79,16 @@ public class ProfileServlet extends HttpServlet {
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
-	
     
     User subject = userStore.getUser(subjectName);
-
+ 
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
       // TODO respond with 404
       response.sendRedirect("/");
       return;
     }
-
+ 
     request.setAttribute("subject", subjectName);
     UUID subjectId = subject.getId();
 
@@ -90,16 +105,10 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String requestUrl = request.getRequestURI();
- 
-    String username = (String) request.getSession().getAttribute("user");
-    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
-    if(username == null){
-      // user not logged in
-      response.sendRedirect("/login");
-      return;
-    }
+    String requestUrl = request.getRequestURI();
+    String username = (String) request.getSession().getAttribute("user"); 
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
@@ -116,6 +125,13 @@ public class ProfileServlet extends HttpServlet {
     //set user's about me and update it in dataStore
     subject.setAboutMe(cleanedAboutMe);
     userStore.updateUser(subject);
+    
+    List<String> aboutMeInformation = new ArrayList<>();
+    aboutMeInformation.add(subject.getName());
+    aboutMeInformation.add(subject.getAboutMe());
+    Event aboutMeEvent = new Event(
+        UUID.randomUUID(), "About Me", Instant.now(), aboutMeInformation);
+    eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
   }

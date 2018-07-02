@@ -3,9 +3,8 @@ package codeu.controller;
 import codeu.model.data.User;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
-import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
+import codeu.model.data.Event;
+import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.UUID;
@@ -25,9 +24,7 @@ public class ActivityFeedServletTest {
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
-  private UserStore mockUserStore;
-  private ConversationStore mockConversationStore;
-  private MessageStore mockMessageStore;
+  private EventStore mockEventStore;
 
   @Before
   public void setUp() {
@@ -39,47 +36,48 @@ public class ActivityFeedServletTest {
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/activityfeed.jsp"))
         .thenReturn(mockRequestDispatcher);
 
-    mockUserStore = Mockito.mock(UserStore.class);
-    activityFeedServlet.setUserStore(mockUserStore);
-
-    mockConversationStore = Mockito.mock(ConversationStore.class);
-    activityFeedServlet.setConversationStore(mockConversationStore);
-
-    mockMessageStore = Mockito.mock(MessageStore.class);
-    activityFeedServlet.setMessageStore(mockMessageStore);
+    mockEventStore = Mockito.mock(EventStore.class);
+    activityFeedServlet.setEventStore(mockEventStore);
   }
 
   @Test
   public void testDoGet() throws IOException, ServletException {
+    List<Event> fakeEventList = new ArrayList<>();
+
     UUID fakeUserId = UUID.randomUUID();
     User fakeUser = 
         new User(fakeUserId, "test_user", "test_password_hash", Instant.now());
-    List<User> fakeUserList = new ArrayList<>();
-    fakeUserList.add(fakeUser);
-    Mockito.when(mockUserStore.getAllUsers()).thenReturn(fakeUserList);
+    List<String> userInformation = new ArrayList<>();
+    userInformation.add(fakeUser.getName());
+    Event userEvent = new Event(
+        UUID.randomUUID(), "User", fakeUser.getCreationTime(), userInformation);
+    fakeEventList.add(userEvent);
 
     UUID fakeConversationId = UUID.randomUUID();
     Conversation fakeConversation = 
-        new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
-    List<Conversation> fakeConversationList = new ArrayList<>();
-    fakeConversationList.add(fakeConversation);
-    Mockito.when(mockConversationStore.getAllConversations()).thenReturn(fakeConversationList);
-
-    List<Message> fakeMessageList = new ArrayList<>();
-    fakeMessageList.add(
-          new Message(
-            UUID.randomUUID(), 
-            fakeConversationId,
-            fakeUserId,
-            "test_message",
-            Instant.now()));
-    Mockito.when(mockMessageStore.getAllMessages()).thenReturn(fakeMessageList);
+        new Conversation(fakeConversationId, fakeUserId, "test_conversation", Instant.now());
+    List<String> conversationInformation = new ArrayList<>();
+    conversationInformation.add(fakeUser.getName());
+    conversationInformation.add(fakeConversation.getTitle());
+    Event conversationEvent = new Event(
+        UUID.randomUUID(), "Conversation", fakeConversation.getCreationTime(), conversationInformation);
+    fakeEventList.add(conversationEvent);
+    
+    Message fakeMessage = new Message(
+        UUID.randomUUID(), fakeConversationId, fakeUserId, "test_message", Instant.now());
+    List<String> messageInformation = new ArrayList<>();
+    messageInformation.add(fakeUser.getName());
+    messageInformation.add(fakeConversation.getTitle());
+    messageInformation.add(fakeMessage.getContent());
+    Event messageEvent = new Event(
+        UUID.randomUUID(), "Message", fakeMessage.getCreationTime(), messageInformation);
+    fakeEventList.add(messageEvent);
+    
+    Mockito.when(mockEventStore.getAllEvents()).thenReturn(fakeEventList);
 
     activityFeedServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest).setAttribute("users", fakeUserList);
-    Mockito.verify(mockRequest).setAttribute("conversations", fakeConversationList);
-    Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
+    Mockito.verify(mockRequest).setAttribute("events", fakeEventList);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
