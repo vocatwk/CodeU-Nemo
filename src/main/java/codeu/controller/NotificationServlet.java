@@ -2,13 +2,8 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-<<<<<<< HEAD
 import codeu.model.store.basic.EventStore;
 import codeu.model.data.Event;
-=======
-import codeu.model.data.Event;
-import codeu.model.store.basic.EventStore;
->>>>>>> 2df4818fb65e958492438d457c9b10502c8bdfbd
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,13 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
-<<<<<<< HEAD
-import java.util.List;
 import java.util.UUID;
-=======
-import java.util.UUID;
-
->>>>>>> 2df4818fb65e958492438d457c9b10502c8bdfbd
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
