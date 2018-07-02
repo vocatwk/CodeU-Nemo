@@ -89,8 +89,14 @@ public class EventStore {
 /** gets the events to be seen by the user */
   public List<Event> getEventsSince(Event lastSeen){
     List<Event> eventsToShow = new ArrayList<Event>();
+
     int indexOfEvent = events.indexOf(lastSeen);
-    eventsToShow = events.subList(indexOfEvent,events.size());
+    if(indexOfEvent != -1){
+      eventsToShow = events.subList(indexOfEvent,events.size());
+      return eventsToShow;
+    } else{
     return eventsToShow;
+    }
   }
+  
 }
