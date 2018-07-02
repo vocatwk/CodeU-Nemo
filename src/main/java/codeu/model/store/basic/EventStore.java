@@ -88,10 +88,16 @@ public class EventStore {
   }
 
   public List<Event> getEventsSince(Event lastSeen){
+
     List<Event> eventsToShow = new ArrayList<Event>();
     int indexOfEvent = events.indexOf(lastSeen);
+    if(indexOfEvent != -1){
     eventsToShow = events.subList(indexOfEvent,events.size());
     return eventsToShow;
+    }
+    else{
+      return eventsToShow;
+    }
   }
 
 }
