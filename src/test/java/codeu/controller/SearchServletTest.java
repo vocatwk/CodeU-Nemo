@@ -38,13 +38,13 @@ public class SearchServletTest {
 
   @Test
   public void testDoGet() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("searchRequest")).thenReturn("user");
+
     List<User> fakeUserList = new ArrayList<User>();
     fakeUserList.add(new User(UUID.randomUUID(), "user", "password_hash", Instant.now()));
     Mockito.when(mockUserStore.getUsers("user")).thenReturn(fakeUserList);
 
     String json = new Gson().toJson(fakeUserList);
-
-    Mockito.when(mockRequest.getParameter("searchRequest")).thenReturn("user");
 
     StringWriter stringWriter = new StringWriter();
     PrintWriter writer = new PrintWriter(stringWriter);
@@ -52,11 +52,8 @@ public class SearchServletTest {
 
     searchServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.when(mockResponse.getContentType()).thenReturn("application/json");
-    Mockito.when(mockResponse.getCharacterEncoding()).thenReturn("UTF-8");
-
-    Assert.assertEquals("application/json", mockResponse.getContentType());
-    Assert.assertEquals("UTF-8", mockResponse.getCharacterEncoding());
+    Mockito.verify(mockResponse).setContentType("application/json");
+    Mockito.verify(mockResponse).setCharacterEncoding("UTF-8");
     Assert.assertEquals(json, stringWriter.toString());
   }
 }
