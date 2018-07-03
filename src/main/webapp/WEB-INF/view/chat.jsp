@@ -62,7 +62,30 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
         $(".dropdown-content").toggle();
       });
     });
-    
+
+    // for make private/make public button
+    var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
+    $(document).ready(function() {
+      $("#privacySettingButton").click(function() {
+        fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "POST",
+          headers: {
+            "Purpose": newChatPrivacyValue,
+          },
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          newChatPrivacyValue = newChatPrivacyValue === "make private" ? "make public":"make private";
+          $("#privacySettingButton").html(newChatPrivacyValue);
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+      });
+    });
+
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
@@ -85,9 +108,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       <div id="dropdown-settings">
         <i id="conversationSettings" class="fa fa-cog"> </i>
         <div class="dropdown-content" style="display:none">
-          <li> <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-            <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
-          </form> </li>
+          <li> <button id="privacySettingButton"> <%=privacySettingButtonValue%> </button> </li>
           <li> <button id="addUsersModalTrigger"> Add User </button> </li>
         </div>
       </div>

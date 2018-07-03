@@ -231,7 +231,7 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getParameter("type"))
+    Mockito.when(mockRequest.getHeader("Purpose"))
         .thenReturn("make private");
     Mockito.when(mockConversation.isPrivate()).thenReturn(false);
     
@@ -255,7 +255,7 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getParameter("type"))
+    Mockito.when(mockRequest.getHeader("Purpose"))
         .thenReturn("make public");
     Mockito.when(mockConversation.isPrivate()).thenReturn(true);
     

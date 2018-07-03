@@ -143,11 +143,11 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String type = request.getParameter("type");
+    String purpose = request.getHeader("Purpose");
     String messageContent = request.getParameter("message");
 
-    if(type != null){
-      if(type.equals("make private")){
+    if(purpose != null){
+      if(purpose.equals("make private")){
         conversation.makePrivate();
       }
       else{
