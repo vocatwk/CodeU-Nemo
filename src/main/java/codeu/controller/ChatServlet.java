@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Bot;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -176,6 +177,21 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(cleanedMessageContent);
       Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
       eventStore.addEvent(messageEvent);
+
+      // Scan the message for "@NemoBot"
+      if (cleanedMessageContent.toLowerCase().contains("@NemoBot".toLowerCase())) {
+        Bot chatBot = new Bot();
+        String botResponse = chatBot.parseMessage(cleanedMessageContent);
+        Message botMessage =
+            new Message(
+                UUID.randomUUID(),
+                conversation.getId(),
+                chatBot.getId(),
+                botResponse,
+                Instant.now());
+
+        messageStore.addMessage(botMessage);
+      }
     }
 
     // redirect to a GET request
