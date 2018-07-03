@@ -13,6 +13,9 @@ import com.google.gson.Gson;
 /** Servlet class responsible for the search feature. */
 public class SearchServlet extends HttpServlet {
 
+
+
+
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
