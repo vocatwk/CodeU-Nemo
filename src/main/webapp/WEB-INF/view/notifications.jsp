@@ -32,8 +32,10 @@
             Conversation title <%= notifcationInfo.get(1)%>
         </li>
       <% }else if(type.equals("Message")){ %>
+            <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
               <%= Username %> sent a message!
               Check conversation: <%= notifcationInfo.get(1)%>
+            </li>
         <%}%>
       <%}%>
     </ul>
