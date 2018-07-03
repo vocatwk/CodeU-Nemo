@@ -85,6 +85,14 @@ public class UserStoreTest {
   }
 
   @Test
+  public void testGetUsers_byUsername_partial_found() {
+    List<User> resultUsers = userStore.getUsers("username_t");
+    Assert.assertEquals(2, resultUsers.size());
+    assertEquals(USER_TWO, resultUsers.get(0));
+    assertEquals(USER_THREE, resultUsers.get(1));
+  }
+
+  @Test
   public void testGetUsers_byUsername_notFound() {
     List<User> resultUsers = userStore.getUsers("bad_username");
     Assert.assertTrue(resultUsers.isEmpty());
