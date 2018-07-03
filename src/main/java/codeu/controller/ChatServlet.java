@@ -171,7 +171,7 @@ public class ChatServlet extends HttpServlet {
 
       messageStore.addMessage(message);
 
-      List<String> messageInformation = new ArrayList<>();
+      List<String> messageInformation = new ArrayList<String>();
       messageInformation.add(user.getName());
       messageInformation.add(conversationTitle);
       messageInformation.add(cleanedMessageContent);
@@ -191,6 +191,13 @@ public class ChatServlet extends HttpServlet {
                 Instant.now());
 
         messageStore.addMessage(botMessage);
+
+        List<String> botMessageInformation = new ArrayList<String>();
+        botMessageInformation.add("NemoBot");
+        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(botResponse);
+        Event botMessageEvent = new Event(UUID.randomUUID(), "Message", botMessage.getCreationTime(), botMessageInformation);
+        eventStore.addEvent(botMessageEvent);
       }
     }
 
