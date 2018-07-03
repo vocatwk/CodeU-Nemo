@@ -16,6 +16,8 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 /** Class representing a registered user. */
 public class User {
@@ -26,6 +28,7 @@ public class User {
   private String aboutMe;
   private boolean isAdmin;
   private Instant lastSeenNotificationsTimestamp;
+  private List<String> subscriptions;
   /**
    * Constructs a new User.
    *
@@ -42,6 +45,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotificationsTimestamp = Instant.now();
+    subscriptions = new ArrayList<String>();
   }
 
   /** Returns the ID of this User. */
@@ -89,5 +93,13 @@ public class User {
   }
   public Instant getLastSeenNotificationsTimestamp(){
       return lastSeenNotificationsTimestamp;
-    }
+  }
+
+  public void setSubscritions(String coversationName){
+      subscriptions.add(conversationName);
+  }
+
+  public void getSubscritons(){
+      return subscriptions;
+  }
 }
