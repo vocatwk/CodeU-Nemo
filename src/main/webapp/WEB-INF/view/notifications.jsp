@@ -12,6 +12,7 @@
 <html>
 <head>
   <title>Notification</title>
+  <%@ include file="header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>

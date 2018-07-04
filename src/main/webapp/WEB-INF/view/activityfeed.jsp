@@ -9,6 +9,7 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 <html>
 <head>
   <title>Activity Feed</title>
+  <%@ include file="header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>

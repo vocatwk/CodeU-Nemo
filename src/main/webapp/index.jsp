@@ -18,6 +18,7 @@
 <html>
 <head>
   <title>CodeU Chat App - Nemo</title>
+  <%@ include file="WEB-INF/view/header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>

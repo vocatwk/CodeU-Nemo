@@ -13,6 +13,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 <html>
 <head>
   <title><%= subject %></title>
+  <%@ include file="header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 
   <script>

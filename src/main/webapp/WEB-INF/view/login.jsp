@@ -17,6 +17,7 @@
 <html>
 <head>
   <title>Login</title>
+  <%@ include file="header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>

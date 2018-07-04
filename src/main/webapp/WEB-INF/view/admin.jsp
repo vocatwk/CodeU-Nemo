@@ -4,6 +4,7 @@
 <html>
 <head>
   <title>Admin Login</title>
+  <%@ include file="header.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
