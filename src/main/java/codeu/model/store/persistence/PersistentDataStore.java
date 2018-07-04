@@ -71,6 +71,7 @@ public class PersistentDataStore {
         User user = new User(uuid, userName, passwordHash, creationTime);
         String aboutMe = (String) entity.getProperty("about_me");
         Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
+        Instant lastSeenNotifications = Instant.parse((String) entity.getProperty("last_seen_notifications"));
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
         users.add(user);
@@ -107,7 +108,6 @@ public class PersistentDataStore {
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         Boolean isPrivate = (Boolean) entity.getProperty("is_private");
-
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
         if(isPrivate != null && isPrivate == true) conversation.makePrivate();
         conversations.add(conversation);
@@ -200,6 +200,7 @@ public class PersistentDataStore {
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("about_me", user.getAboutMe());
     userEntity.setProperty("is_admin", user.getIsAdmin());
+    userEntity.setProperty("last_seen_notifications", user.getLastSeenNotifications().toString());
     datastore.put(userEntity);
   }
 
