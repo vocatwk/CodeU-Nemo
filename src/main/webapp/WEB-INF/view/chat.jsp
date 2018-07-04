@@ -69,9 +69,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getTitle() %>', {
           method: "POST",
-          headers: {
-            "Purpose": newChatPrivacyValue,
-          },
+          body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
           if(!response.ok) {

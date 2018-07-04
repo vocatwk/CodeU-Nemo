@@ -23,6 +23,7 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,10 @@ public class ChatServletTest {
   private UserStore mockUserStore;
   private Conversation mockConversation;
   private EventStore mockEventStore;
+  private BufferedReader mockReader;
 
   @Before
-  public void setup() {
+  public void setup() throws IOException {
     chatServlet = new ChatServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
@@ -76,6 +78,9 @@ public class ChatServletTest {
     mockConversation = Mockito.mock(Conversation.class);
     mockEventStore = Mockito.mock(EventStore.class);
     chatServlet.setEventStore(mockEventStore);
+
+    mockReader = Mockito.mock(BufferedReader.class);
+    Mockito.when(mockRequest.getReader()).thenReturn(mockReader);
   }
 
   @Test
@@ -231,7 +236,7 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getHeader("Purpose"))
+    Mockito.when(mockReader.readLine())
         .thenReturn("make private");
     Mockito.when(mockConversation.isPrivate()).thenReturn(false);
     
@@ -255,7 +260,7 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getHeader("Purpose"))
+    Mockito.when(mockReader.readLine())
         .thenReturn("make public");
     Mockito.when(mockConversation.isPrivate()).thenReturn(true);
     
