@@ -27,6 +27,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -107,9 +108,15 @@ public class PersistentDataStore {
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         Boolean isPrivate = (Boolean) entity.getProperty("is_private");
+        List<String> membersAsList = (List<String>) entity.getProperty("members");
 
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
-        if(isPrivate != null && isPrivate == true) conversation.makePrivate();
+        if(isPrivate != null && isPrivate == true) {
+          conversation.makePrivate();
+        }
+        if(membersAsList != null) {
+          conversation.addMembers(new HashSet<>(membersAsList));
+        }
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -222,6 +229,7 @@ public class PersistentDataStore {
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     conversationEntity.setProperty("is_private", conversation.isPrivate());
+    conversationEntity.setProperty("members", conversation.getMembers());
     datastore.put(conversationEntity);
   }
 

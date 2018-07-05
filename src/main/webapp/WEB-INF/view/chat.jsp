@@ -39,19 +39,58 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <script>
+
+    //open add user box
+    $(document).ready(function(){
+      $("#addUsersModalTrigger").click(function() {
+        $("#addUserBox").show();
+      });
+    });
+
+    // close add user box when user clicks on x or anywhere outside of the box
+    $(document).ready(function() {
+      $(".close").click(function() {
+        $("#addUserBox").hide();
+      });
+    });
+
+    // show contents of drop down settings menu
+    $(document).ready(function(){
+      $("#conversationSettings").click(function() {
+        $(".dropdown-content").toggle();
+      });
+    });
+
+    // for make private/make public button
+    var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
+    $(document).ready(function() {
+      $("#privacySettingButton").click(function() {
+        fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "POST",
+          body : newChatPrivacyValue,
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          newChatPrivacyValue = newChatPrivacyValue === "make private" ? "make public":"make private";
+          $("#privacySettingButton").html(newChatPrivacyValue);
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+      });
+    });
+
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
-    // show contents of dropDown menu
-    function toggleSettingsDropdown() {
-      var dropDiv = document.getElementById("SettingDropDown");
-      dropDiv.style.display = dropDiv.style.display === "none"? "block" : "none";
-    };
   </script>
 </head>
 <body onload="scrollChat()">
@@ -61,17 +100,25 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   <div id="container">
 
     <h1>
+      <!-- Conversation title -->
       <%= conversation.getTitle() %>
-      <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
+        
+      <!-- Setting button and content -->
+      <div id="dropdown-settings">
+        <i id="conversationSettings" class="fa fa-cog"> </i>
+        <div class="dropdown-content" style="display:none">
+          <li> <button id="privacySettingButton"> <%=privacySettingButtonValue%> </button> </li>
+          <li> <button id="addUsersModalTrigger"> Add User </button> </li>
+        </div>
+      </div>
+
+      <%@ include file="addUserBox.jsp" %>
+
+      <!-- refresh button -->
       <a href="" style="float: right">&#8635;</a>
     </h1>
-    
-    <div id="SettingDropDown" style="display: none">
-      <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
-      </form>
-    </div>
 
+    
     <hr/>
 
     <div id="chat">
