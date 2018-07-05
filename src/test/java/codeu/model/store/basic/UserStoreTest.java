@@ -76,6 +76,41 @@ public class UserStoreTest {
   }
 
   @Test
+  public void testGetUsers_byUsername_found() {
+    List<User> resultUsers = userStore.getUsers("username");
+    Assert.assertEquals(3, resultUsers.size());
+    assertEquals(USER_ONE, resultUsers.get(0));
+    assertEquals(USER_TWO, resultUsers.get(1));
+    assertEquals(USER_THREE, resultUsers.get(2));
+  }
+
+  @Test
+  public void testGetUsers_byUsername_partial_found() {
+    List<User> resultUsers = userStore.getUsers("username_t");
+    Assert.assertEquals(2, resultUsers.size());
+    assertEquals(USER_TWO, resultUsers.get(0));
+    assertEquals(USER_THREE, resultUsers.get(1));
+  }
+
+  @Test
+  public void testGetUsers_byUsername_notFound() {
+    List<User> resultUsers = userStore.getUsers("bad_username");
+    Assert.assertTrue(resultUsers.isEmpty());
+  }
+
+  @Test
+  public void testGetUsers_null() {
+    List<User> resultUsers = userStore.getUsers(null);
+    Assert.assertTrue(resultUsers.isEmpty());
+  }
+
+  @Test
+  public void testGetUsers_empty() {
+    List<User> resultUsers = userStore.getUsers("");
+    Assert.assertTrue(resultUsers.isEmpty());
+  }
+
+  @Test
   public void testAddUser() {
     User inputUser =
         new User(
