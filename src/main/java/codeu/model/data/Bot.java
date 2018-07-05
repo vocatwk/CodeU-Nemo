@@ -11,10 +11,11 @@ public class Bot extends User {
   * Constructs a new Bot.
   */
   public Bot() {
-    super(UUID.fromString("0000000-0000-0000-0000-000000000000"), 
-      "NemoBot", 
-      BCrypt.hashpw("NemoBotPassword2018", BCrypt.gensalt()), 
-      Instant.now());
+    super(
+        UUID.fromString("0000000-0000-0000-0000-000000000000"), 
+        "NemoBot", 
+        BCrypt.hashpw("NemoBotPassword2018", BCrypt.gensalt()), 
+        Instant.now());
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null); // TODO: null or Instant.now()?
