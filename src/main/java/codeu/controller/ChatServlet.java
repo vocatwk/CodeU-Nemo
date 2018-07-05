@@ -146,7 +146,9 @@ public class ChatServlet extends HttpServlet {
     }
 
     String purpose = request.getReader().readLine();
+    System.out.println("purpose: " + purpose);
     String messageContent = request.getParameter("message");
+    System.out.println("messageContent: " + messageContent);
 
     if(purpose != null){
       if(purpose.equals("make private")){
@@ -176,7 +178,12 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(user.getName());
       messageInformation.add(conversationTitle);
       messageInformation.add(cleanedMessageContent);
-      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+      Event messageEvent = 
+          new Event(
+              UUID.randomUUID(), 
+              "Message", 
+              message.getCreationTime(), 
+              messageInformation);
       eventStore.addEvent(messageEvent);
 
       // Scan the message for "@NemoBot"
@@ -197,7 +204,12 @@ public class ChatServlet extends HttpServlet {
         botMessageInformation.add("NemoBot");
         botMessageInformation.add(conversationTitle);
         botMessageInformation.add(botResponse);
-        Event botMessageEvent = new Event(UUID.randomUUID(), "Message", botMessage.getCreationTime(), botMessageInformation);
+        Event botMessageEvent = 
+            new Event(
+                UUID.randomUUID(), 
+                "Message", 
+                botMessage.getCreationTime(), 
+                botMessageInformation);
         eventStore.addEvent(botMessageEvent);
       }
     }

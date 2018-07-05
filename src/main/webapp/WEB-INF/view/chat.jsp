@@ -125,14 +125,8 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       <ul>
     <%
       for (Message message : messages) {
-        String author;
-        if (message.getAuthorId().equals(UUID.fromString("0000000-0000-0000-0000-000000000000"))) {
-          author = "NemoBot";
-        }
-        else {
-          author = UserStore.getInstance()
-            .getUser(message.getAuthorId()).getName();
-        }
+        String author = UserStore.getInstance()
+          .getUser(message.getAuthorId()).getName();
     %>
       <li><strong> <a href="/profile/<%=author %>"><%= author %></a>:
           </strong> <%= message.getContent() %></li>

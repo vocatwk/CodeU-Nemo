@@ -1,15 +1,23 @@
 package codeu.model.data;
 
+import java.time.Instant;
 import java.util.UUID;
+import org.mindrot.jbcrypt.BCrypt;
 
 /** Class representing a Bot. */
-public class Bot {
-  private final UUID id;
+public class Bot extends User {
+  
   /**
   * Constructs a new Bot.
   */
   public Bot() {
-    id = UUID.fromString("0000000-0000-0000-0000-000000000000");
+    super(UUID.fromString("0000000-0000-0000-0000-000000000000"), 
+      "NemoBot", 
+      BCrypt.hashpw("NemoBotPassword2018", BCrypt.gensalt()), 
+      Instant.now());
+    setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
+    setIsAdmin(true);
+    setLastSeenNotifications(null); // TODO: null or Instant.now()?
   }
 
   /*
@@ -34,10 +42,5 @@ public class Bot {
     }
 
     return "I'm sorry. I didn't understand that.";
-  }
-
-  /** Returns the ID of this Bot. */
-  public UUID getId() {
-    return id;
   }
 }
