@@ -39,30 +39,8 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+  
   <script>
-
-    //open add user box
-    $(document).ready(function(){
-      $("#addUsersModalTrigger").click(function() {
-        $("#addUserBox").show();
-      });
-    });
-
-    // close add user box when user clicks on x or anywhere outside of the box
-    $(document).ready(function() {
-      $(".close").click(function() {
-        $("#addUserBox").hide();
-      });
-    });
-
-    // show contents of drop down settings menu
-    $(document).ready(function(){
-      $("#conversationSettings").click(function() {
-        $(".dropdown-content").toggle();
-      });
-    });
 
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
@@ -99,25 +77,37 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
   <div id="container">
 
-    <h1>
-      <!-- Conversation title -->
-      <%= conversation.getTitle() %>
-        
-      <!-- Setting button and content -->
+    <div class="headerContainer">
+
+      <div class="titleAndSettings">
+        <!-- Conversation title -->
+        <h1> <%= conversation.getTitle() %> </h1>
+          
+        <!-- Setting button and content -->
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog"> </i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+            <button class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+          </div>
+        </div>
+      </div>
+
+      <%@ include file="addUserBox.jsp" %>
+
+      <!-- mine 
       <div id="dropdown-settings">
         <i id="conversationSettings" class="fa fa-cog"> </i>
         <div class="dropdown-content" style="display:none">
           <li> <button id="privacySettingButton"> <%=privacySettingButtonValue%> </button> </li>
           <li> <button id="addUsersModalTrigger"> Add User </button> </li>
         </div>
-      </div>
-
-      <%@ include file="addUserBox.jsp" %>
+      </div> -->
 
       <!-- refresh button -->
-      <a href="" style="float: right">&#8635;</a>
-    </h1>
-
+      <h1> <a href="" >&#8635;</a> </h1>
+    </div>
     
     <hr/>
 
