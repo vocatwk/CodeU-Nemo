@@ -23,6 +23,7 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
@@ -143,14 +144,14 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String type = request.getParameter("type");
+    String purpose = request.getReader().readLine();
     String messageContent = request.getParameter("message");
 
-    if(type != null){
-      if(type.equals("make private")){
+    if(purpose != null){
+      if(purpose.equals("make private")){
         conversation.makePrivate();
       }
-      else{
+      else if(purpose.equals("make public")){
         conversation.makePublic();
       }
       conversationStore.updateConversation(conversation);
