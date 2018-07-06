@@ -190,11 +190,9 @@ public class ChatServlet extends HttpServlet {
 
     if(purpose.equals("make private")){
       conversation.makePrivate();
-      System.out.println("Just made it Private");
     }
     else if(purpose.equals("make public")){
       conversation.makePublic();
-      System.out.println("Just made it public");
     }
     conversationStore.updateConversation(conversation);
   }
