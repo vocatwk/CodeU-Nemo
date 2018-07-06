@@ -144,42 +144,58 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String purpose = request.getReader().readLine();
     String messageContent = request.getParameter("message");
 
-    if(purpose != null){
-      if(purpose.equals("make private")){
-        conversation.makePrivate();
-      }
-      else if(purpose.equals("make public")){
-        conversation.makePublic();
-      }
-      conversationStore.updateConversation(conversation);
-    }
-    else if(messageContent != null) {
+    // this removes any HTML from the message content
+    String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
 
-      // this removes any HTML from the message content
-      String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
+    Message message =
+        new Message(
+            UUID.randomUUID(),
+            conversation.getId(),
+            user.getId(),
+            cleanedMessageContent,
+            Instant.now());
 
-      Message message =
-          new Message(
-              UUID.randomUUID(),
-              conversation.getId(),
-              user.getId(),
-              cleanedMessageContent,
-              Instant.now());
+    messageStore.addMessage(message);
 
-      messageStore.addMessage(message);
-
-      List<String> messageInformation = new ArrayList<>();
-      messageInformation.add(user.getName());
-      messageInformation.add(conversationTitle);
-      messageInformation.add(cleanedMessageContent);
-      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
-      eventStore.addEvent(messageEvent);
-    }
+    List<String> messageInformation = new ArrayList<>();
+    messageInformation.add(user.getName());
+    messageInformation.add(conversationTitle);
+    messageInformation.add(cleanedMessageContent);
+    Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+    eventStore.addEvent(messageEvent);
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
+  }
+
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+    String username = (String) request.getSession().getAttribute("user");
+
+    String requestUrl = request.getRequestURI();
+    String conversationTitle = requestUrl.substring("/chat/".length());
+
+    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    if (conversation == null) {
+      // couldn't find conversation, redirect to conversation list
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    String purpose = request.getReader().readLine();
+
+    if(purpose.equals("make private")){
+      conversation.makePrivate();
+      System.out.println("Just made it Private");
+    }
+    else if(purpose.equals("make public")){
+      conversation.makePublic();
+      System.out.println("Just made it public");
+    }
+    conversationStore.updateConversation(conversation);
   }
 }
