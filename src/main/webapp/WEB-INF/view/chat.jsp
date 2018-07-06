@@ -96,16 +96,6 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
       <%@ include file="addUserBox.jsp" %>
 
-      <!-- mine 
-      <div id="dropdown-settings">
-        <i id="conversationSettings" class="fa fa-cog"> </i>
-        <div class="dropdown-content" style="display:none">
-          <li> <button id="privacySettingButton"> <%=privacySettingButtonValue%> </button> </li>
-          <li> <button id="addUsersModalTrigger"> Add User </button> </li>
-        </div>
-      </div> -->
-
-      <!-- refresh button -->
       <h1> <a href="" >&#8635;</a> </h1>
     </div>
     

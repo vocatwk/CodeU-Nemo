@@ -22,7 +22,7 @@
                   a1.href = "/profile/" + userName;
                   a1.innerHTML = userName;
                   a2 = document.createElement("a");
-                  a2.href = "/" + userName;
+                  //a2.href = "/" + userName;
                   a2.style = "float: right";
                   a2.innerHTML = "add";
                   li.appendChild(a1);
