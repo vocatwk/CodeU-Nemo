@@ -19,11 +19,10 @@
 <html>
 <head>
   <title>Conversations</title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-
-  <%@ include file="navbar.jsp" %>
 
   <div id="container">
 

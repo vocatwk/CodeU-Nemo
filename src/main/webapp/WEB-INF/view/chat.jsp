@@ -28,6 +28,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 <html>
 <head>
   <title><%= conversation.getTitle() %></title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -38,37 +39,15 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+  
   <script>
-
-    //open add user box
-    $(document).ready(function(){
-      $("#addUsersModalTrigger").click(function() {
-        $("#addUserBox").show();
-      });
-    });
-
-    // close add user box when user clicks on x or anywhere outside of the box
-    $(document).ready(function() {
-      $(".close").click(function() {
-        $("#addUserBox").hide();
-      });
-    });
-
-    // show contents of drop down settings menu
-    $(document).ready(function(){
-      $("#conversationSettings").click(function() {
-        $(".dropdown-content").toggle();
-      });
-    });
 
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getTitle() %>', {
-          method: "POST",
+          method: "PUT",
           body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
@@ -94,29 +73,31 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 </head>
 <body onload="scrollChat()">
 
-  <%@ include file="navbar.jsp" %>
-
   <div id="container">
 
-    <h1>
-      <!-- Conversation title -->
-      <%= conversation.getTitle() %>
-        
-      <!-- Setting button and content -->
-      <div id="dropdown-settings">
-        <i id="conversationSettings" class="fa fa-cog"> </i>
-        <div class="dropdown-content" style="display:none">
-          <li> <button id="privacySettingButton"> <%=privacySettingButtonValue%> </button> </li>
-          <li> <button id="addUsersModalTrigger"> Add User </button> </li>
+    <div class="headerContainer">
+
+      <div class="titleAndSettings">
+        <!-- Conversation title -->
+        <h1> <%= conversation.getTitle() %> </h1>
+          
+        <!-- Setting button and content -->
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <i class="fa fa-cog"> </i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+            <button class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+          </div>
         </div>
       </div>
 
       <%@ include file="addUserBox.jsp" %>
 
-      <!-- refresh button -->
-      <a href="" style="float: right">&#8635;</a>
-    </h1>
-
+      <h1> <a href="" >&#8635;</a> </h1>
+    </div>
     
     <hr/>
 

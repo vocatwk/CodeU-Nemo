@@ -13,15 +13,32 @@
             response.json().then(function(data) {
               // Start with no resultItem divs
               document.querySelector('#' + putResultsIn).innerHTML = '';
-              for (var user in data) {
-                var userName = data[user].name;
-                var div = document.createElement("div");
-                div.setAttribute("class", "resultItem");
-                a = document.createElement("a");
-                a.href = "/profile/" + userName;
-                a.innerHTML = userName;
-                div.appendChild(a);
-                document.getElementById(putResultsIn).appendChild(div);
+              if(putResultsIn === 'userResult'){
+                for (var user in data) {
+                  var userName = data[user].name;
+                  var li = document.createElement("li");
+                  li.setAttribute("class", "list-group-item");
+                  a1 = document.createElement("a");
+                  a1.href = "/profile/" + userName;
+                  a1.innerHTML = userName;
+                  a2 = document.createElement("a");
+                  a2.style = "float: right";
+                  a2.innerHTML = "add";
+                  li.appendChild(a1);
+                  li.appendChild(a2);
+                  document.getElementById(putResultsIn).appendChild(li);
+                }
+              } else {
+                for (var user in data) {
+                  var userName = data[user].name;
+                  var div = document.createElement("div");
+                  div.setAttribute("class", "resultItem");
+                  a = document.createElement("a");
+                  a.href = "/profile/" + userName;
+                  a.innerHTML = userName;
+                  div.appendChild(a);
+                  document.getElementById(putResultsIn).appendChild(div);
+                }
               }
             });
           }
