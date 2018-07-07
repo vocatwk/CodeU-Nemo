@@ -234,6 +234,10 @@ public class ChatServlet extends HttpServlet {
     conversationStore.updateConversation(conversation);
   }
 
+  /*
+  * This function splits source by whitespace and checks if substring 
+  * is contained as a standalone word, ignore case.
+  */
   private boolean containsExactMatch(String source, String substring) {
     for (String word : source.split("\\s+")) {
       if (word.equalsIgnoreCase(substring)) {
