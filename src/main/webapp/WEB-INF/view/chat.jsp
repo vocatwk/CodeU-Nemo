@@ -84,8 +84,15 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
         <h1> <%= conversation.getTitle() %> </h1>
           
         <!-- Setting button and content -->
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-cog"> </i>
+        <div class="settingsDropdown">
+          <button 
+          class="btn btn-secondary dropdown-toggle" 
+          type="button" 
+          id="dropdownMenu2" 
+          data-toggle="dropdown" 
+          aria-haspopup="true" 
+          aria-expanded="false"> 
+            <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
             <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
