@@ -13,7 +13,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 <html>
 <head>
   <title><%= subject %></title>
-  <%@ include file="header.jsp" %>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 
   <script>
@@ -25,8 +25,6 @@ String aboutMe = (String) request.getAttribute("aboutMe");
   </script>
 </head>
 <body onload="scrollChat()">
-
-  <%@ include file="navbar.jsp" %>
 
   <div id="container">
 

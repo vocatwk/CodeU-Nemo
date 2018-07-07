@@ -28,7 +28,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 <html>
 <head>
   <title><%= conversation.getTitle() %></title>
-  <%@ include file="header.jsp" %>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -72,8 +72,6 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   </script>
 </head>
 <body onload="scrollChat()">
-
-  <%@ include file="navbar.jsp" %>
 
   <div id="container">
 

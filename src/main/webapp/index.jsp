@@ -18,13 +18,12 @@
 <html>
 <head>
   <title>CodeU Chat App - Nemo</title>
-  <%@ include file="WEB-INF/view/header.jsp" %>
+  <%@ include file="WEB-INF/view/navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 
   <% if(user != null) {%>
-      <%@ include file="WEB-INF/view/navbar.jsp" %>
       <div id="container">
       <div
         style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
