@@ -29,6 +29,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -145,20 +147,6 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String purpose = request.getReader().readLine();
-    String messageContent = request.getParameter("message");
-    
-    if(purpose != null){
-      if(purpose.equals("make private")){
-        conversation.makePrivate();
-      }
-      else if(purpose.equals("make public")){
-        conversation.makePublic();
-      }
-      conversationStore.updateConversation(conversation);
-    }
-    else if(messageContent != null) {
-
     String messageContent = request.getParameter("message");
     if(messageContent != null) {
       // this removes any HTML from the message content
@@ -187,7 +175,8 @@ public class ChatServlet extends HttpServlet {
       eventStore.addEvent(messageEvent);
 
       // Scan the message for "@NemoBot"
-      if (cleanedMessageContent.toLowerCase().contains("@NemoBot".toLowerCase())) {
+      if (containsExactMatch(cleanedMessageContent, "@NemoBot")) {
+        System.out.println("Contains exact match");
         Bot chatBot = new Bot();
         String botResponse = chatBot.parseMessage(cleanedMessageContent);
         Message botMessage =
@@ -243,5 +232,14 @@ public class ChatServlet extends HttpServlet {
       conversation.makePublic();
     }
     conversationStore.updateConversation(conversation);
+  }
+
+  private boolean containsExactMatch(String source, String substring) {
+    for (String word : source.split("\\s+")) {
+      if (word.equalsIgnoreCase(substring)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
