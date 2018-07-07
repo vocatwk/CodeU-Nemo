@@ -12,10 +12,10 @@
 <html>
 <head>
   <title>Notification</title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <%@ include file="navbar.jsp" %>
   <p> Hello! This is your notifcation page</p>
   <div id="notifications">
       <ul>

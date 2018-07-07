@@ -146,10 +146,8 @@ public class ChatServlet extends HttpServlet {
     }
 
     String purpose = request.getReader().readLine();
-    System.out.println("purpose: " + purpose);
     String messageContent = request.getParameter("message");
-    System.out.println("messageContent: " + messageContent);
-
+    
     if(purpose != null){
       if(purpose.equals("make private")){
         conversation.makePrivate();
@@ -161,6 +159,8 @@ public class ChatServlet extends HttpServlet {
     }
     else if(messageContent != null) {
 
+    String messageContent = request.getParameter("message");
+    if(messageContent != null) {
       // this removes any HTML from the message content
       String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
 
@@ -213,8 +213,35 @@ public class ChatServlet extends HttpServlet {
         eventStore.addEvent(botMessageEvent);
       }
     }
-
+ 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
+  }
+
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+    String username = (String) request.getSession().getAttribute("user");
+
+    String requestUrl = request.getRequestURI();
+    String conversationTitle = requestUrl.substring("/chat/".length());
+
+    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    if (conversation == null) {
+      // couldn't find conversation, redirect to conversation list
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    String purpose = request.getReader().readLine();
+
+    if(purpose.equals("make private")){
+      conversation.makePrivate();
+    }
+    else if(purpose.equals("make public")){
+      conversation.makePublic();
+    }
+    conversationStore.updateConversation(conversation);
   }
 }
