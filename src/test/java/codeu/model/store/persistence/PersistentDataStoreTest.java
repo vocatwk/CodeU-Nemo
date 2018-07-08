@@ -49,11 +49,10 @@ public class PersistentDataStoreTest {
     boolean isAdminOne = true;
     Instant lastSeenNotificationsOne = Instant.ofEpochMilli(1000);
     User inputUserOne = new User(idOne, nameOne, passwordHashOne, creationOne);
-    inputUserOne.setLastSeenNotifications(lastSeenNotificationsOne);
     String aboutMeOne = "test_about_me_one";
-    User inputUserOne = new User(idOne, nameOne, passwordHashOne, creationOne);
     inputUserOne.setIsAdmin(isAdminOne);
     inputUserOne.setAboutMe(aboutMeOne);
+    inputUserOne.setLastSeenNotifications(lastSeenNotificationsOne);
 
     UUID idTwo = UUID.fromString("10000001-2222-3333-4444-555555555555");
     String nameTwo = "test_username_two";
