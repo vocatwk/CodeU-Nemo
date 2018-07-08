@@ -23,6 +23,7 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
@@ -143,20 +144,8 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String type = request.getParameter("type");
     String messageContent = request.getParameter("message");
-
-    if(type != null){
-      if(type.equals("make private")){
-        conversation.makePrivate();
-      }
-      else{
-        conversation.makePublic();
-      }
-      conversationStore.updateConversation(conversation);
-    }
-    else if(messageContent != null) {
-
+    if(messageContent != null) {
       // this removes any HTML from the message content
       String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
 
@@ -177,8 +166,35 @@ public class ChatServlet extends HttpServlet {
       Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
       eventStore.addEvent(messageEvent);
     }
-
+ 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
+  }
+
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+    String username = (String) request.getSession().getAttribute("user");
+
+    String requestUrl = request.getRequestURI();
+    String conversationTitle = requestUrl.substring("/chat/".length());
+
+    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    if (conversation == null) {
+      // couldn't find conversation, redirect to conversation list
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    String purpose = request.getReader().readLine();
+
+    if(purpose.equals("make private")){
+      conversation.makePrivate();
+    }
+    else if(purpose.equals("make public")){
+      conversation.makePublic();
+    }
+    conversationStore.updateConversation(conversation);
   }
 }

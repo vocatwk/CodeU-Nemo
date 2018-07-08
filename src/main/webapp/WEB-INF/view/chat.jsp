@@ -28,6 +28,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 <html>
 <head>
   <title><%= conversation.getTitle() %></title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -38,39 +39,66 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
-
+  
   <script>
+
+    // for make private/make public button
+    var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
+    $(document).ready(function() {
+      $("#privacySettingButton").click(function() {
+        fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "PUT",
+          body : newChatPrivacyValue,
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          newChatPrivacyValue = newChatPrivacyValue === "make private" ? "make public":"make private";
+          $("#privacySettingButton").html(newChatPrivacyValue);
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+      });
+    });
+
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
-    // show contents of dropDown menu
-    function toggleSettingsDropdown() {
-      var dropDiv = document.getElementById("SettingDropDown");
-      dropDiv.style.display = dropDiv.style.display === "none"? "block" : "none";
-    };
   </script>
 </head>
 <body onload="scrollChat()">
 
-  <%@ include file="navbar.jsp" %>
-
   <div id="container">
 
-    <h1>
-      <%= conversation.getTitle() %>
-      <i onclick="toggleSettingsDropdown()" class="fa fa-cog"> </i>
-      <a href="" style="float: right">&#8635;</a>
-    </h1>
-    
-    <div id="SettingDropDown" style="display: none">
-      <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="submit"  name="type" value="<%= privacySettingButtonValue %>" />
-      </form>
-    </div>
+    <div class="headerContainer">
 
+      <div class="titleAndSettings">
+        <!-- Conversation title -->
+        <h1> <%= conversation.getTitle() %> </h1>
+          
+        <!-- Setting button and content -->
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <i class="fa fa-cog"> </i>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+            <button class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+          </div>
+        </div>
+      </div>
+
+      <%@ include file="addUserBox.jsp" %>
+
+      <h1> <a href="" >&#8635;</a> </h1>
+    </div>
+    
     <hr/>
 
     <div id="chat">
