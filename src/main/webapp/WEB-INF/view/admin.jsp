@@ -4,10 +4,10 @@
 <html>
 <head>
   <title>Admin Login</title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <%@ include file="navbar.jsp" %>
   <%-- getting statistics  --%>
 	<br/>
 	<br/>

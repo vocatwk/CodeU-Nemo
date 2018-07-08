@@ -17,6 +17,7 @@
 <html>
 <head>
   <title>Register</title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>

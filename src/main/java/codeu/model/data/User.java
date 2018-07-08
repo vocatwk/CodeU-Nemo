@@ -27,8 +27,12 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
+<<<<<<< HEAD
   private Instant lastSeenNotificationsTimestamp;
   private List<String> subscriptions;
+=======
+  private Instant lastSeenNotifications;
+>>>>>>> aa040e874cdc9bc456cc743db0efa6ee5f364a67
   /**
    * Constructs a new User.
    *
@@ -88,8 +92,9 @@ public class User {
       return isAdmin;
   }
 
-  public void setLastSeenNotificationTimestamp(Instant lastSeen){
-      lastSeenNotificationsTimestamp = lastSeen;
+  /** Set the Instant the last time the user visted the notification page */
+  public void setLastSeenNotifications(Instant lastSeen){
+      lastSeenNotifications = lastSeen;
   }
   public Instant getLastSeenNotificationsTimestamp(){
       return lastSeenNotificationsTimestamp;

@@ -106,3 +106,22 @@ button {
   height: 500px;
   overflow-y: scroll;
 }
+
+/* This is for the Search Results Page */
+#results {
+  background-color: white;
+  height: 500px;
+  overflow-y: scroll;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+.titleAndSettings {
+  display: flex;
+}
+
+

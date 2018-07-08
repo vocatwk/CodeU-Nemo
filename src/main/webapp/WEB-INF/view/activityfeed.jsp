@@ -9,11 +9,10 @@ List<Event> events = (List<Event>) request.getAttribute("events");
 <html>
 <head>
   <title>Activity Feed</title>
+  <%@ include file="navbar.jsp" %>
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-
-  <%@ include file="navbar.jsp" %>
 
   <div id="container">
     <h1>Activity

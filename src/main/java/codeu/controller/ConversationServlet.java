@@ -118,6 +118,7 @@ public class ConversationServlet extends HttpServlet {
 
     Conversation conversation =
         new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
+    conversation.addMember(username);
 
     conversationStore.addConversation(conversation);
 

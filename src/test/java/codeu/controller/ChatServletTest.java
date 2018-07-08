@@ -23,6 +23,7 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +51,10 @@ public class ChatServletTest {
   private UserStore mockUserStore;
   private Conversation mockConversation;
   private EventStore mockEventStore;
+  private BufferedReader mockReader;
 
   @Before
-  public void setup() {
+  public void setup() throws IOException {
     chatServlet = new ChatServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
@@ -76,6 +78,9 @@ public class ChatServletTest {
     mockConversation = Mockito.mock(Conversation.class);
     mockEventStore = Mockito.mock(EventStore.class);
     chatServlet.setEventStore(mockEventStore);
+
+    mockReader = Mockito.mock(BufferedReader.class);
+    Mockito.when(mockRequest.getReader()).thenReturn(mockReader);
   }
 
   @Test
@@ -138,6 +143,33 @@ public class ChatServletTest {
 
     Mockito.verify(mockMessageStore, Mockito.never()).addMessage(Mockito.any(Message.class));
     Mockito.verify(mockResponse).sendRedirect("/conversations");
+  }
+
+  @Test
+  public void testDoPost_MessageIsNull() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "$2a$10$bBiLUAVmUFK6Iwg5rmpBUOIBW6rIMhU1eKfi3KR60V9UXaYTwPfHy",
+            Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    Conversation fakeConversation =
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+    Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
+        .thenReturn(fakeConversation);
+
+    Mockito.when(mockRequest.getParameter("message")).thenReturn(null);
+
+    chatServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockMessageStore, Mockito.never()).addMessage(Mockito.any(Message.class));
+    Mockito.verify(mockEventStore, Mockito.never()).addEvent(Mockito.any(Event.class));
+    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 
   @Test
@@ -219,50 +251,38 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPost_makePublicPrivate() throws IOException, ServletException {
+  public void testDoPut_makePublicPrivate() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(
-        new User(
-          UUID.randomUUID(),
-          "test_username",
-          "test_Hash",
-          Instant.now()));
+    
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getParameter("type"))
+    Mockito.when(mockReader.readLine())
         .thenReturn("make private");
     Mockito.when(mockConversation.isPrivate()).thenReturn(false);
     
-    chatServlet.doPost(mockRequest, mockResponse);
+    chatServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockConversation).makePrivate();
     Mockito.verify(mockConversationStore).updateConversation(mockConversation);
-    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 
   @Test
-  public void testDoPost_makePrivatePublic() throws IOException, ServletException {
+  public void testDoPut_makePrivatePublic() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(
-        new User(
-          UUID.randomUUID(),
-          "test_username",
-          "test_Hash",
-          Instant.now()));
+    
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getParameter("type"))
+    Mockito.when(mockReader.readLine())
         .thenReturn("make public");
     Mockito.when(mockConversation.isPrivate()).thenReturn(true);
     
-    chatServlet.doPost(mockRequest, mockResponse);
+    chatServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockConversation).makePublic();
     Mockito.verify(mockConversationStore).updateConversation(mockConversation);
-    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 }

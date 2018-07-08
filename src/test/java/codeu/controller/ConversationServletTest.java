@@ -23,6 +23,7 @@ import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
@@ -147,6 +148,10 @@ public class ConversationServletTest {
         ArgumentCaptor.forClass(Conversation.class);
     Mockito.verify(mockConversationStore).addConversation(conversationArgumentCaptor.capture());
     Assert.assertEquals(conversationArgumentCaptor.getValue().getTitle(), "test_conversation");
+
+    HashSet<String> members = new HashSet<String>();
+    members.add("test_username");
+    Assert.assertEquals(members, conversationArgumentCaptor.getValue().getMembers());
 
     ArgumentCaptor<Event> eventArgumentCaptor = 
         ArgumentCaptor.forClass(Event.class);
