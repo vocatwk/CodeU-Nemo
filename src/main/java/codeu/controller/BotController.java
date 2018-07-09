@@ -39,9 +39,6 @@ public class BotController {
   * @return null if the given String does not match any existing Bot. 
   */
   public Bot getBot(String mentionKey) {
-    if (botMap.containsKey(mentionKey)) {
-      return botMap.get(mentionKey);
-    }
-    return null;
+    return botMap.get(mentionKey);
   }
 }
