@@ -70,14 +70,14 @@ public class NotificationServletTest{
     fakeEventList.add(userEvent);
 
     UUID fakeConversationId = UUID.randomUUID();
-    Conversation fakeConversation = new Conversation(fakeConversationId, fakeUserId, "testConversation", Instant.ofEpochMilli(1000));
+    Conversation fakeConversation = new Conversation(fakeConversationId, fakeUserId, "testConversation", Instant.ofEpochMilli(2000));
     List<String> conversationInformation = new ArrayList<>();
     conversationInformation.add(fakeUser.getName());
     conversationInformation.add(fakeConversation.getTitle());
     Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", fakeConversation.getCreationTime(), conversationInformation);
     fakeEventList.add(conversationEvent);
 
-    Message fakeMessage = new Message(UUID.randomUUID(), fakeConversationId, fakeUserId, "testMessage", Instant.ofEpochMilli(1000));
+    Message fakeMessage = new Message(UUID.randomUUID(), fakeConversationId, fakeUserId, "testMessage", Instant.ofEpochMilli(3000));
     List<String> messageInformation = new ArrayList<>();
     messageInformation.add(fakeUser.getName());
     messageInformation.add(fakeConversation.getTitle());
