@@ -63,6 +63,21 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       });
     });
 
+    $(document).on('click', '.add-user-button', function(e) {             
+      e.preventDefault();
+      if(!this.classList.contains('isDisabled')){
+
+        this.removeAttribute("href");
+        this.classList.add('isDisabled');
+        var selectedUserList = document.getElementById('selectedUserList');
+        var selectedUser = document.createElement("button");
+        selectedUser.setAttribute("class", "selectedUser");
+        selectedUser.innerHTML = this.id;
+
+        selectedUserList.appendChild(selectedUser);
+      }
+    });
+
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');

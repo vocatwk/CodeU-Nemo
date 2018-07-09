@@ -9,6 +9,9 @@
         </button>
       </div>
       <div class="modal-body">
+        <div id="selectedUserList">
+          <!-- list of users selected will go here -->
+        </div>
         <div id ="searchDiv">
           <input onkeyup="fetchResults('userResult','userSearchBar')" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="userSearchBar">
         </div>
