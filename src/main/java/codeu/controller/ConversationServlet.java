@@ -103,6 +103,18 @@ public class ConversationServlet extends HttpServlet {
     User user = userStore.getUser(username);
 
     String conversationTitle = request.getParameter("conversationTitle");
+
+    if(conversationTitle == null){
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    if (conversationTitle.equals("")) {
+      request.setAttribute("error", "Please enter at least one letter or number");
+      request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
+      return;
+    }
+
     if (!conversationTitle.matches("[\\w*]*")) {
       request.setAttribute("error", "Please enter only letters and numbers.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
