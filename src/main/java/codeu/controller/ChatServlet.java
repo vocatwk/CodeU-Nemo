@@ -175,8 +175,7 @@ public class ChatServlet extends HttpServlet {
       eventStore.addEvent(messageEvent);
 
       // Scan the message for "@NemoBot"
-      if (containsExactMatch(cleanedMessageContent, "@NemoBot")) {
-        System.out.println("Contains exact match");
+      if (containsWholeWord(cleanedMessageContent, "@NemoBot")) {
         Bot chatBot = new Bot();
         String botResponse = chatBot.parseMessage(cleanedMessageContent);
         Message botMessage =
@@ -238,8 +237,8 @@ public class ChatServlet extends HttpServlet {
   * This function splits source by whitespace and checks if substring 
   * is contained as a standalone word, ignore case.
   */
-  private boolean containsExactMatch(String source, String substring) {
-    for (String word : source.split("\\s+")) {
+  private boolean containsWholeWord(String source, String substring) {
+    for (String word : source.split("[[\\p{Punct}&&[^@]]\\s]+")) {
       if (word.equalsIgnoreCase(substring)) {
         return true;
       }
