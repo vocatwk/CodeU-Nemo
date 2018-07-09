@@ -85,7 +85,7 @@ public class NotificationServletTest{
     Event messageEvent = new Event(UUID.randomUUID(), "Message", fakeMessage.getCreationTime(), messageInformation);
     fakeEventList.add(messageEvent);
 
-    Instant fakeLastSeenTime = Instant.now();
+    Instant fakeLastSeenTime =  Instant.ofEpochMilli(1500);
     mockUser.setLastSeenNotifications(fakeLastSeenTime);
 
 
