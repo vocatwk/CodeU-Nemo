@@ -27,7 +27,7 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
-  private Instant lastSeenNotificationsTimestamp;
+  private Instant lastSeenNotifications;
   private List<String> subscriptions;
 
   /**
@@ -45,7 +45,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-    lastSeenNotificationsTimestamp = Instant.now();
+    lastSeenNotifications = Instant.now();
     subscriptions = new ArrayList<String>();
   }
 
@@ -93,15 +93,18 @@ public class User {
   public void setLastSeenNotifications(Instant lastSeen){
       lastSeenNotifications = lastSeen;
   }
-  public Instant getLastSeenNotificationsTimestamp(){
-      return lastSeenNotificationsTimestamp;
+  /** get the Instant the last time the user visted the notification page */
+  public Instant getLastSeenNotifications(){
+      return lastSeenNotifications;
   }
 
-  public void setSubscription(String coversationName){
+  /** Add the subscription to the subscriptions list */
+  public void setSubscription(String conversationName){
       subscriptions.add(conversationName);
   }
 
-  public void getSubscription(){
+  /** get the subscription to the subscriptions list */
+  public List<String> getSubscription(){
       return subscriptions;
   }
 }

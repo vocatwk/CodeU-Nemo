@@ -1,6 +1,17 @@
+package codeu.controller;
+
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
+import java.util.UUID;
+import java.util.Arrays;
 
 
 public class SubscriptionServlet extends HttpServlet{
@@ -24,7 +35,7 @@ public class SubscriptionServlet extends HttpServlet{
       throws IOException, ServletException {
         String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
-        
+        List<String> subscriptions = user.getSubscription();
 
         request.setAttribute("subscriptions",subscriptions);
 

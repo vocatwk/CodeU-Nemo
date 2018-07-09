@@ -7,6 +7,6 @@
   <title> Subscriptions </title>
   <%@ include file="navbar.jsp" %>
 <p> These are the User's subscriptions </p>
-<%= request.getAttribute("numOfUsers") %>
+<%= request.getAttribute("subscriptions") %>
 </head>
 </html>
