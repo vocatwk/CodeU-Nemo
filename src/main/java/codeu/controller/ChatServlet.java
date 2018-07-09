@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Bot;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -159,12 +160,44 @@ public class ChatServlet extends HttpServlet {
 
       messageStore.addMessage(message);
 
-      List<String> messageInformation = new ArrayList<>();
+      List<String> messageInformation = new ArrayList<String>();
       messageInformation.add(user.getName());
       messageInformation.add(conversationTitle);
       messageInformation.add(cleanedMessageContent);
-      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+      Event messageEvent = 
+          new Event(
+              UUID.randomUUID(), 
+              "Message", 
+              message.getCreationTime(), 
+              messageInformation);
       eventStore.addEvent(messageEvent);
+
+      // Scan the message for "@NemoBot"
+      if (containsWholeWord(cleanedMessageContent, "@NemoBot")) {
+        Bot chatBot = new Bot();
+        String botResponse = chatBot.parseMessage(cleanedMessageContent);
+        Message botMessage =
+            new Message(
+                UUID.randomUUID(),
+                conversation.getId(),
+                chatBot.getId(),
+                botResponse,
+                Instant.now());
+
+        messageStore.addMessage(botMessage);
+
+        List<String> botMessageInformation = new ArrayList<String>();
+        botMessageInformation.add("NemoBot");
+        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(botResponse);
+        Event botMessageEvent = 
+            new Event(
+                UUID.randomUUID(), 
+                "Message", 
+                botMessage.getCreationTime(), 
+                botMessageInformation);
+        eventStore.addEvent(botMessageEvent);
+      }
     }
  
     // redirect to a GET request
@@ -196,5 +229,18 @@ public class ChatServlet extends HttpServlet {
       conversation.makePublic();
     }
     conversationStore.updateConversation(conversation);
+  }
+
+  /*
+  * This function splits source by whitespace and checks if substring 
+  * is contained as a standalone word, ignore case.
+  */
+  private boolean containsWholeWord(String source, String substring) {
+    for (String word : source.split("[[\\p{Punct}&&[^@]]\\s]+")) {
+      if (word.equalsIgnoreCase(substring)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
