@@ -3,10 +3,13 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title> Subscriptions </title>
-  <%@ include file="navbar.jsp" %>
-<p> These are the User's subscriptions </p>
-<%= request.getAttribute("subscriptions") %>
-</head>
+  <head>
+    <link rel="stylesheet" href="/css/main.css">
+      <title> Subscriptions </title>
+      <%@ include file="navbar.jsp" %>
+  </head>
+  <body>
+    <p> These are the User's subscriptions </p>
+    <%= request.getAttribute("subscriptions") %>
+  </body>
 </html>
