@@ -27,12 +27,9 @@ public class User {
   private final Instant creation;
   private String aboutMe;
   private boolean isAdmin;
-<<<<<<< HEAD
   private Instant lastSeenNotificationsTimestamp;
   private List<String> subscriptions;
-=======
-  private Instant lastSeenNotifications;
->>>>>>> aa040e874cdc9bc456cc743db0efa6ee5f364a67
+
   /**
    * Constructs a new User.
    *
@@ -100,11 +97,11 @@ public class User {
       return lastSeenNotificationsTimestamp;
   }
 
-  public void setSubscritions(String coversationName){
+  public void setSubscription(String coversationName){
       subscriptions.add(conversationName);
   }
 
-  public void getSubscritons(){
+  public void getSubscription(){
       return subscriptions;
   }
 }
