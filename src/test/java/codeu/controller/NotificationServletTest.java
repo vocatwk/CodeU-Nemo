@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.junit.Assert;
 
 public class NotificationServletTest{
   private NotificationServlet NotificationServlet;
@@ -61,6 +62,7 @@ public class NotificationServletTest{
   @Test
   public void tesDoGet() throws IOException, ServletException {
     List<Event> fakeEventList = new ArrayList<>();
+    List<Event> eventsToShow = new ArrayList<>();
 
     UUID fakeUserId = UUID.randomUUID();
     User fakeUser = new User(fakeUserId, "testUser", "test_password_hash", Instant.ofEpochMilli(1000));
@@ -76,6 +78,7 @@ public class NotificationServletTest{
     conversationInformation.add(fakeConversation.getTitle());
     Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", fakeConversation.getCreationTime(), conversationInformation);
     fakeEventList.add(conversationEvent);
+    eventsToShow.add(conversationEvent);
 
     Message fakeMessage = new Message(UUID.randomUUID(), fakeConversationId, fakeUserId, "testMessage", Instant.ofEpochMilli(3000));
     List<String> messageInformation = new ArrayList<>();
@@ -84,21 +87,22 @@ public class NotificationServletTest{
     messageInformation.add(fakeMessage.getContent());
     Event messageEvent = new Event(UUID.randomUUID(), "Message", fakeMessage.getCreationTime(), messageInformation);
     fakeEventList.add(messageEvent);
+    eventsToShow.add(messageEvent);
 
-    Instant fakeLastSeenTime =  Instant.ofEpochMilli(1500);
+    Instant fakeLastSeenTime = Instant.ofEpochMilli(100);
     mockUser.setLastSeenNotifications(fakeLastSeenTime);
 
-
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_User");
-    Mockito.when(mockUserStore.getUser("test_User")).thenReturn(mockUser);
-    Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(fakeEventList);
-
+    Mockito.when(mockEventStore.getAllEvents()).thenReturn(fakeEventList);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("fakeUser");
+    Mockito.when(mockUserStore.getUser("fakeUser")).thenReturn(mockUser);
     Mockito.when(mockUser.getLastSeenNotifications()).thenReturn(fakeLastSeenTime);
+
+    Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(eventsToShow);
     Mockito.verify(mockUser).setLastSeenNotifications(fakeLastSeenTime);
+
     NotificationServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.when(mockEventStore.getAllEvents()).thenReturn(fakeEventList);
-    Mockito.verify(mockRequest).setAttribute("eventsToShow", fakeEventList);
+    Mockito.verify(mockRequest).setAttribute("eventsToShow", eventsToShow);
 
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
 
