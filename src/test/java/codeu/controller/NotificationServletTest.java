@@ -61,6 +61,7 @@ public class NotificationServletTest{
 
   @Test
   public void tesDoGet() throws IOException, ServletException {
+
     List<Event> fakeEventList = new ArrayList<>();
     List<Event> eventsToShow = new ArrayList<>();
 
@@ -89,6 +90,8 @@ public class NotificationServletTest{
     fakeEventList.add(messageEvent);
     eventsToShow.add(messageEvent);
 
+    NotificationServlet.doGet(mockRequest, mockResponse);
+
     Instant fakeLastSeenTime = Instant.ofEpochMilli(100);
     mockUser.setLastSeenNotifications(fakeLastSeenTime);
 
@@ -100,7 +103,6 @@ public class NotificationServletTest{
     Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(eventsToShow);
     Mockito.verify(mockUser).setLastSeenNotifications(fakeLastSeenTime);
 
-    NotificationServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("eventsToShow", eventsToShow);
 
