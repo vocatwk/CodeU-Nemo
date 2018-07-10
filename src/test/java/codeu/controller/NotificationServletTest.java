@@ -92,7 +92,7 @@ public class NotificationServletTest{
 
     NotificationServlet.doGet(mockRequest, mockResponse);
 
-    Instant fakeLastSeenTime = Instant.ofEpochMilli(100);
+    Instant fakeLastSeenTime = Instant.ofEpochMilli(1500);
     mockUser.setLastSeenNotifications(fakeLastSeenTime);
 
     Mockito.when(mockEventStore.getAllEvents()).thenReturn(fakeEventList);
