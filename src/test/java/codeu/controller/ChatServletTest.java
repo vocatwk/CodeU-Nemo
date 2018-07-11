@@ -14,6 +14,9 @@
 
 package codeu.controller;
 
+import codeu.controller.BotController;
+import codeu.model.data.Bot;
+import codeu.model.data.NemoBot;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
@@ -46,6 +49,7 @@ public class ChatServletTest {
   private HttpSession mockSession;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
+  private BotController mockBotController;
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
@@ -65,6 +69,9 @@ public class ChatServletTest {
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/chat.jsp"))
         .thenReturn(mockRequestDispatcher);
+
+    mockBotController = Mockito.mock(BotController.class);
+    chatServlet.setBotController(mockBotController);
 
     mockConversationStore = Mockito.mock(ConversationStore.class);
     chatServlet.setConversationStore(mockConversationStore);
@@ -173,7 +180,7 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPost_StoresMessage() throws IOException, ServletException {
+  public void testDoPost_StoresMessage_NoBot() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
@@ -207,11 +214,14 @@ public class ChatServletTest {
     testInformation.add("Test message.");
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
+    // This simulates the private method getMentionKey() to some extent.
+    Mockito.when(mockBotController.getBot("@NoBot")).thenReturn(null);
+
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 
   @Test
-  public void testDoPost_CleansHtmlContent() throws IOException, ServletException {
+  public void testDoPost_CleansHtmlContent_NoBot() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
@@ -246,6 +256,50 @@ public class ChatServletTest {
     testInformation.add("test_conversation");
     testInformation.add("Contains html and  content.");
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
+
+    // This simulates the private method getMentionKey() to some extent.
+    Mockito.when(mockBotController.getBot("@NoBot")).thenReturn(null);
+
+    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
+  }
+
+  @Test
+  public void testDoPost_StoresMessage_WithBot() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "$2a$10$bBiLUAVmUFK6Iwg5rmpBUOIBW6rIMhU1eKfi3KR60V9UXaYTwPfHy",
+            Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    Conversation fakeConversation =
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+    Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
+        .thenReturn(fakeConversation);
+
+    Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message @NemoBot.");
+
+    chatServlet.doPost(mockRequest, mockResponse);
+
+    ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+    Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
+    Assert.assertEquals("Test message @NemoBot.", messageArgumentCaptor.getValue().getContent());
+
+    ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("Message", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test_username");
+    testInformation.add("test_conversation");
+    testInformation.add("Test message @NemoBot.");
+    Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
+
+    NemoBot nemoBot = Mockito.mock(NemoBot.class);
+    Mockito.when(mockBotController.getBot("@NemoBot")).thenReturn(nemoBot);
 
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }

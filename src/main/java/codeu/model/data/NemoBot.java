@@ -8,7 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 /** Class representing a help Bot. */
 public class NemoBot extends User implements Bot {
 
-  private String name;
+  private String mentionName;
   
   /**
   * Constructs a new Bot.
@@ -23,7 +23,7 @@ public class NemoBot extends User implements Bot {
     setIsAdmin(true);
     setLastSeenNotifications(null);
     UserStore.getInstance().addUser(this);
-    name = "NemoBot";
+    mentionName = "NemoBot";
   }
 
   /** Scans a message to identify keywords.*/
@@ -46,10 +46,5 @@ public class NemoBot extends User implements Bot {
     }
 
     return "I'm sorry. I didn't understand that.";
-  }
-
-  /** Returns the Bot's name. */
-  public String getName() {
-    return name;
   }
 }
