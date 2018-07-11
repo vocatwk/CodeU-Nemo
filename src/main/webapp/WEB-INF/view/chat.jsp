@@ -75,7 +75,8 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
         this.classList.add('isDisabled');
         var selectedUserList = document.getElementById('selectedUserList');
         var selectedUser = document.createElement("button");
-        selectedUser.setAttribute("class", "selectedUser");
+        selectedUser.setAttribute("class", "btn btn-primary");
+        selectedUser.classList.add('selectedUser');
         selectedUser.innerHTML = this.id;
 
         selectedUserList.appendChild(selectedUser);
