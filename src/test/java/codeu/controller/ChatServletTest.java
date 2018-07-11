@@ -257,6 +257,7 @@ public class ChatServletTest {
     
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Changing chat privacy");
 
     Mockito.when(mockReader.readLine())
         .thenReturn("make private");
@@ -275,6 +276,7 @@ public class ChatServletTest {
     
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(mockConversation);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Changing chat privacy");
 
     Mockito.when(mockReader.readLine())
         .thenReturn("make public");

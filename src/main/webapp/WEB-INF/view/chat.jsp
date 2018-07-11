@@ -48,6 +48,9 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
+          headers: {
+            "purpose" : "Changing chat privacy"
+          },
           body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
@@ -63,6 +66,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       });
     });
 
+    // select user to add
     $(document).on('click', '.add-user-button', function(e) {             
       e.preventDefault();
       if(!this.classList.contains('isDisabled')){
@@ -76,6 +80,36 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
         selectedUserList.appendChild(selectedUser);
       }
+    });
+
+    // add selected users
+    $(document).on('click', '#addSelectedUsersButton', function() {             
+      var selectedUserNames = [];
+      var selectedUserList = $(".add-user-button.isDisabled");
+
+      $.each(selectedUserList, function( index, value ) {
+        selectedUserNames.push(value.id);
+      });
+
+      $("#selectedUserList").innerHTML = "";
+      $( "#AddUsersModalCloseButton" ).trigger( "click" );
+
+      fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "purpose" : "Adding users"
+          },
+          body: JSON.stringify(selectedUserNames),
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
     });
 
     // scroll the chat div to the bottom
