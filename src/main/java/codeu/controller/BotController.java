@@ -13,7 +13,7 @@ public class BotController {
   /** Singleton instance of BotController. */
   private static BotController instance;
 
-  /** Map that stores a mention key to it's Bot. */
+  /** Map that stores a mention key to its Bot. */
   private Map<String, Bot> botMap;
 
   private BotController() {
