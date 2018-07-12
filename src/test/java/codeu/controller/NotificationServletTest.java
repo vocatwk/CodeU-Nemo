@@ -92,7 +92,6 @@ public class NotificationServletTest{
 
 
     Instant fakeLastSeenTime = Instant.ofEpochMilli(1500);
-    mockUser.setLastSeenNotifications(fakeLastSeenTime);
 
     Mockito.when(mockSession.getAttribute("user")).thenReturn("fakeUser");
     Mockito.when(mockUserStore.getUser("fakeUser")).thenReturn(mockUser);
