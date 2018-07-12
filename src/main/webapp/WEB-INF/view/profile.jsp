@@ -60,7 +60,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
       </ul>
 
     </div>
-
+    <h1> <%= subject %>'s subscriptions </h1>
   </div>
 
 </body>

@@ -95,16 +95,16 @@ public class User {
   }
   /** get the Instant the last time the user visted the notification page */
   public Instant getLastSeenNotifications(){
-      return lastSeenNotifications;
+    return lastSeenNotifications;
   }
 
   /** Add the subscription to the subscriptions list */
   public void setSubscription(String conversationName){
-      subscriptions.add(conversationName);
+    subscriptions.add(conversationName);
   }
 
   /** get the subscription to the subscriptions list */
   public List<String> getSubscription(){
-      return subscriptions;
+    return subscriptions;
   }
 }

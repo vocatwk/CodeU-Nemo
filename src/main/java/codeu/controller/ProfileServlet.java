@@ -20,7 +20,7 @@ import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
-   
+
   private MessageStore messageStore;
 
   /** Store class that gives access to Users. */
@@ -79,16 +79,16 @@ public class ProfileServlet extends HttpServlet {
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
-    
+
     User subject = userStore.getUser(subjectName);
- 
+
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
       // TODO respond with 404
       response.sendRedirect("/");
       return;
     }
- 
+
     request.setAttribute("subject", subjectName);
     UUID subjectId = subject.getId();
 
@@ -107,7 +107,7 @@ public class ProfileServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String requestUrl = request.getRequestURI();
-    String username = (String) request.getSession().getAttribute("user"); 
+    String username = (String) request.getSession().getAttribute("user");
     User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){
@@ -116,7 +116,7 @@ public class ProfileServlet extends HttpServlet {
       response.sendRedirect("/login");
       return;
     }
- 
+
     String aboutMe = request.getParameter("aboutMe");
 
     // remove any HTML from the About me message
@@ -125,7 +125,7 @@ public class ProfileServlet extends HttpServlet {
     //set user's about me and update it in dataStore
     subject.setAboutMe(cleanedAboutMe);
     userStore.updateUser(subject);
-    
+
     List<String> aboutMeInformation = new ArrayList<>();
     aboutMeInformation.add(subject.getName());
     aboutMeInformation.add(subject.getAboutMe());
@@ -135,4 +135,15 @@ public class ProfileServlet extends HttpServlet {
 
     response.sendRedirect("/profile/" + subject.getName());
   }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+        String username = (String)request.getSession().getAttribute("user");
+        User user = userStore.getUser(username);
+        List<String> subscriptions = user.getSubscription();
+        request.setAttribute("subscriptions",subscriptions);
+      }
+
+
 }
