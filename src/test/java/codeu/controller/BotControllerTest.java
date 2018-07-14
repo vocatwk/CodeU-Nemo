@@ -1,13 +1,11 @@
 package codeu.controller;
 
-// import codeu.controller.BotController;
 import codeu.model.data.Bot;
 import codeu.model.data.NemoBot;
 import java.util.Map;
 import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.junit.Assert;
 
 public class BotControllerTest {
