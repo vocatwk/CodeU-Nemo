@@ -14,11 +14,12 @@
 
 package codeu.controller;
 
+import codeu.controller.BotController;
+import codeu.model.data.Bot;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
-import codeu.model.data.NemoBot;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -51,6 +52,9 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  /** Controller class that gives control to Bots. */
+  private BotController botController;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -59,6 +63,7 @@ public class ChatServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    setBotController(BotController.getInstance());
   }
 
   /**
@@ -91,6 +96,14 @@ public class ChatServlet extends HttpServlet {
    */
   void setEventStore(EventStore eventStore) {
     this.eventStore = eventStore;
+  }
+
+  /**
+   * Sets the BotController used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setBotController(BotController botController) {
+    this.botController = botController;
   }
 
   /**
@@ -172,22 +185,24 @@ public class ChatServlet extends HttpServlet {
               messageInformation);
       eventStore.addEvent(messageEvent);
 
-      // Scan the message for "@NemoBot"
-      if (containsWholeWord(cleanedMessageContent, "@NemoBot")) {
-        NemoBot nemoBot = new NemoBot();
-        String botResponse = nemoBot.answerMessage(cleanedMessageContent);
+      // Check if any Bot was @ mentioned
+      String mentionKey = getMentionKey(cleanedMessageContent);
+      if (mentionKey != null) {
+        // Generate a Bot response
+        Bot bot = botController.getBot(mentionKey);
+        String botResponse = bot.answerMessage(cleanedMessageContent);
         Message botMessage =
             new Message(
                 UUID.randomUUID(),
                 conversation.getId(),
-                nemoBot.getId(),
+                bot.getId(),
                 botResponse,
                 Instant.now());
 
         messageStore.addMessage(botMessage);
 
         List<String> botMessageInformation = new ArrayList<String>();
-        botMessageInformation.add("NemoBot");
+        botMessageInformation.add(bot.getName());
         botMessageInformation.add(conversationTitle);
         botMessageInformation.add(botResponse);
         Event botMessageEvent = 
@@ -231,16 +246,18 @@ public class ChatServlet extends HttpServlet {
     conversationStore.updateConversation(conversation);
   }
 
-  /*
-  * This function splits source by whitespace and checks if substring 
-  * is contained as a standalone word, ignore case.
+  /**
+  * This function scans through the source String and checks if it's a registered 
+  * mention key in BotController.
+  *
+  * @return null if no word is registered. 
   */
-  private boolean containsWholeWord(String source, String substring) {
+  private String getMentionKey(String source) {
     for (String word : source.split("[[\\p{Punct}&&[^@]]\\s]+")) {
-      if (word.equalsIgnoreCase(substring)) {
-        return true;
+      if (botController.getBot(word) != null) {
+        return word;
       }
     }
-    return false;
+    return null;
   }
 }
