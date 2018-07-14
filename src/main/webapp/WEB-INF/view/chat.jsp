@@ -42,6 +42,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   
   <script>
 
+    var ToBeAddedToConversation = new Array();
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
@@ -77,23 +78,21 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
         var selectedUser = document.createElement("button");
         selectedUser.setAttribute("class", "btn btn-primary");
         selectedUser.classList.add('selectedUser');
-        selectedUser.innerHTML = this.id;
+        selectedUser.innerHTML = this.getAttribute("username");
 
         selectedUserList.appendChild(selectedUser);
+        ToBeAddedToConversation.push(this.getAttribute("username"));
+        $('#addSelectedUsersButton').removeAttr('disabled');
       }
     });
 
     // add selected users
     $(document).on('click', '#addSelectedUsersButton', function() {             
-      var selectedUserNames = [];
-      var selectedUserList = $(".add-user-button.isDisabled");
-
-      $.each(selectedUserList, function( index, value ) {
-        selectedUserNames.push(value.id);
-      });
-
-      $("#selectedUserList").innerHTML = "";
-      $( "#AddUsersModalCloseButton" ).trigger( "click" );
+     
+      $('#selectedUserList').empty();
+      $('#userResult').empty();
+      $('#userSearchBar').val("");
+      $('#addUsersModal').modal('hide');
 
       fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
@@ -101,13 +100,14 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
             "Content-Type": "application/json; charset=utf-8",
             "purpose" : "Adding users"
           },
-          body: JSON.stringify(selectedUserNames),
+          body: JSON.stringify(ToBeAddedToConversation),
           credentials: "same-origin"
         }).then(function(response) {
           if(!response.ok) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
+          ToBeAddedToConversation = new Array();
         }, function(error) {
           console.log("An error occured. " + error.message);
         })

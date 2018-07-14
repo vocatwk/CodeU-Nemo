@@ -24,9 +24,15 @@
                   a2 = document.createElement("a");
                   a2.style = "float: right";
                   a2.innerHTML = "add";
-                  a2.href = "#";
                   a2.setAttribute("class", "add-user-button");
-                  a2.setAttribute("id", userName);
+                  a2.setAttribute("username", userName);
+
+                  if(ToBeAddedToConversation.includes(userName)){
+                    a2.classList.add("isDisabled");
+                  }else{
+                    a2.href = "#";
+                  }
+
                   li.appendChild(a1);
                   li.appendChild(a2);
                   document.getElementById(putResultsIn).appendChild(li);

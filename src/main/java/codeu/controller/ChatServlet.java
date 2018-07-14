@@ -222,8 +222,7 @@ public class ChatServlet extends HttpServlet {
 
     String purpose = request.getHeader("purpose");
     if(purpose == null){
-      // wrong form of PUT request, redirect to conversation list
-      response.sendRedirect("/conversations");
+      // wrong form of PUT request, do nothing
       return;
     }
     
@@ -239,7 +238,7 @@ public class ChatServlet extends HttpServlet {
       conversationStore.updateConversation(conversation);
     }
     else if(purpose.equals("Adding users")){
-      //TO DO parse json here
+      //TODO parse json here
     }
     
   }
