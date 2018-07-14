@@ -42,12 +42,16 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   
   <script>
 
+    var ToBeAddedToConversation = new Array();
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
+          headers: {
+            "purpose" : "Changing chat privacy"
+          },
           body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
@@ -61,6 +65,53 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
           console.log("An error occured. " + error.message);
         })
       });
+    });
+
+    // select user to add
+    $(document).on('click', '.add-user-button', function(e) {             
+      e.preventDefault();
+      if(!this.classList.contains('isDisabled')){
+
+        this.removeAttribute("href");
+        this.classList.add('isDisabled');
+        var selectedUserList = document.getElementById('selectedUserList');
+        var selectedUser = document.createElement("button");
+        selectedUser.setAttribute("class", "btn btn-primary");
+        selectedUser.classList.add('selectedUser');
+        selectedUser.innerHTML = this.getAttribute("username");
+
+        selectedUserList.appendChild(selectedUser);
+        ToBeAddedToConversation.push(this.getAttribute("username"));
+        $('#addSelectedUsersButton').removeAttr('disabled');
+      }
+    });
+
+    // add selected users
+    $(document).on('click', '#addSelectedUsersButton', function() {             
+     
+      $('#selectedUserList').empty();
+      $('#userResult').empty();
+      $('#userSearchBar').val("");
+      $('#addUsersModal').modal('hide');
+      this.setAttribute('disabled', true);
+
+      fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "purpose" : "Adding users"
+          },
+          body: JSON.stringify(ToBeAddedToConversation),
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          ToBeAddedToConversation = new Array();
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
     });
 
     // scroll the chat div to the bottom

@@ -220,15 +220,27 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String purpose = request.getReader().readLine();
+    String purpose = request.getHeader("purpose");
+    if(purpose == null){
+      // wrong form of PUT request, do nothing
+      return;
+    }
+    
+    if(purpose.equals("Changing chat privacy")){
+      String privacyCommand = request.getReader().readLine();
 
-    if(purpose.equals("make private")){
-      conversation.makePrivate();
+      if(privacyCommand.equals("make private")){
+        conversation.makePrivate();
+      }
+      else if(privacyCommand.equals("make public")){
+        conversation.makePublic();
+      }
+      conversationStore.updateConversation(conversation);
     }
-    else if(purpose.equals("make public")){
-      conversation.makePublic();
+    else if(purpose.equals("Adding users")){
+      //TODO parse json here
     }
-    conversationStore.updateConversation(conversation);
+    
   }
 
   /*
