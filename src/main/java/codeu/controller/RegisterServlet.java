@@ -78,13 +78,6 @@ public class RegisterServlet extends HttpServlet {
     }
 
     String password = request.getParameter("password");
-
-    if (password.length() < 6) {
-      request.setAttribute("error", "Password must contain at least 6 characters.");
-      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
-      return;
-    }
-
     String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
     User user = new User(UUID.randomUUID(), username, hashedPassword, Instant.now());
