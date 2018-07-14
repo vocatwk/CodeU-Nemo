@@ -79,7 +79,6 @@ public class NotificationServletTest{
     conversationInformation.add(fakeConversation.getTitle());
     Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", fakeConversation.getCreationTime(), conversationInformation);
     fakeEventList.add(conversationEvent);
-    eventsToShow.add(conversationEvent);
 
     Message fakeMessage = new Message(UUID.randomUUID(), fakeConversationId, fakeUserId, "testMessage", Instant.ofEpochMilli(3000));
     List<String> messageInformation = new ArrayList<>();
@@ -88,23 +87,30 @@ public class NotificationServletTest{
     messageInformation.add(fakeMessage.getContent());
     Event messageEvent = new Event(UUID.randomUUID(), "Message", fakeMessage.getCreationTime(), messageInformation);
     fakeEventList.add(messageEvent);
-    eventsToShow.add(messageEvent);
 
 
     Instant fakeLastSeenTime = Instant.ofEpochMilli(1500);
-
     Mockito.when(mockSession.getAttribute("user")).thenReturn("fakeUser");
     Mockito.when(mockUserStore.getUser("fakeUser")).thenReturn(mockUser);
     Mockito.when(mockEventStore.getAllEvents()).thenReturn(fakeEventList);
     Mockito.when(mockUser.getLastSeenNotifications()).thenReturn(fakeLastSeenTime);
-    Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(eventsToShow);
+
+    List<Event> spyEvents = Mockito.spy(eventsToShow);
+    spyEvents.add(conversationEvent);
+    spyEvents.add(messageEvent);
+
+    Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(spyEvents);
+    Mockito.doReturn(2).when(spyEvents).size();
+
+    Instant fakeSeenNotification = Instant.ofEpochMilli(3000);
 
     NotificationServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockUser).setLastSeenNotifications(fakeLastSeenTime);
-    Mockito.verify(mockRequest).setAttribute("eventsToShow", eventsToShow);
-    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+    Assert.assertEquals(2, spyEvents.size());
 
+    Mockito.verify(mockUser).setLastSeenNotifications(fakeSeenNotification);
+    Mockito.verify(mockRequest).setAttribute("eventsToShow", spyEvents);
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
 
   }
 
