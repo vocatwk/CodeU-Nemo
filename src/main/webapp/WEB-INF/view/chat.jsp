@@ -93,6 +93,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       $('#userResult').empty();
       $('#userSearchBar').val("");
       $('#addUsersModal').modal('hide');
+      this.setAttribute('disabled', true);
 
       fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
