@@ -28,6 +28,11 @@ public class BotController {
     return instance;
   }
 
+  /** Instance getter function used for testing. */
+  public static BotController getTestInstance() {
+    return new BotController();
+  }
+
   /** Adds an entry to the map. */
   public void registerBot(String mentionKey, Bot bot) {
     botMap.put(mentionKey, bot);
@@ -40,5 +45,13 @@ public class BotController {
   */
   public Bot getBot(String mentionKey) {
     return botMap.get(mentionKey);
+  }
+
+  /** 
+  * Sets the Bots to be used. 
+  * This should only be called once and is ideally only used for testing. 
+  */
+  public void setBots(Map<String, Bot> botMap) {
+    this.botMap = botMap;
   }
 }

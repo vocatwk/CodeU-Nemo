@@ -22,7 +22,6 @@ public class NemoBot extends User implements Bot {
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null);
-    UserStore.getInstance().addUser(this);
     mentionName = "NemoBot";
   }
 
