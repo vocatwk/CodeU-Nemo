@@ -29,12 +29,15 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.HashSet;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.gson.Gson;
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -238,7 +241,15 @@ public class ChatServlet extends HttpServlet {
       conversationStore.updateConversation(conversation);
     }
     else if(purpose.equals("Adding users")){
-      //TODO parse json here
+
+      String[] userNameArray = stringToArray(request.getReader().readLine());
+      HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
+      conversation.addMembers(toBeAdded);
+
+      String json = new Gson().toJson(conversation.getMembers());
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
     }
     
   }
@@ -254,5 +265,17 @@ public class ChatServlet extends HttpServlet {
       }
     }
     return false;
+  }
+
+  /*
+  * This function takes an array as a string and converts it to
+  * an actual array.
+  */
+  private String[] stringToArray(String source){
+    String withoutQuotes = source.replaceAll("\"", "");
+    String withoutBrackets = withoutQuotes.substring(1,withoutQuotes.length() - 1);
+    String[] asArray = withoutBrackets.split(",");
+
+    return asArray;
   }
 }

@@ -43,6 +43,8 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   <script>
 
     var ToBeAddedToConversation = new Array();
+    var membersOfConversation = new Set();
+
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
@@ -109,6 +111,10 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
             return;
           }
           ToBeAddedToConversation = new Array();
+          response.json().then(function(data) {
+            membersOfConversation = new Set(data);
+          });
+
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
