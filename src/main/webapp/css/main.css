@@ -136,4 +136,6 @@ button {
   margin-right: 5px;
 }
 
-
+.add-user-button{
+  float: right;
+}

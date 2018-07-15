@@ -25,7 +25,6 @@
 
                   if(!membersOfConversation.has(userName)){
                     a2 = document.createElement("a");
-                    a2.style = "float: right";
                     a2.innerHTML = "add";
                     a2.setAttribute("class", "add-user-button");
                     a2.setAttribute("username", userName);

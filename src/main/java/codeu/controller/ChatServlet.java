@@ -245,7 +245,25 @@ public class ChatServlet extends HttpServlet {
     }
     else if(purpose.equals("Adding users")){
 
-      String[] userNameArray = stringToArray(request.getReader().readLine());
+      String jsonString = request.getReader().readLine();
+      String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
+      String[] userNameArray = null;
+      
+      try{
+        userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
+      }
+      catch(Exception e){
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      for(String user : userNameArray){
+        if(userStore.getUser(user) == null){
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          return;
+        }
+      }
+
       HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
       conversation.addMembers(toBeAdded);
       conversationStore.updateConversation(conversation);
@@ -269,17 +287,5 @@ public class ChatServlet extends HttpServlet {
       }
     }
     return false;
-  }
-
-  /*
-  * This function takes an array as a string and converts it to
-  * an actual array.
-  */
-  private String[] stringToArray(String source){
-    String withoutQuotes = source.replaceAll("\"", "");
-    String withoutBrackets = withoutQuotes.substring(1,withoutQuotes.length() - 1);
-    String[] asArray = withoutBrackets.split(",");
-
-    return asArray;
   }
 }

@@ -312,6 +312,23 @@ public class ChatServletTest {
     Mockito.when(mockReader.readLine())
         .thenReturn("[\"test_user1\",\"test_user2\"]");
     
+    User fakeUser1 =
+        new User(
+            UUID.randomUUID(),
+            "test_user1",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now());
+
+    User fakeUser2 =
+        new User(
+            UUID.randomUUID(),
+            "test_user2",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now());
+
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("test_user2")).thenReturn(fakeUser2);
+
     HashSet<String> fakeUsersToBeAdded = new HashSet<>();
     fakeUsersToBeAdded.add("test_user1");
     fakeUsersToBeAdded.add("test_user2");

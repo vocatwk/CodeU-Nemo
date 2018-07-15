@@ -89,7 +89,6 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         closeIcon.setAttribute("type", "button");
         closeIcon.setAttribute("class", "close");
         closeIcon.setAttribute("aria-label", "Close");
-        closeIcon.setAttribute("id", "remove-from-queue-button");
         closeIcon.setAttribute("username", userName);
 
         var span = document.createElement("span");
@@ -97,29 +96,27 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         span.innerHTML = "&times;";
 
         closeIcon.appendChild(span);
+        closeIcon.addEventListener("click", function(){
+          var userName = this.getAttribute("username");
+          $(this).parent().remove();
+
+          var addButtonForUser = $(".add-user-button[username='" + userName + "']");
+          addButtonForUser.attr("href", "#");
+          addButtonForUser.removeClass("isDisabled");
+
+          if(ToBeAddedToConversation.size === 1){
+            $('#addSelectedUsersButton').attr("disabled", "true");
+          }
+
+          ToBeAddedToConversation.delete(userName);
+        });
+
         selectedUser.appendChild(closeIcon);
         selectedUserList.appendChild(selectedUser);
 
         ToBeAddedToConversation.add(userName);
         $('#addSelectedUsersButton').removeAttr('disabled');
       }
-    });
-
-    // unselect user to add
-    $(document).on('click', '#remove-from-queue-button', function() {
-
-      var userName = this.getAttribute("username");
-      $(this).parent().remove();
-
-      var addButtonForUser = $(".add-user-button[username='" + userName + "']");
-      addButtonForUser.attr("href", "#");
-      addButtonForUser.removeClass("isDisabled");
-
-      if(ToBeAddedToConversation.size === 1){
-        $('#addSelectedUsersButton').attr("disabled", "true");
-      }
-
-      ToBeAddedToConversation.delete(userName);
     });
 
     // add selected users
@@ -140,11 +137,12 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           body: JSON.stringify(Array.from(ToBeAddedToConversation)),
           credentials: "same-origin"
         }).then(function(response) {
+
+          ToBeAddedToConversation = new Set();
           if(!response.ok) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
-          ToBeAddedToConversation = new Set();
           response.json().then(function(data) {
             membersOfConversation = new Set(data);
           });
