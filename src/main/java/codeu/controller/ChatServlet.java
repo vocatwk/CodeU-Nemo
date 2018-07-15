@@ -119,9 +119,12 @@ public class ChatServlet extends HttpServlet {
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
+    String membersOfConversation = new Gson().toJson(conversation.getMembers());
+    
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
+    request.setAttribute("membersOfConversation", membersOfConversation);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -245,6 +248,7 @@ public class ChatServlet extends HttpServlet {
       String[] userNameArray = stringToArray(request.getReader().readLine());
       HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
       conversation.addMembers(toBeAdded);
+      conversationStore.updateConversation(conversation);
 
       String json = new Gson().toJson(conversation.getMembers());
       response.setContentType("application/json");

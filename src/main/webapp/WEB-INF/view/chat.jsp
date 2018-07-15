@@ -22,6 +22,7 @@ Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
+String membersOfConversation = (String) request.getAttribute("membersOfConversation");
 %>
 
 <!DOCTYPE html>
@@ -43,7 +44,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   <script>
 
     var ToBeAddedToConversation = new Array();
-    var membersOfConversation = new Set();
+    var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
 
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
