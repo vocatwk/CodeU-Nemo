@@ -30,7 +30,7 @@
                     a2.setAttribute("class", "add-user-button");
                     a2.setAttribute("username", userName);
 
-                    if(ToBeAddedToConversation.includes(userName)){
+                    if(ToBeAddedToConversation.has(userName)){
                       a2.classList.add("isDisabled");
                     }else{
                       a2.href = "#";

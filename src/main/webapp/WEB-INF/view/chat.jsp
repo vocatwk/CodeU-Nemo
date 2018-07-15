@@ -43,7 +43,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   
   <script>
 
-    var ToBeAddedToConversation = new Array();
+    var ToBeAddedToConversation = new Set();
     var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
 
     // for make private/make public button
@@ -75,18 +75,51 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       e.preventDefault();
       if(!this.classList.contains('isDisabled')){
 
+        var userName = this.getAttribute("username");
+
         this.removeAttribute("href");
         this.classList.add('isDisabled');
         var selectedUserList = document.getElementById('selectedUserList');
         var selectedUser = document.createElement("button");
         selectedUser.setAttribute("class", "btn btn-primary");
         selectedUser.classList.add('selectedUser');
-        selectedUser.innerHTML = this.getAttribute("username");
+        selectedUser.innerHTML = userName;
 
+        var closeIcon = document.createElement("button");
+        closeIcon.setAttribute("type", "button");
+        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("aria-label", "Close");
+        closeIcon.setAttribute("id", "remove-from-queue-button");
+        closeIcon.setAttribute("username", userName);
+
+        var span = document.createElement("span");
+        span.setAttribute("aria-hidden", "true");
+        span.innerHTML = "&times;";
+
+        closeIcon.appendChild(span);
+        selectedUser.appendChild(closeIcon);
         selectedUserList.appendChild(selectedUser);
-        ToBeAddedToConversation.push(this.getAttribute("username"));
+
+        ToBeAddedToConversation.add(userName);
         $('#addSelectedUsersButton').removeAttr('disabled');
       }
+    });
+
+    // unselect user to add
+    $(document).on('click', '#remove-from-queue-button', function() {
+
+      var userName = this.getAttribute("username");
+      $(this).parent().remove();
+
+      var addButtonForUser = $(".add-user-button[username='" + userName + "']");
+      addButtonForUser.attr("href", "#");
+      addButtonForUser.removeClass("isDisabled");
+
+      if(ToBeAddedToConversation.size === 1){
+        $('#addSelectedUsersButton').attr("disabled", "true");
+      }
+
+      ToBeAddedToConversation.delete(userName);
     });
 
     // add selected users
@@ -104,14 +137,14 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
             "Content-Type": "application/json; charset=utf-8",
             "purpose" : "Adding users"
           },
-          body: JSON.stringify(ToBeAddedToConversation),
+          body: JSON.stringify(Array.from(ToBeAddedToConversation)),
           credentials: "same-origin"
         }).then(function(response) {
           if(!response.ok) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
-          ToBeAddedToConversation = new Array();
+          ToBeAddedToConversation = new Set();
           response.json().then(function(data) {
             membersOfConversation = new Set(data);
           });
