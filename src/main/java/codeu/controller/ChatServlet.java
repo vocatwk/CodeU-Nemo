@@ -120,7 +120,7 @@ public class ChatServlet extends HttpServlet {
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
-    
+
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
