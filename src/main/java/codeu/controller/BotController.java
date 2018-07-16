@@ -1,6 +1,8 @@
 package codeu.controller;
 
 import codeu.model.data.Bot;
+import codeu.model.data.User;
+import codeu.model.store.basic.UserStore;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -16,8 +18,12 @@ public class BotController {
   /** Map that stores a mention key to its Bot. */
   private Map<String, Bot> botMap;
 
+  /** Store class that gives access to Users. */
+  private UserStore userStore;
+
   private BotController() {
     botMap = new HashMap<String, Bot>();
+    setUserStore(UserStore.getInstance());
   }
 
   /** Returns the singleton instance of BotController that should be shared between all servlet classes. */
@@ -33,25 +39,41 @@ public class BotController {
     return new BotController();
   }
 
-  /** Adds an entry to the map. */
+  /**
+   * Sets the UserStore used by this controller. This function provides a common setup method for use
+   * by the test framework or the controller's BotController() function.
+   */
+  void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
+  /** Adds an entry to the map and to the UserStore. */
   public void registerBot(String mentionKey, Bot bot) {
-    botMap.put(mentionKey, bot);
+    botMap.put(mentionKey.toLowerCase(), bot);
+
+    userStore.addUser((User)bot);
   }
 
   /** 
-  * Access the Bot with the given String.
+  * Access the Bot with the given String, ignoring case.
   * 
   * @return null if the given String does not match any existing Bot. 
   */
   public Bot getBot(String mentionKey) {
-    return botMap.get(mentionKey);
+    return botMap.get(mentionKey.toLowerCase());
   }
 
   /** 
-  * Sets the Bots to be used. 
+  * Sets the Bots to be used and adds them to the UserStore. 
   * This should only be called once and is ideally only used for testing. 
   */
   public void setBots(Map<String, Bot> botMap) {
-    this.botMap = botMap;
+    for (String key : botMap.keySet()) {
+      this.botMap.put(key.toLowerCase(), botMap.get(key));
+    }
+
+    for (Bot bot : botMap.values()) {
+      userStore.addUser((User)bot);
+    }
   }
 }

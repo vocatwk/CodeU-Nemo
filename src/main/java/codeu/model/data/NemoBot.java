@@ -8,7 +8,8 @@ import org.mindrot.jbcrypt.BCrypt;
 /** Class representing a help Bot. */
 public class NemoBot extends User implements Bot {
 
-  private String mentionName;
+  /** "@" + Bot's name. */
+  private String mentionKey;
   
   /**
   * Constructs a new Bot.
@@ -22,7 +23,7 @@ public class NemoBot extends User implements Bot {
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null);
-    mentionName = "NemoBot";
+    mentionKey = "@NemoBot";
   }
 
   /** Scans a message to identify keywords.*/
@@ -45,5 +46,10 @@ public class NemoBot extends User implements Bot {
     }
 
     return "I'm sorry. I didn't understand that.";
+  }
+
+  /** Returns "@" + Bot's name. */
+  public String getMentionKey() {
+    return mentionKey;
   }
 }

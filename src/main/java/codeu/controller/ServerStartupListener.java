@@ -23,9 +23,6 @@ import javax.servlet.ServletContextListener;
  */
 public class ServerStartupListener implements ServletContextListener {
 
-  /** Store class that gives access to Users. */
-  private UserStore userStore = UserStore.getInstance();
-
    /** Controller class that gives control to Bots. */
   private BotController botController = BotController.getInstance();
 
@@ -34,7 +31,7 @@ public class ServerStartupListener implements ServletContextListener {
   public void contextInitialized(ServletContextEvent sce) {
     try {
       List<User> users = PersistentStorageAgent.getInstance().loadUsers();
-      userStore.setUsers(users);
+      UserStore.getInstance().setUsers(users);
 
       List<Conversation> conversations = PersistentStorageAgent.getInstance().loadConversations();
       ConversationStore.getInstance().setConversations(conversations);
@@ -46,8 +43,7 @@ public class ServerStartupListener implements ServletContextListener {
       EventStore.getInstance().setEvents(events);
 
       NemoBot nemoBot = new NemoBot();
-      botController.registerBot("@NemoBot", nemoBot);
-      userStore.addUser(nemoBot);
+      botController.registerBot(nemoBot.getMentionKey(), nemoBot);
 
     } catch (PersistentDataStoreException e) {
       System.err.println("Server didn't start correctly. An error occurred during Datastore load!");
