@@ -29,12 +29,15 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.HashSet;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.gson.Gson;
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -116,9 +119,12 @@ public class ChatServlet extends HttpServlet {
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
+    String membersOfConversation = new Gson().toJson(conversation.getMembers());
+
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
+    request.setAttribute("membersOfConversation", membersOfConversation);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -238,7 +244,34 @@ public class ChatServlet extends HttpServlet {
       conversationStore.updateConversation(conversation);
     }
     else if(purpose.equals("Adding users")){
-      //TODO parse json here
+
+      String jsonString = request.getReader().readLine();
+      String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
+      String[] userNameArray = null;
+      
+      try{
+        userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
+      }
+      catch(Exception e){
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      for(String user : userNameArray){
+        if(userStore.getUser(user) == null){
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          return;
+        }
+      }
+
+      HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
+      conversation.addMembers(toBeAdded);
+      conversationStore.updateConversation(conversation);
+
+      String json = new Gson().toJson(conversation.getMembers());
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
     }
     
   }
