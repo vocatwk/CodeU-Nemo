@@ -124,4 +124,18 @@ button {
   display: flex;
 }
 
+#selectedUserList {
+  display: flex;
+}
 
+.selectedUser {
+  width: 50px;
+  height: 25px;
+  padding: 0;
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.add-user-button{
+  float: right;
+}

@@ -28,7 +28,7 @@ public class User {
   private String aboutMe;
   private boolean isAdmin;
   private Instant lastSeenNotifications;
-  private List<String> subscriptions;
+  private List<UUID> subscriptions;
 
   /**
    * Constructs a new User.
@@ -46,7 +46,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = Instant.now();
-    subscriptions = new ArrayList<String>();
+    subscriptions = new ArrayList<UUID>();
   }
 
   /** Returns the ID of this User. */
@@ -104,7 +104,7 @@ public class User {
   }
 
   /** get the subscription to the subscriptions list */
-  public List<String> getSubscription(){
+  public List<UUID> getSubscription(){
     return subscriptions;
   }
 }
