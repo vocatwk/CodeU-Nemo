@@ -24,10 +24,12 @@ import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +54,7 @@ public class ChatServletTest {
   private Conversation mockConversation;
   private EventStore mockEventStore;
   private BufferedReader mockReader;
+  private PrintWriter mockWriter;
 
   @Before
   public void setup() throws IOException {
@@ -81,6 +84,9 @@ public class ChatServletTest {
 
     mockReader = Mockito.mock(BufferedReader.class);
     Mockito.when(mockRequest.getReader()).thenReturn(mockReader);
+
+    mockWriter = Mockito.mock(PrintWriter.class);
+    Mockito.when(mockResponse.getWriter()).thenReturn(mockWriter);
   }
 
   @Test
@@ -90,6 +96,10 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    
+    fakeConversation.addMember("test_user1");
+    fakeConversation.addMember("test_user2");
+
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(fakeConversation);
 
@@ -109,6 +119,8 @@ public class ChatServletTest {
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
     Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
     Mockito.verify(mockRequest).setAttribute("isPrivate",false);
+    Mockito.verify(mockRequest)
+        .setAttribute("membersOfConversation","[\"test_user2\",\"test_user1\"]");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -286,5 +298,49 @@ public class ChatServletTest {
 
     Mockito.verify(mockConversation).makePublic();
     Mockito.verify(mockConversationStore).updateConversation(mockConversation);
+  }
+
+  @Test
+  public void testDoPut_addMembers() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    
+    Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
+        .thenReturn(mockConversation);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Adding users");
+
+    Mockito.when(mockReader.readLine())
+        .thenReturn("[\"test_user1\",\"test_user2\"]");
+    
+    User fakeUser1 =
+        new User(
+            UUID.randomUUID(),
+            "test_user1",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now());
+
+    User fakeUser2 =
+        new User(
+            UUID.randomUUID(),
+            "test_user2",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now());
+
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("test_user2")).thenReturn(fakeUser2);
+
+    HashSet<String> fakeUsersToBeAdded = new HashSet<>();
+    fakeUsersToBeAdded.add("test_user1");
+    fakeUsersToBeAdded.add("test_user2");
+    
+    Mockito.when(mockConversation.getMembers()).thenReturn(fakeUsersToBeAdded);
+
+    chatServlet.doPut(mockRequest, mockResponse);
+
+    Mockito.verify(mockConversation).addMembers(fakeUsersToBeAdded);
+    Mockito.verify(mockConversationStore).updateConversation(mockConversation);
+    Mockito.verify(mockResponse).setContentType("application/json");
+    Mockito.verify(mockResponse).setCharacterEncoding("UTF-8");
+    Mockito.verify(mockWriter).write("[\"test_user2\",\"test_user1\"]");
   }
 }
