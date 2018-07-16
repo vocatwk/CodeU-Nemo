@@ -14,13 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
 import java.util.UUID;
-import java.time.Clock;
-//import java.util.Long;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
   private EventStore eventStore;
-  private Clock clock = Clock.systemDefaultZone();
 
   @Override
   public void init() throws ServletException {
@@ -46,7 +43,7 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        Instant CurrentTime = clock.instant();
+        Instant CurrentTime = Instant.now();
         long nanosTosubtract = CurrentTime.getNano();
         Instant lastEventTime = CurrentTime.minusNanos(nanosTosubtract);
 

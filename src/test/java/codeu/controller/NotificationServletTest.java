@@ -104,16 +104,12 @@ public class NotificationServletTest{
     Mockito.when(mockUser.getLastSeenNotifications()).thenReturn(fakeLastSeenTime);
 
     Mockito.when(mockEventStore.getEventsSince(fakeLastSeenTime)).thenReturn(spyEvents);
-    Mockito.doReturn(2).when(spyEvents).size();
 
     Instant currentTime = Instant.now();
     long nanosTosubtract = currentTime.getNano();
     Instant lastEventTime = currentTime.minusNanos(nanosTosubtract);
 
-    Mockito.when(mockClock.instant()).thenReturn(lastEventTime);
-
     NotificationServlet.doGet(mockRequest, mockResponse);
-    Assert.assertEquals(2, spyEvents.size());
 
     Mockito.verify(mockRequest).setAttribute("eventsToShow", spyEvents);
 
