@@ -109,27 +109,31 @@ public class ConversationServlet extends HttpServlet {
       return;
     }
 
+    conversationTitle = conversationTitle.trim();
+
     if (conversationTitle.equals("")) {
       request.setAttribute("error", "Please enter at least one letter or number");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
       return;
     }
 
-    if (!conversationTitle.matches("[\\w*]*")) {
+    if (!conversationTitle.matches("[\\w*\\s*]*")) {
       request.setAttribute("error", "Please enter only letters and numbers.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
       return;
     }
 
-    if (conversationStore.isTitleTaken(conversationTitle)) {
+    String conversationTitleStored = conversationTitle.replaceAll(" ", "-");
+
+    if (conversationStore.isTitleTaken(conversationTitleStored)) {
       // conversation title is already taken, just go into that conversation instead of creating a
       // new one
-      response.sendRedirect("/chat/" + conversationTitle);
+      response.sendRedirect("/chat/" + conversationTitleStored);
       return;
     }
 
     Conversation conversation =
-        new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
+        new Conversation(UUID.randomUUID(), user.getId(), conversationTitleStored, Instant.now());
     conversation.addMember(username);
 
     conversationStore.addConversation(conversation);
@@ -141,6 +145,6 @@ public class ConversationServlet extends HttpServlet {
         conversation.getCreationTime(), conversationInformation);
     eventStore.addEvent(conversationEvent);
     
-    response.sendRedirect("/chat/" + conversationTitle);
+    response.sendRedirect("/chat/" + conversationTitleStored);
   }
 }

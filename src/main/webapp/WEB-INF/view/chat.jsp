@@ -130,7 +130,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
       <div class="titleAndSettings">
         <!-- Conversation title -->
-        <h1> <%= conversation.getTitle() %> </h1>
+        <h1> <%= conversation.getTitle().replaceAll("-", " ") %> </h1>
           
         <!-- Setting button and content -->
         <div class="dropdown">
