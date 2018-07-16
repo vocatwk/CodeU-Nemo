@@ -9,6 +9,9 @@
         </button>
       </div>
       <div class="modal-body">
+        <div id="selectedUserList">
+          <!-- list of users selected will go here -->
+        </div>
         <div id ="searchDiv">
           <input onkeyup="fetchResults('userResult','userSearchBar')" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="userSearchBar">
         </div>
@@ -17,8 +20,8 @@
         </ul>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add users</button>
+        <button id="AddUsersModalCloseButton" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button disabled="true" id= "addSelectedUsersButton" type="button" class="btn btn-primary">Add users</button>
       </div>
     </div>
   </div>
