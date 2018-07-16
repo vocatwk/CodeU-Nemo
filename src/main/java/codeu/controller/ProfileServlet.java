@@ -134,16 +134,9 @@ public class ProfileServlet extends HttpServlet {
     eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
+
+    List<UUID> subscriptions = user.getSubscription();
+    request.setAttribute("subscriptions",subscriptions);
   }
-
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-        String username = (String)request.getSession().getAttribute("user");
-        User user = userStore.getUser(username);
-        List<String> subscriptions = user.getSubscription();
-        request.setAttribute("subscriptions",subscriptions);
-      }
-
 
 }
