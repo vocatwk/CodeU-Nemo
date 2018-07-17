@@ -1,6 +1,5 @@
 package codeu.model.data;
 
-import codeu.model.store.basic.UserStore;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
