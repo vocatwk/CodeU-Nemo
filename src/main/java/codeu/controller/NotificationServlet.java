@@ -46,8 +46,10 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        Instant CurrentTime = clock.instant();
-        
+        Instant currentTime = clock.instant();
+        long nanosTosubtract = currentTime.getNano();
+        Instant lastEventTime = currentTime.minusNanos(nanosTosubtract);
+
         String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
         Instant lastSeenTime = user.getLastSeenNotifications();
@@ -55,7 +57,7 @@ public class NotificationServlet extends HttpServlet{
 
 
         request.setAttribute("eventsToShow",eventsToShow);
-        user.setLastSeenNotifications(CurrentTime);
+        user.setLastSeenNotifications(currentTime);
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
