@@ -96,27 +96,6 @@ public class ConversationStore {
     persistentStorageAgent.writeThrough(conversation);
   }
 
-  /** Check whether a Conversation title is already known to the application. */
-  public boolean isTitleTaken(String title) {
-    // This approach will be pretty slow if we have many Conversations.
-    for (Conversation conversation : conversations) {
-      if (conversation.getTitle().equals(title)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /** Find and return the Conversation with the given title. */
-  public Conversation getConversationWithTitle(String title) {
-    for (Conversation conversation : conversations) {
-      if (conversation.getTitle().equals(title)) {
-        return conversation;
-      }
-    }
-    return null;
-  }
-
   /** Sets the List of Conversations stored by this ConversationStore. */
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;

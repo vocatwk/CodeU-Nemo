@@ -107,16 +107,7 @@ public class ChatServlet extends HttpServlet {
 
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
-    UUID conversationId = null;
-
-    try{
-      conversationId = UUID.fromString(conversationIdAsString);
-    }
-    catch(Exception e){
-      System.out.println("Conversation was null: " + conversationIdAsString);
-      response.sendRedirect("/conversations");
-      return;
-    }
+    UUID conversationId = getIdFromString(conversationIdAsString);
 
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
@@ -152,16 +143,7 @@ public class ChatServlet extends HttpServlet {
 
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
-    UUID conversationId = null;
-
-    try{
-      conversationId = UUID.fromString(conversationIdAsString);
-    }
-    catch(Exception e){
-      System.out.println("Conversation was null: " + conversationIdAsString);
-      response.sendRedirect("/conversations");
-      return;
-    }
+    UUID conversationId = getIdFromString(conversationIdAsString);
 
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
@@ -239,16 +221,7 @@ public class ChatServlet extends HttpServlet {
 
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
-    UUID conversationId = null;
-
-    try{
-      conversationId = UUID.fromString(conversationIdAsString);
-    }
-    catch(Exception e){
-      System.out.println("Conversation was null: " + conversationIdAsString);
-      response.sendRedirect("/conversations");
-      return;
-    }
+    UUID conversationId = getIdFromString(conversationIdAsString);
 
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
@@ -319,5 +292,22 @@ public class ChatServlet extends HttpServlet {
       }
     }
     return false;
+  }
+
+  /*
+  * This function converts from string to UUID.
+  * Returns null if string is not a proper representation of UUID.
+  */
+  private UUID getIdFromString(String input) {
+    UUID conversationId = null;
+
+    try{
+      conversationId = UUID.fromString(input);
+    }
+    catch(Exception e){
+      return null;
+    }
+
+    return conversationId;
   }
 }
