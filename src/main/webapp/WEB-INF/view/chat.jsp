@@ -40,7 +40,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       overflow-y: scroll
     }
   </style>
-  
+
   <script>
 
     var ToBeAddedToConversation = new Set();
@@ -71,7 +71,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // select user to add
-    $(document).on('click', '.add-user-button', function(e) {             
+    $(document).on('click', '.add-user-button', function(e) {
       e.preventDefault();
       if(!this.classList.contains('isDisabled')){
 
@@ -120,8 +120,8 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // add selected users
-    $(document).on('click', '#addSelectedUsersButton', function() {             
-     
+    $(document).on('click', '#addSelectedUsersButton', function() {
+
       $('#selectedUserList').empty();
       $('#userResult').empty();
       $('#userSearchBar').val("");
@@ -159,6 +159,18 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     };
 
   </script>
+
+  <div id="subscribeButton">
+    <button type="button" class="btn btn-light">Subscribe</button>
+    <p onclick="subscribe()">Click me to change my text color.</p>
+    <script>
+   function subscribe() {
+     UUID convoId = conversation.getId();
+       document.addConversationUUID(convoId);
+   }
+    </script>
+  </div>
+
 </head>
 <body onload="scrollChat()">
 
@@ -169,11 +181,11 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       <div class="titleAndSettings">
         <!-- Conversation title -->
         <h1> <%= conversation.getTitle() %> </h1>
-          
+
         <!-- Setting button and content -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -187,7 +199,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
       <h1> <a href="" >&#8635;</a> </h1>
     </div>
-    
+
     <hr/>
 
     <div id="chat">

@@ -135,7 +135,7 @@ public class ProfileServlet extends HttpServlet {
 
     response.sendRedirect("/profile/" + subject.getName());
 
-    List<UUID> subscriptions = user.getSubscription();
+    List<UUID> subscriptions = subject.getSubscription();
     request.setAttribute("subscriptions",subscriptions);
   }
 

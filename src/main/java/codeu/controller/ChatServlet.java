@@ -170,11 +170,11 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(user.getName());
       messageInformation.add(conversationTitle);
       messageInformation.add(cleanedMessageContent);
-      Event messageEvent = 
+      Event messageEvent =
           new Event(
-              UUID.randomUUID(), 
-              "Message", 
-              message.getCreationTime(), 
+              UUID.randomUUID(),
+              "Message",
+              message.getCreationTime(),
               messageInformation);
       eventStore.addEvent(messageEvent);
 
@@ -196,16 +196,16 @@ public class ChatServlet extends HttpServlet {
         botMessageInformation.add("NemoBot");
         botMessageInformation.add(conversationTitle);
         botMessageInformation.add(botResponse);
-        Event botMessageEvent = 
+        Event botMessageEvent =
             new Event(
-                UUID.randomUUID(), 
-                "Message", 
-                botMessage.getCreationTime(), 
+                UUID.randomUUID(),
+                "Message",
+                botMessage.getCreationTime(),
                 botMessageInformation);
         eventStore.addEvent(botMessageEvent);
       }
     }
- 
+
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
@@ -231,7 +231,7 @@ public class ChatServlet extends HttpServlet {
       // wrong form of PUT request, do nothing
       return;
     }
-    
+
     if(purpose.equals("Changing chat privacy")){
       String privacyCommand = request.getReader().readLine();
 
@@ -248,7 +248,7 @@ public class ChatServlet extends HttpServlet {
       String jsonString = request.getReader().readLine();
       String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
       String[] userNameArray = null;
-      
+
       try{
         userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
       }
@@ -273,11 +273,11 @@ public class ChatServlet extends HttpServlet {
       response.setCharacterEncoding("UTF-8");
       response.getWriter().write(json);
     }
-    
+
   }
 
   /*
-  * This function splits source by whitespace and checks if substring 
+  * This function splits source by whitespace and checks if substring
   * is contained as a standalone word, ignore case.
   */
   private boolean containsWholeWord(String source, String substring) {
@@ -288,4 +288,13 @@ public class ChatServlet extends HttpServlet {
     }
     return false;
   }
+
+  /* Adds the conversation UUID to a list in the user class */
+  private void addConversationUUID(UUID conversationID){
+    String username = (String) request.getSession().getAttribute("user");
+    User user = User.getUser(username);
+    List<UUID> subscribeList = user.getSubscription();
+    subscribeList.add(UUID);
+  }
+
 }
