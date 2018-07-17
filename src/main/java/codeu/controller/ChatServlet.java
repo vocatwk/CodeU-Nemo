@@ -268,6 +268,7 @@ public class ChatServlet extends HttpServlet {
 
       if(userNameArray == null || userNameArray.length == 0){
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().write("Conversation must have at least one member.");
         return;
       }
 

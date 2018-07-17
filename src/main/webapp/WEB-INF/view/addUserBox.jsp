@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="addUsersModal" tabindex="-1" role="dialog" aria-labelledby="addUsersModal" aria-hidden="true">
+<div class="modal fade" id="setUsersModal" tabindex="-1" role="dialog" aria-labelledby="setUsersModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addUsersModalTitle">Add users to this conversation</h5>
+        <h5 class="modal-title" id="setUsersModalTitle">Edit the members of this conversation! </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="modal-footer">
-        <button id="AddUsersModalCloseButton" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button disabled="true" id= "saveChangesButton" type="button" class="btn btn-primary">Save Changes</button>
       </div>
     </div>

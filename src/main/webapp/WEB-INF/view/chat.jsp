@@ -99,9 +99,9 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         selectedUserList.appendChild(selectedUser);
     }
 
-    //prepopulate members of conversation in addUsers modal
+    //prepopulate members of conversation in setUsers modal
     $(document).ready(function(){
-      $("#modalOpenerButton").click(function(){
+      $("#EditMembersButton").click(function(){
 
         //clean up modal
         $('#userResult').empty();
@@ -188,7 +188,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     // save changes to the list of members
     $(document).on('click', '#saveChangesButton', function() {             
      
-      $('#addUsersModal').modal('hide');
+      $('#setUsersModal').modal('hide');
 
       fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
@@ -235,7 +235,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
             <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button id="modalOpenerButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+            <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
           </div>
         </div>
       </div>
