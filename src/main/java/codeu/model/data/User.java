@@ -82,17 +82,17 @@ public class User {
 
   /** Returns true if the user is admin. Returns false if not */
   public boolean getIsAdmin(){
-      return isAdmin;
+    return isAdmin;
   }
 
   /** Set the Instant the last time the user visted the notification page */
   public void setLastSeenNotifications(Instant lastSeen){
-      lastSeenNotifications = lastSeen;
+    lastSeenNotifications = lastSeen;
   }
 
   /** Returns the Instant the last time the user visted the notification page */
   public Instant getLastSeenNotifications(){
-      return lastSeenNotifications;
-    }
+    return lastSeenNotifications;
+  }
 
 }

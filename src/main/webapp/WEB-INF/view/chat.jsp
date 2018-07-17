@@ -22,6 +22,7 @@ Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
+String membersOfConversation = (String) request.getAttribute("membersOfConversation");
 %>
 
 <!DOCTYPE html>
@@ -42,12 +43,18 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
   <script>
 
+    var ToBeAddedToConversation = new Set();
+    var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
+
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
+          headers: {
+            "purpose" : "Changing chat privacy"
+          },
           body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
@@ -61,6 +68,88 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
           console.log("An error occured. " + error.message);
         })
       });
+    });
+
+    // select user to add
+    $(document).on('click', '.add-user-button', function(e) {             
+      e.preventDefault();
+      if(!this.classList.contains('isDisabled')){
+
+        var userName = this.getAttribute("username");
+
+        this.removeAttribute("href");
+        this.classList.add('isDisabled');
+        var selectedUserList = document.getElementById('selectedUserList');
+        var selectedUser = document.createElement("button");
+        selectedUser.setAttribute("class", "btn btn-primary");
+        selectedUser.classList.add('selectedUser');
+        selectedUser.innerHTML = userName;
+
+        var closeIcon = document.createElement("button");
+        closeIcon.setAttribute("type", "button");
+        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("aria-label", "Close");
+        closeIcon.setAttribute("username", userName);
+
+        var span = document.createElement("span");
+        span.setAttribute("aria-hidden", "true");
+        span.innerHTML = "&times;";
+
+        closeIcon.appendChild(span);
+        closeIcon.addEventListener("click", function(){
+          var userName = this.getAttribute("username");
+          $(this).parent().remove();
+
+          var addButtonForUser = $(".add-user-button[username='" + userName + "']");
+          addButtonForUser.attr("href", "#");
+          addButtonForUser.removeClass("isDisabled");
+
+          if(ToBeAddedToConversation.size === 1){
+            $('#addSelectedUsersButton').attr("disabled", "true");
+          }
+
+          ToBeAddedToConversation.delete(userName);
+        });
+
+        selectedUser.appendChild(closeIcon);
+        selectedUserList.appendChild(selectedUser);
+
+        ToBeAddedToConversation.add(userName);
+        $('#addSelectedUsersButton').removeAttr('disabled');
+      }
+    });
+
+    // add selected users
+    $(document).on('click', '#addSelectedUsersButton', function() {             
+     
+      $('#selectedUserList').empty();
+      $('#userResult').empty();
+      $('#userSearchBar').val("");
+      $('#addUsersModal').modal('hide');
+      this.setAttribute('disabled', true);
+
+      fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "purpose" : "Adding users"
+          },
+          body: JSON.stringify(Array.from(ToBeAddedToConversation)),
+          credentials: "same-origin"
+        }).then(function(response) {
+
+          ToBeAddedToConversation = new Set();
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          response.json().then(function(data) {
+            membersOfConversation = new Set(data);
+          });
+
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
     });
 
     // scroll the chat div to the bottom

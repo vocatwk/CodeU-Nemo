@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.NemoBot;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -28,12 +29,15 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.HashSet;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.gson.Gson;
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -115,9 +119,12 @@ public class ChatServlet extends HttpServlet {
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
+    String membersOfConversation = new Gson().toJson(conversation.getMembers());
+
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
+    request.setAttribute("membersOfConversation", membersOfConversation);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -159,12 +166,44 @@ public class ChatServlet extends HttpServlet {
 
       messageStore.addMessage(message);
 
-      List<String> messageInformation = new ArrayList<>();
+      List<String> messageInformation = new ArrayList<String>();
       messageInformation.add(user.getName());
       messageInformation.add(conversationTitle);
       messageInformation.add(cleanedMessageContent);
-      Event messageEvent = new Event(UUID.randomUUID(), "Message", message.getCreationTime(), messageInformation);
+      Event messageEvent = 
+          new Event(
+              UUID.randomUUID(), 
+              "Message", 
+              message.getCreationTime(), 
+              messageInformation);
       eventStore.addEvent(messageEvent);
+
+      // Scan the message for "@NemoBot"
+      if (containsWholeWord(cleanedMessageContent, "@NemoBot")) {
+        NemoBot nemoBot = new NemoBot();
+        String botResponse = nemoBot.answerMessage(cleanedMessageContent);
+        Message botMessage =
+            new Message(
+                UUID.randomUUID(),
+                conversation.getId(),
+                nemoBot.getId(),
+                botResponse,
+                Instant.now());
+
+        messageStore.addMessage(botMessage);
+
+        List<String> botMessageInformation = new ArrayList<String>();
+        botMessageInformation.add("NemoBot");
+        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(botResponse);
+        Event botMessageEvent = 
+            new Event(
+                UUID.randomUUID(), 
+                "Message", 
+                botMessage.getCreationTime(), 
+                botMessageInformation);
+        eventStore.addEvent(botMessageEvent);
+      }
     }
  
     // redirect to a GET request
@@ -187,14 +226,66 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String purpose = request.getReader().readLine();
+    String purpose = request.getHeader("purpose");
+    if(purpose == null){
+      // wrong form of PUT request, do nothing
+      return;
+    }
+    
+    if(purpose.equals("Changing chat privacy")){
+      String privacyCommand = request.getReader().readLine();
 
-    if(purpose.equals("make private")){
-      conversation.makePrivate();
+      if(privacyCommand.equals("make private")){
+        conversation.makePrivate();
+      }
+      else if(privacyCommand.equals("make public")){
+        conversation.makePublic();
+      }
+      conversationStore.updateConversation(conversation);
     }
-    else if(purpose.equals("make public")){
-      conversation.makePublic();
+    else if(purpose.equals("Adding users")){
+
+      String jsonString = request.getReader().readLine();
+      String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
+      String[] userNameArray = null;
+      
+      try{
+        userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
+      }
+      catch(Exception e){
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return;
+      }
+
+      for(String user : userNameArray){
+        if(userStore.getUser(user) == null){
+          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          return;
+        }
+      }
+
+      HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
+      conversation.addMembers(toBeAdded);
+      conversationStore.updateConversation(conversation);
+
+      String json = new Gson().toJson(conversation.getMembers());
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
     }
-    conversationStore.updateConversation(conversation);
+    
+  }
+
+  /*
+  * This function splits source by whitespace and checks if substring 
+  * is contained as a standalone word, ignore case.
+  */
+  private boolean containsWholeWord(String source, String substring) {
+    for (String word : source.split("[[\\p{Punct}&&[^@]]\\s]+")) {
+      if (word.equalsIgnoreCase(substring)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
