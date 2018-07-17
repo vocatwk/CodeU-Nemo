@@ -78,6 +78,17 @@ public class NemoBot extends User implements Bot {
     }
   }
 
+  /** Creates a reply based on the keyword. */
+  public String answerMessage(String message) {
+    String keyword = getKeyword(message);
+
+    if (keyword == null) {
+      return "I'm sorry. I didn't understand that. Send a message with the word \"Help\".";
+    }
+
+    return answerMap.get(keyword);
+  }
+
   /** 
   * Scans a message to identify keywords in the map. Ignores case.
   *
@@ -92,16 +103,5 @@ public class NemoBot extends User implements Bot {
     }
 
     return null;
-  }
-
-  /** Creates a reply based on the keyword.*/
-  public String answerMessage(String message) {
-    String keyword = getKeyword(message);
-
-    if (keyword == null) {
-      return "I'm sorry. I didn't understand that. Send a message with the word \"Help\".";
-    }
-
-    return answerMap.get(keyword);
   }
 }
