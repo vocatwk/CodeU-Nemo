@@ -112,28 +112,13 @@ public class ConversationServlet extends HttpServlet {
     conversationTitle = conversationTitle.trim();
 
     if (conversationTitle.equals("")) {
-      request.setAttribute("error", "Please enter at least one letter or number");
+      request.setAttribute("error", "Please enter at least one character");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
-      return;
-    }
-
-    if (!conversationTitle.matches("[\\w*\\s*]*")) {
-      request.setAttribute("error", "Please enter only letters and numbers.");
-      request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
-      return;
-    }
-
-    String conversationTitleStored = conversationTitle.replaceAll(" ", "-");
-
-    if (conversationStore.isTitleTaken(conversationTitleStored)) {
-      // conversation title is already taken, just go into that conversation instead of creating a
-      // new one
-      response.sendRedirect("/chat/" + conversationTitleStored);
       return;
     }
 
     Conversation conversation =
-        new Conversation(UUID.randomUUID(), user.getId(), conversationTitleStored, Instant.now());
+        new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
     conversation.addMember(username);
 
     conversationStore.addConversation(conversation);
@@ -141,10 +126,11 @@ public class ConversationServlet extends HttpServlet {
     List<String> conversationInformation = new ArrayList<>();
     conversationInformation.add(user.getName());
     conversationInformation.add(conversationTitle);
+    conversationInformation.add(conversation.getId().toString());
     Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", 
         conversation.getCreationTime(), conversationInformation);
     eventStore.addEvent(conversationEvent);
     
-    response.sendRedirect("/chat/" + conversationTitleStored);
+    response.sendRedirect("/chat/" + conversation.getId());
   }
 }

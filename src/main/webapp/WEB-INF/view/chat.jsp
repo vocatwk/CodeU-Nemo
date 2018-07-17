@@ -50,7 +50,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
-        fetch('/chat/<%= conversation.getTitle() %>', {
+        fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
           headers: {
             "purpose" : "Changing chat privacy"
@@ -128,7 +128,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       $('#addUsersModal').modal('hide');
       this.setAttribute('disabled', true);
 
-      fetch('/chat/<%= conversation.getTitle() %>', {
+      fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
           headers: {
             "Content-Type": "application/json; charset=utf-8",
@@ -168,7 +168,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
       <div class="titleAndSettings">
         <!-- Conversation title -->
-        <h1> <%= conversation.getTitle().replaceAll("-", " ") %> </h1>
+        <h1> <%= conversation.getTitle() %> </h1>
           
         <!-- Setting button and content -->
         <div class="dropdown">
@@ -208,7 +208,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     <hr/>
 
     <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+    <form action="/chat/<%= conversation.getId() %>" method="POST">
         <input type="text" name="message">
         <br/>
         <button type="submit">Send</button>

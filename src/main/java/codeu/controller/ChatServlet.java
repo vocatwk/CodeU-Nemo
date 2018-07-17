@@ -104,18 +104,27 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
-    if (conversation == null) {
-      // couldn't find conversation, redirect to conversation list
-      System.out.println("Conversation was null: " + conversationTitle);
+    String requestUrl = request.getRequestURI();
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = null;
+
+    try{
+      conversationId = UUID.fromString(conversationIdAsString);
+    }
+    catch(Exception e){
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }
 
-    UUID conversationId = conversation.getId();
+    Conversation conversation = conversationStore.getConversation(conversationId);
+    if (conversation == null) {
+      // couldn't find conversation, redirect to conversation list
+      System.out.println("Conversation was null: " + conversationIdAsString);
+      response.sendRedirect("/conversations");
+      return;
+    }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
@@ -142,11 +151,22 @@ public class ChatServlet extends HttpServlet {
     User user = userStore.getUser(username);
 
     String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = null;
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    try{
+      conversationId = UUID.fromString(conversationIdAsString);
+    }
+    catch(Exception e){
+      System.out.println("Conversation was null: " + conversationIdAsString);
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }
@@ -168,8 +188,9 @@ public class ChatServlet extends HttpServlet {
 
       List<String> messageInformation = new ArrayList<String>();
       messageInformation.add(user.getName());
-      messageInformation.add(conversationTitle);
+      messageInformation.add(conversation.getTitle());
       messageInformation.add(cleanedMessageContent);
+      messageInformation.add(conversationId.toString());
       Event messageEvent = 
           new Event(
               UUID.randomUUID(), 
@@ -194,7 +215,7 @@ public class ChatServlet extends HttpServlet {
 
         List<String> botMessageInformation = new ArrayList<String>();
         botMessageInformation.add("NemoBot");
-        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(conversation.getTitle());
         botMessageInformation.add(botResponse);
         Event botMessageEvent = 
             new Event(
@@ -207,7 +228,7 @@ public class ChatServlet extends HttpServlet {
     }
  
     // redirect to a GET request
-    response.sendRedirect("/chat/" + conversationTitle);
+    response.sendRedirect("/chat/" + conversationId);
   }
 
   @Override
@@ -217,11 +238,22 @@ public class ChatServlet extends HttpServlet {
     String username = (String) request.getSession().getAttribute("user");
 
     String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = null;
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    try{
+      conversationId = UUID.fromString(conversationIdAsString);
+    }
+    catch(Exception e){
+      System.out.println("Conversation was null: " + conversationIdAsString);
+      response.sendRedirect("/conversations");
+      return;
+    }
+
+    Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }

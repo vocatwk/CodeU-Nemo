@@ -60,8 +60,8 @@
     <%
       for(Conversation conversation : conversations){
     %>
-      <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle().replaceAll("-", " ")%></a></li>
+      <li><a href="/chat/<%= conversation.getId() %>">
+        <%= conversation.getTitle() %></a></li>
     <%
       }
     %>
