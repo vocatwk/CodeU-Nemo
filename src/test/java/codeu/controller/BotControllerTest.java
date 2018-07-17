@@ -15,7 +15,9 @@ public class BotControllerTest {
 
   private BotController botController;
 
-  private final NemoBot NEMO_BOT = new NemoBot();
+  private final String NEMO_FILE_PATH = "./src/main/java/codeu/model/data/nemobot.txt";
+  
+  private final NemoBot NEMO_BOT = new NemoBot(NEMO_FILE_PATH);
 
   private UserStore mockUserStore;
 
@@ -54,7 +56,7 @@ public class BotControllerTest {
 
   @Test
   public void testRegisterBot() {
-    NemoBot nemoBot = new NemoBot();
+    NemoBot nemoBot = new NemoBot(NEMO_FILE_PATH);
 
     botController.registerBot(nemoBot.getMentionKey(), nemoBot);
     Bot resultBot = botController.getBot(nemoBot.getMentionKey());
@@ -66,7 +68,7 @@ public class BotControllerTest {
 
   @Test
   public void testRegisterBot_upperCase() {
-    NemoBot nemoBot = new NemoBot();
+    NemoBot nemoBot = new NemoBot(NEMO_FILE_PATH);
 
     botController.registerBot("@NEMOBOT", nemoBot);
     Bot resultBot = botController.getBot("@NEMOBOT");
@@ -78,7 +80,7 @@ public class BotControllerTest {
 
   @Test
   public void testRegisterBot_lowerCase() {
-    NemoBot nemoBot = new NemoBot();
+    NemoBot nemoBot = new NemoBot(NEMO_FILE_PATH);
 
     botController.registerBot("@nemobot", nemoBot);
     Bot resultBot = botController.getBot("@nemobot");

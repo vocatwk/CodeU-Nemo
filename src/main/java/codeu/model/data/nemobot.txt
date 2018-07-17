@@ -1,0 +1,15 @@
+Hi	Hey! I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!
+
+Bye	Bye! Feel free to message me whenever you need my help.
+
+Conversations	Get started by creating your own conversation or joining an existing one! Conversations support access control and the ability to add/remove users!
+
+Profiles	Make sure to update your About Me section and browse through other users' profiles to learn more about them. You can also see users' recent activity!
+
+Activity Feed	The Activity Feed page is where you can see all of the action happening on the site!
+
+Notifications	Always stay up-to-date with your notifications!
+
+Bots	We currently have 1 Bot - Me! Developers are encouraged to use our open source Bot Framework to add bots of their own!
+
+Help	Feel free to ask me about the following: Conversations, Profiles, Activtity Feed, Notifications, Searching for users, and Bots.  

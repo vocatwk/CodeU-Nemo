@@ -42,7 +42,7 @@ public class ServerStartupListener implements ServletContextListener {
       List<Event> events = PersistentStorageAgent.getInstance().loadEvents();
       EventStore.getInstance().setEvents(events);
 
-      NemoBot nemoBot = new NemoBot();
+      NemoBot nemoBot = new NemoBot("../../src/main/java/codeu/model/data/nemobot.txt");
       botController.registerBot(nemoBot.getMentionKey(), nemoBot);
 
     } catch (PersistentDataStoreException e) {
