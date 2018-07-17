@@ -29,6 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {
@@ -109,7 +111,7 @@ public class ConversationServlet extends HttpServlet {
       return;
     }
 
-    conversationTitle = conversationTitle.trim();
+    conversationTitle = Jsoup.clean(conversationTitle.trim(), Whitelist.none());
 
     if (conversationTitle.equals("")) {
       request.setAttribute("error", "Please enter at least one character");
