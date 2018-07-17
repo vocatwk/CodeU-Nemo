@@ -117,6 +117,15 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    String purpose = request.getHeader("purpose");
+    if(purpose != null && purpose.equals("Get members")){
+      String json = new Gson().toJson(conversation.getMembers());
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
+      return;
+    }
+
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
@@ -248,7 +257,7 @@ public class ChatServlet extends HttpServlet {
       }
       conversationStore.updateConversation(conversation);
     }
-    else if(purpose.equals("Adding users")){
+    else if(purpose.equals("Setting users")){
 
       String jsonString = request.getReader().readLine();
       String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
@@ -262,6 +271,12 @@ public class ChatServlet extends HttpServlet {
         return;
       }
 
+      if(userNameArray == null || userNameArray.length == 0){
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().write("Conversation must have at least one member.");
+        return;
+      }
+
       for(String user : userNameArray){
         if(userStore.getUser(user) == null){
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -269,14 +284,9 @@ public class ChatServlet extends HttpServlet {
         }
       }
 
-      HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
-      conversation.addMembers(toBeAdded);
+      HashSet<String> membersList = new HashSet<>(Arrays.asList(userNameArray));
+      conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
-
-      String json = new Gson().toJson(conversation.getMembers());
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(json);
     }
     
   }

@@ -125,6 +125,30 @@ public class ChatServletTest {
   }
 
   @Test
+  public void testDoGet_PurposeIsToGetMembers() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+
+    Conversation fakeConversation =
+        new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    
+    fakeConversation.addMember("test_user1");
+    fakeConversation.addMember("test_user2");
+
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
+        .thenReturn(fakeConversation);
+
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Get members");
+
+    chatServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).setContentType("application/json");
+    Mockito.verify(mockResponse).setCharacterEncoding("UTF-8");
+    Mockito.verify(mockWriter).write("[\"test_user2\",\"test_user1\"]");
+    Mockito.verify(mockRequestDispatcher, Mockito.never()).forward(mockRequest, mockResponse);
+  }
+
+  @Test
   public void testDoGet_badConversation() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
@@ -320,14 +344,14 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPut_addMembers() throws IOException, ServletException {
+  public void testDoPut_SettingUsers() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
     
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
-    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Adding users");
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Setting users");
 
     Mockito.when(mockReader.readLine())
         .thenReturn("[\"test_user1\",\"test_user2\"]");
@@ -357,10 +381,7 @@ public class ChatServletTest {
 
     chatServlet.doPut(mockRequest, mockResponse);
 
-    Mockito.verify(mockConversation).addMembers(fakeUsersToBeAdded);
+    Mockito.verify(mockConversation).setMembers(fakeUsersToBeAdded);
     Mockito.verify(mockConversationStore).updateConversation(mockConversation);
-    Mockito.verify(mockResponse).setContentType("application/json");
-    Mockito.verify(mockResponse).setCharacterEncoding("UTF-8");
-    Mockito.verify(mockWriter).write("[\"test_user2\",\"test_user1\"]");
   }
 }
