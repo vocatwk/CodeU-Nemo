@@ -93,6 +93,11 @@ public class Conversation {
     members.addAll(usernames);
   }
 
+  /** sets the members of this conversation. */
+  public void setMembers(HashSet<String> usernames) {
+    this.members = usernames;
+  }
+
   /** Returns the members of this conversation. */
   public HashSet<String> getMembers() {
     return members;
