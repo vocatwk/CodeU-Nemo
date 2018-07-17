@@ -43,43 +43,24 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   
   <script>
 
-    var ToBeAddedToConversation = new Set();
     var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
+    var membersAfterEditing = new Set(membersOfConversation);
 
-    // for make private/make public button
-    var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
-    $(document).ready(function() {
-      $("#privacySettingButton").click(function() {
-        fetch('/chat/<%= conversation.getTitle() %>', {
-          method: "PUT",
-          headers: {
-            "purpose" : "Changing chat privacy"
-          },
-          body : newChatPrivacyValue,
-          credentials: "same-origin"
-        }).then(function(response) {
-          if(!response.ok) {
-            console.log("An error occured. Status code: " + response.status);
-            return;
-          }
-          newChatPrivacyValue = newChatPrivacyValue === "make private" ? "make public":"make private";
-          $("#privacySettingButton").html(newChatPrivacyValue);
-        }, function(error) {
-          console.log("An error occured. " + error.message);
-        })
-      });
-    });
+    function AreSetsEqual(set1, set2){
+      
+      if(set1.size !== set2.size){
+        return false;
+      }
+      for (let value of set1){
+        if(!set2.has(value)){
+          return false;
+        }
+      }
+      return true;
+    }
 
-    // select user to add
-    $(document).on('click', '.add-user-button', function(e) {             
-      e.preventDefault();
-      if(!this.classList.contains('isDisabled')){
-
-        var userName = this.getAttribute("username");
-
-        this.removeAttribute("href");
-        this.classList.add('isDisabled');
-        var selectedUserList = document.getElementById('selectedUserList');
+    function AddUserAsTag(userName){
+      var selectedUserList = document.getElementById('selectedUserList');
         var selectedUser = document.createElement("button");
         selectedUser.setAttribute("class", "btn btn-primary");
         selectedUser.classList.add('selectedUser');
@@ -104,49 +85,125 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           addButtonForUser.attr("href", "#");
           addButtonForUser.removeClass("isDisabled");
 
-          if(ToBeAddedToConversation.size === 1){
-            $('#addSelectedUsersButton').attr("disabled", "true");
+          membersAfterEditing.delete(userName);
+
+          if(!AreSetsEqual(membersOfConversation, membersAfterEditing) && membersAfterEditing.size >= 1){
+            $('#saveChangesButton').removeAttr('disabled');
+          }else{
+            $('#saveChangesButton').attr('disabled', 'true');
           }
 
-          ToBeAddedToConversation.delete(userName);
         });
 
         selectedUser.appendChild(closeIcon);
         selectedUserList.appendChild(selectedUser);
+    }
 
-        ToBeAddedToConversation.add(userName);
-        $('#addSelectedUsersButton').removeAttr('disabled');
+    //prepopulate members of conversation in addUsers modal
+    $(document).ready(function(){
+      $("#modalOpenerButton").click(function(){
+
+        //clean up modal
+        $('#userResult').empty();
+        $('#userSearchBar').val("");
+        $('#selectedUserList').empty();
+        $('#saveChangesButton').attr('disabled', 'true');
+
+        // get updated list of members
+        fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "GET",
+          headers: {
+            "purpose" : "Get members"
+          },
+          credentials: "same-origin"
+        }).then(function(response) {
+
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+
+          response.json().then(function(data){
+            membersOfConversation = new Set(data);
+            membersAfterEditing = new Set(membersOfConversation);
+          });
+
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+
+        //populate
+        membersOfConversation.forEach(function(userName){
+          AddUserAsTag(userName);
+        });
+      });
+    });
+
+    // for make private/make public button
+    var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
+    $(document).ready(function() {
+      $("#privacySettingButton").click(function() {
+
+        fetch('/chat/<%= conversation.getTitle() %>', {
+          method: "PUT",
+          headers: {
+            "purpose" : "Changing chat privacy"
+          },
+          body : newChatPrivacyValue,
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          newChatPrivacyValue = newChatPrivacyValue === "make private" ? "make public":"make private";
+          $("#privacySettingButton").html(newChatPrivacyValue);
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+
+      });
+    });
+
+    // Add selected user
+    $(document).on('click', '.add-user-button', function(e) {             
+      e.preventDefault();
+      if(!this.classList.contains('isDisabled')){
+
+        var userName = this.getAttribute("username");
+        membersAfterEditing.add(userName);
+
+        if(!AreSetsEqual(membersOfConversation, membersAfterEditing)){
+          $('#saveChangesButton').removeAttr('disabled');
+        }else{
+          $('#saveChangesButton').attr('disabled', 'true');
+        }
+
+        this.removeAttribute("href");
+        this.classList.add('isDisabled');
+        AddUserAsTag(userName);
       }
     });
 
-    // add selected users
-    $(document).on('click', '#addSelectedUsersButton', function() {             
+    // save changes to the list of members
+    $(document).on('click', '#saveChangesButton', function() {             
      
-      $('#selectedUserList').empty();
-      $('#userResult').empty();
-      $('#userSearchBar').val("");
       $('#addUsersModal').modal('hide');
-      this.setAttribute('disabled', true);
 
       fetch('/chat/<%= conversation.getTitle() %>', {
           method: "PUT",
           headers: {
             "Content-Type": "application/json; charset=utf-8",
-            "purpose" : "Adding users"
+            "purpose" : "Setting users"
           },
-          body: JSON.stringify(Array.from(ToBeAddedToConversation)),
+          body: JSON.stringify(Array.from(membersAfterEditing)),
           credentials: "same-origin"
         }).then(function(response) {
-
-          ToBeAddedToConversation = new Set();
           if(!response.ok) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
-          response.json().then(function(data) {
-            membersOfConversation = new Set(data);
-          });
-
+          membersOfConversation = new Set(membersAfterEditing);
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
@@ -177,8 +234,8 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+            <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+            <button id="modalOpenerButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
           </div>
         </div>
       </div>

@@ -21,7 +21,7 @@
       </div>
       <div class="modal-footer">
         <button id="AddUsersModalCloseButton" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button disabled="true" id= "addSelectedUsersButton" type="button" class="btn btn-primary">Add users</button>
+        <button disabled="true" id= "saveChangesButton" type="button" class="btn btn-primary">Save Changes</button>
       </div>
     </div>
   </div>
