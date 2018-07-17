@@ -39,7 +39,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       overflow-y: scroll
     }
   </style>
-  
+
   <script>
 
     // for make private/make public button
@@ -70,6 +70,11 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
     };
 
   </script>
+  
+  <div id = "subscribeButton">
+    <button type="button" class="btn btn-light">Light</button>
+  </div>
+
 </head>
 <body onload="scrollChat()">
 
@@ -80,11 +85,11 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
       <div class="titleAndSettings">
         <!-- Conversation title -->
         <h1> <%= conversation.getTitle() %> </h1>
-          
+
         <!-- Setting button and content -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -98,7 +103,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
 
       <h1> <a href="" >&#8635;</a> </h1>
     </div>
-    
+
     <hr/>
 
     <div id="chat">

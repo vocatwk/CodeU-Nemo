@@ -75,6 +75,7 @@ public class PersistentDataStore {
         Instant lastSeenNotifications = Instant.parse((String) entity.getProperty("last_seen_notifications"));
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
+        if (lastSeenNotifications!= null) user.setLastSeenNotifications(lastSeenNotifications);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
