@@ -15,8 +15,8 @@ public class BotControllerTest {
 
   private BotController botController;
 
-  private final String NEMO_FILE_PATH = "./src/main/java/codeu/model/data/nemobot.txt";
-  
+  private final String NEMO_FILE_PATH = "./src/main/java/codeu/model/data/NemoBot.txt";
+
   private final NemoBot NEMO_BOT = new NemoBot(NEMO_FILE_PATH);
 
   private UserStore mockUserStore;
