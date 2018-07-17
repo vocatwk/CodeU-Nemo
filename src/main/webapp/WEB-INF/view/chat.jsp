@@ -110,7 +110,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         $('#saveChangesButton').attr('disabled', 'true');
 
         // get updated list of members
-        fetch('/chat/<%= conversation.getTitle() %>', {
+        fetch('/chat/<%= conversation.getId() %>', {
           method: "GET",
           headers: {
             "purpose" : "Get members"
@@ -143,8 +143,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
-
-        fetch('/chat/<%= conversation.getTitle() %>', {
+        fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
           headers: {
             "purpose" : "Changing chat privacy"
@@ -161,7 +160,6 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
-
       });
     });
 
@@ -190,7 +188,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
      
       $('#setUsersModal').modal('hide');
 
-      fetch('/chat/<%= conversation.getTitle() %>', {
+      fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
           headers: {
             "Content-Type": "application/json; charset=utf-8",
@@ -265,7 +263,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     <hr/>
 
     <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+    <form action="/chat/<%= conversation.getId() %>" method="POST">
         <input type="text" name="message">
         <br/>
         <button type="submit">Send</button>
