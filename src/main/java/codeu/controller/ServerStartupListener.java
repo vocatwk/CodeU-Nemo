@@ -1,5 +1,8 @@
 package codeu.controller;
 
+import codeu.controller.BotController;
+import codeu.model.data.Bot;
+import codeu.model.data.NemoBot;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
@@ -20,6 +23,9 @@ import javax.servlet.ServletContextListener;
  */
 public class ServerStartupListener implements ServletContextListener {
 
+   /** Controller class that gives control to Bots. */
+  private BotController botController = BotController.getInstance();
+
   /** Loads data from Datastore. */
   @Override
   public void contextInitialized(ServletContextEvent sce) {
@@ -35,6 +41,9 @@ public class ServerStartupListener implements ServletContextListener {
 
       List<Event> events = PersistentStorageAgent.getInstance().loadEvents();
       EventStore.getInstance().setEvents(events);
+
+      NemoBot nemoBot = new NemoBot("../../src/main/java/codeu/model/data/NemoBot.txt");
+      botController.registerBot(nemoBot.getMentionKey(), nemoBot);
 
     } catch (PersistentDataStoreException e) {
       System.err.println("Server didn't start correctly. An error occurred during Datastore load!");
