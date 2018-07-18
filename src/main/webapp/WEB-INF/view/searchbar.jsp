@@ -22,21 +22,18 @@
                   a1.href = "/profile/" + userName;
                   a1.innerHTML = userName;
                   li.appendChild(a1);
+                  a2 = document.createElement("a");
+                  a2.innerHTML = "add";
+                  a2.setAttribute("class", "add-user-button");
+                  a2.setAttribute("username", userName);
 
-                  if(!membersOfConversation.has(userName)){
-                    a2 = document.createElement("a");
-                    a2.innerHTML = "add";
-                    a2.setAttribute("class", "add-user-button");
-                    a2.setAttribute("username", userName);
-
-                    if(ToBeAddedToConversation.has(userName)){
-                      a2.classList.add("isDisabled");
-                    }else{
-                      a2.href = "#";
-                    }
-                    li.appendChild(a2);
+                  if(membersAfterEditing.has(userName)){
+                    a2.classList.add("isDisabled");
+                  }else{
+                    a2.setAttribute("href", "#");
                   }
 
+                  li.appendChild(a2);
                   document.getElementById(putResultsIn).appendChild(li);
                 }
               } else {

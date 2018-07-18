@@ -85,49 +85,6 @@ public class ConversationServletTest {
   }
 
   @Test
-  public void testDoPost_BadConversationName() throws IOException, ServletException {
-    Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("bad !@#$% name");
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-
-    User fakeUser =
-        new User(
-            UUID.randomUUID(),
-            "test_username",
-            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
-
-    conversationServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockConversationStore, Mockito.never())
-        .addConversation(Mockito.any(Conversation.class));
-    Mockito.verify(mockRequest).setAttribute("error", "Please enter only letters and numbers.");
-    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
-  }
-
-  @Test
-  public void testDoPost_ConversationNameTaken() throws IOException, ServletException {
-    Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("test_conversation");
-    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-
-    User fakeUser =
-        new User(
-            UUID.randomUUID(),
-            "test_username",
-            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
-
-    Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(true);
-
-    conversationServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockConversationStore, Mockito.never())
-        .addConversation(Mockito.any(Conversation.class));
-    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
-  }
-
-  @Test
   public void testDoPost_ConversationNameIsEmpty() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
@@ -144,7 +101,7 @@ public class ConversationServletTest {
 
     Mockito.verify(mockConversationStore, Mockito.never())
         .addConversation(Mockito.any(Conversation.class));
-    Mockito.verify(mockRequest).setAttribute("error", "Please enter at least one letter or number");
+    Mockito.verify(mockRequest).setAttribute("error", "Please enter at least one character");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -181,8 +138,6 @@ public class ConversationServletTest {
             Instant.now());
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
-    Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(false);
-
     conversationServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<Conversation> conversationArgumentCaptor =
@@ -201,8 +156,9 @@ public class ConversationServletTest {
     List<String> testInformation = new ArrayList<>();
     testInformation.add("test_username");
     testInformation.add("test_conversation");
+    testInformation.add(conversationArgumentCaptor.getValue().getId().toString());
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
-    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
+    Mockito.verify(mockResponse).sendRedirect("/chat/" + conversationArgumentCaptor.getValue().getId());
   }
 }
