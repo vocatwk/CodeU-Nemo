@@ -8,6 +8,9 @@ public interface Bot {
   /** Returns the Bot's name. */
   public String getName();
 
+  /** Returns "@" + Bot's name. */
+  public String getMentionKey();
+
   /** Returns the Bot's id. */
   public UUID getId();
 

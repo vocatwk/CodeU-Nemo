@@ -22,6 +22,7 @@ Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
+String membersOfConversation = (String) request.getAttribute("membersOfConversation");
 %>
 
 <!DOCTYPE html>
@@ -42,12 +43,111 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
   
   <script>
 
+    var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
+    var membersAfterEditing = new Set(membersOfConversation);
+
+    function AreSetsEqual(set1, set2){
+      
+      if(set1.size !== set2.size){
+        return false;
+      }
+      for (let value of set1){
+        if(!set2.has(value)){
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function AddUserAsTag(userName){
+      var selectedUserList = document.getElementById('selectedUserList');
+        var selectedUser = document.createElement("button");
+        selectedUser.setAttribute("class", "btn btn-primary");
+        selectedUser.classList.add('selectedUser');
+        selectedUser.innerHTML = userName;
+
+        var closeIcon = document.createElement("button");
+        closeIcon.setAttribute("type", "button");
+        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("aria-label", "Close");
+        closeIcon.setAttribute("username", userName);
+
+        var span = document.createElement("span");
+        span.setAttribute("aria-hidden", "true");
+        span.innerHTML = "&times;";
+
+        closeIcon.appendChild(span);
+        closeIcon.addEventListener("click", function(){
+          var userName = this.getAttribute("username");
+          $(this).parent().remove();
+
+          var addButtonForUser = $(".add-user-button[username='" + userName + "']");
+          addButtonForUser.attr("href", "#");
+          addButtonForUser.removeClass("isDisabled");
+
+          membersAfterEditing.delete(userName);
+
+          if(!AreSetsEqual(membersOfConversation, membersAfterEditing) && membersAfterEditing.size >= 1){
+            $('#saveChangesButton').removeAttr('disabled');
+          }else{
+            $('#saveChangesButton').attr('disabled', 'true');
+          }
+
+        });
+
+        selectedUser.appendChild(closeIcon);
+        selectedUserList.appendChild(selectedUser);
+    }
+
+    //prepopulate members of conversation in setUsers modal
+    $(document).ready(function(){
+      $("#EditMembersButton").click(function(){
+
+        //clean up modal
+        $('#userResult').empty();
+        $('#userSearchBar').val("");
+        $('#selectedUserList').empty();
+        $('#saveChangesButton').attr('disabled', 'true');
+
+        // get updated list of members
+        fetch('/chat/<%= conversation.getId() %>', {
+          method: "GET",
+          headers: {
+            "purpose" : "Get members"
+          },
+          credentials: "same-origin"
+        }).then(function(response) {
+
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+
+          response.json().then(function(data){
+            membersOfConversation = new Set(data);
+            membersAfterEditing = new Set(membersOfConversation);
+          });
+
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
+
+        //populate
+        membersOfConversation.forEach(function(userName){
+          AddUserAsTag(userName);
+        });
+      });
+    });
+
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
     $(document).ready(function() {
       $("#privacySettingButton").click(function() {
-        fetch('/chat/<%= conversation.getTitle() %>', {
+        fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
+          headers: {
+            "purpose" : "Changing chat privacy"
+          },
           body : newChatPrivacyValue,
           credentials: "same-origin"
         }).then(function(response) {
@@ -61,6 +161,50 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
           console.log("An error occured. " + error.message);
         })
       });
+    });
+
+    // Add selected user
+    $(document).on('click', '.add-user-button', function(e) {             
+      e.preventDefault();
+      if(!this.classList.contains('isDisabled')){
+
+        var userName = this.getAttribute("username");
+        membersAfterEditing.add(userName);
+
+        if(!AreSetsEqual(membersOfConversation, membersAfterEditing)){
+          $('#saveChangesButton').removeAttr('disabled');
+        }else{
+          $('#saveChangesButton').attr('disabled', 'true');
+        }
+
+        this.removeAttribute("href");
+        this.classList.add('isDisabled');
+        AddUserAsTag(userName);
+      }
+    });
+
+    // save changes to the list of members
+    $(document).on('click', '#saveChangesButton', function() {             
+     
+      $('#setUsersModal').modal('hide');
+
+      fetch('/chat/<%= conversation.getId() %>', {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            "purpose" : "Setting users"
+          },
+          body: JSON.stringify(Array.from(membersAfterEditing)),
+          credentials: "same-origin"
+        }).then(function(response) {
+          if(!response.ok) {
+            console.log("An error occured. Status code: " + response.status);
+            return;
+          }
+          membersOfConversation = new Set(membersAfterEditing);
+        }, function(error) {
+          console.log("An error occured. " + error.message);
+        })
     });
 
     // scroll the chat div to the bottom
@@ -88,8 +232,8 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button id = "privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#addUsersModal">Add Users</button>
+            <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+            <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
           </div>
         </div>
       </div>
@@ -119,7 +263,7 @@ String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? 
     <hr/>
 
     <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
+    <form action="/chat/<%= conversation.getId() %>" method="POST">
         <input type="text" name="message">
         <br/>
         <button type="submit">Send</button>

@@ -21,10 +21,18 @@
                   a1 = document.createElement("a");
                   a1.href = "/profile/" + userName;
                   a1.innerHTML = userName;
-                  a2 = document.createElement("a");
-                  a2.style = "float: right";
-                  a2.innerHTML = "add";
                   li.appendChild(a1);
+                  a2 = document.createElement("a");
+                  a2.innerHTML = "add";
+                  a2.setAttribute("class", "add-user-button");
+                  a2.setAttribute("username", userName);
+
+                  if(membersAfterEditing.has(userName)){
+                    a2.classList.add("isDisabled");
+                  }else{
+                    a2.setAttribute("href", "#");
+                  }
+
                   li.appendChild(a2);
                   document.getElementById(putResultsIn).appendChild(li);
                 }
