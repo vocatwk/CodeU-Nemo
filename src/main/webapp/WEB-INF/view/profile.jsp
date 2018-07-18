@@ -62,7 +62,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
       </ul>
 
     </div>
-    <h1> <%= subject %>'s subscriptions </h1>
+    <h2> <%= subject %>'s subscriptions </h2>
     <% List<UUID> subscriptionsID = (List<UUID>) request.getAttribute("subscriptionsID"); %>
     <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
     <% for (int i = 0; i< subscriptionsID.size(); i++) { %>
