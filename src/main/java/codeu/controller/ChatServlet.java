@@ -220,7 +220,7 @@ public class ChatServlet extends HttpServlet {
         
         List<String> botMessageInformation = new ArrayList<String>();
         botMessageInformation.add(bot.getName());
-        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(conversation.getTitle());
         botMessageInformation.add(botResponse);
         Event botMessageEvent = 
             new Event(
