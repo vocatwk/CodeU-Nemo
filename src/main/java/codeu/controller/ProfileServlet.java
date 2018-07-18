@@ -3,9 +3,11 @@ package codeu.controller;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Conversation;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
+import codeu.model.store.basic.ConversationStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -29,6 +31,9 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  /** Store class that gives access to Conversations. */
+  private ConversationStore conversationStore;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
@@ -36,6 +41,7 @@ public class ProfileServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    setConversationStore(ConversationStore.getInstance());
   }
 
   /**
@@ -60,6 +66,14 @@ public class ProfileServlet extends HttpServlet {
    */
   void setEventStore(EventStore eventStore) {
     this.eventStore = eventStore;
+  }
+
+  /**
+   * Sets the ConversationStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setConversationStore(ConversationStore conversationStore) {
+    this.conversationStore = conversationStore;
   }
 
   /**
@@ -137,8 +151,8 @@ public class ProfileServlet extends HttpServlet {
 
     List<UUID> subscriptionsID = subject.getSubscription();
     List<String> conversationNames = new ArrayList<>();
-    for (UUID subID : subscriptions) {
-        Conversation convo = ConversationStore.getConversation(subID);
+    for (UUID subID : subscriptionsID) {
+        Conversation convo = conversationStore.getConversation(subID);
         String convoName = convo.getTitle();
         conversationNames.add(convoName);
     }
