@@ -136,10 +136,10 @@ public class ProfileServlet extends HttpServlet {
     response.sendRedirect("/profile/" + subject.getName());
 
     List<UUID> subscriptionsID = subject.getSubscription();
-    List<String> conversationNames = ArrayList <String> ;
+    List<String> conversationNames = new ArrayList<>();
     for (UUID subID : subscriptions) {
         Conversation convo = ConversationStore.getConversation(subID);
-        String convoName = convo.getTitle()
+        String convoName = convo.getTitle();
         conversationNames.add(convoName);
     }
     request.setAttribute("subscriptionsID",subscriptionsID);
