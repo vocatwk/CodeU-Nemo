@@ -2,11 +2,13 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="codeu.model.store.basic.ConversationStore"%>
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");
 String user = (String) request.getSession().getAttribute("user");
 String aboutMe = (String) request.getAttribute("aboutMe");
+ConversationStore conversationStore = 
 %>
 
 <!DOCTYPE html>
@@ -61,6 +63,11 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 
     </div>
     <h1> <%= subject %>'s subscriptions </h1>
+    <% List<UUID> subscriptions = subject.getSubscription(); %>
+    <% for (UUID subID : subscriptions) { %>
+        conversationStore
+
+    <% } %>
   </div>
 
 </body>

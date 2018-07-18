@@ -162,13 +162,13 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
   <div id="subscribeButton">
     <button type="button" class="btn btn-light">Subscribe</button>
-    <p onclick="subscribe()">Click me to change my text color.</p>
-    <script>
-   function subscribe() {
-     UUID convoId = conversation.getId();
-       document.addConversationUUID(convoId);
-   }
-    </script>
+    <onclick="subscribe()"></onclick>
+    <%
+        function subscribe() {
+        UUID convoId = conversation.getId();
+        List<UUID> subscription = user.getSubscription();
+        subscription.add(convoId);
+     %>
   </div>
 
 </head>

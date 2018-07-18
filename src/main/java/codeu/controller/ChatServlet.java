@@ -289,12 +289,4 @@ public class ChatServlet extends HttpServlet {
     return false;
   }
 
-  /* Adds the conversation UUID to a list in the user class */
-  private void addConversationUUID(UUID conversationID){
-    String username = (String) request.getSession().getAttribute("user");
-    User user = User.getUser(username);
-    List<UUID> subscribeList = user.getSubscription();
-    subscribeList.add(UUID);
-  }
-
 }

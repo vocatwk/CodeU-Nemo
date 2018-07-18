@@ -99,8 +99,8 @@ public class User {
   }
 
   /** Add the subscription to the subscriptions list */
-  public void setSubscription(String conversationName){
-    subscriptions.add(conversationName);
+  public void setSubscription(UUID conversationId){
+    subscriptions.add(conversationId);
   }
 
   /** get the subscription to the subscriptions list */
