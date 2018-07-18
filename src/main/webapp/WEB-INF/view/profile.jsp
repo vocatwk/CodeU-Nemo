@@ -63,8 +63,8 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 
     </div>
     <h1> <%= subject %>'s subscriptions </h1>
-    <% List<UUID> subscriptionsID = request.getAttribute("subscriptionsID"); %>
-    <% List<String> conversationNames = request.getAttribute("conversationNames"); %>
+    <% List<UUID> subscriptionsID = (List<UUID>) request.getAttribute("subscriptionsID"); %>
+    <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
     <% for (int i = 0; i< subscriptionsID.size(); i++) { %>
     <a class="btn btn-primary" href="/chat/<%=subscriptionsID.get(i)%>" role="button"> <%=conversationNames.get(i)%> </a>
     <% } %>
