@@ -2,13 +2,14 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
-<%@ page import="codeu.model.store.basic.ConversationStore"%>
+
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");
 String user = (String) request.getSession().getAttribute("user");
 String aboutMe = (String) request.getAttribute("aboutMe");
-ConversationStore conversationStore = 
+String requestUrl = (String) request.getRequestURI();
+String UrlStripped = (String) requestUrl.substring();
 %>
 
 <!DOCTYPE html>
@@ -63,10 +64,10 @@ ConversationStore conversationStore =
 
     </div>
     <h1> <%= subject %>'s subscriptions </h1>
-    <% List<UUID> subscriptions = subject.getSubscription(); %>
-    <% for (UUID subID : subscriptions) { %>
-        conversationStore
-
+    <% List<UUID> subscriptionsID = request.getAttribute("subscriptionsID"); %>
+    <% List<String> conversationNames = request.getAttribute("conversationNames"); %>
+    <% for (int i = 0; i< subscriptionsID.size(); i++) { %>
+    <a class="btn btn-primary" href="/chat/<%=subscriptionsID.get(i)%>" role="button"> <%=conversationNames.get(i)%> </a>
     <% } %>
   </div>
 

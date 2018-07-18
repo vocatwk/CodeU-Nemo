@@ -135,8 +135,15 @@ public class ProfileServlet extends HttpServlet {
 
     response.sendRedirect("/profile/" + subject.getName());
 
-    List<UUID> subscriptions = subject.getSubscription();
-    request.setAttribute("subscriptions",subscriptions);
+    List<UUID> subscriptionsID = subject.getSubscription();
+    List<String> conversationNames = ArrayList <String> ;
+    for (UUID subID : subscriptions) {
+        Conversation convo = ConversationStore.getConversation(subID);
+        String convoName = convo.getTitle()
+        conversationNames.add(convoName);
+    }
+    request.setAttribute("subscriptionsID",subscriptionsID);
+    request.setAttribute("conversationNames",conversationNames);
   }
 
 }
