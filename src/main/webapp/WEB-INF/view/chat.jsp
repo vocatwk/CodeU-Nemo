@@ -17,6 +17,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="java.util.UUID" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -161,14 +162,10 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   </script>
 
   <div id="subscribeButton">
-    <button type="button" class="btn btn-light">Subscribe</button>
-    <onclick="subscribe()"></onclick>
-    <%
-        function subscribe() {
-        UUID convoId = conversation.getId();
-        List<UUID> subscription = user.getSubscription();
-        subscription.add(convoId);
-     %>
+    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
+       autocomplete="off">
+      Subscribe
+    </button>
   </div>
 
 </head>

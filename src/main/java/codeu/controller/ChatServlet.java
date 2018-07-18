@@ -120,7 +120,7 @@ public class ChatServlet extends HttpServlet {
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
-
+    
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
@@ -272,6 +272,9 @@ public class ChatServlet extends HttpServlet {
       response.setContentType("application/json");
       response.setCharacterEncoding("UTF-8");
       response.getWriter().write(json);
+    } else if(purpose.equals("Subscribe")){
+      UUID conversationId = conversation.getId();
+
     }
 
   }
