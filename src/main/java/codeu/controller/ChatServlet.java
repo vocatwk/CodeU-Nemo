@@ -222,6 +222,7 @@ public class ChatServlet extends HttpServlet {
         botMessageInformation.add(bot.getName());
         botMessageInformation.add(conversation.getTitle());
         botMessageInformation.add(botResponse);
+        botMessageInformation.add(conversationId.toString());
         Event botMessageEvent = 
             new Event(
                 UUID.randomUUID(), 

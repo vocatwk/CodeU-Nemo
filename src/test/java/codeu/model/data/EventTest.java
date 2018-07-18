@@ -20,7 +20,8 @@ public class EventTest {
           Arrays.asList(
             "test_username", 
             "test_conversation_title", 
-            "test_message_content"));
+            "test_message_content",
+            UUID.randomUUID().toString()));
 
     Event event = new Event(id, type, creation, information);
 
