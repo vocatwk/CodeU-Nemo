@@ -19,6 +19,7 @@ public class Event {
    * 1. Username
    * 2. Updated "About Me"/Conversation Title based on type
    * 3. Message Content
+   * 4. Conversaiton Id
    * NOTE: At minimum, must store Username
    */
   private final List<String> information;
