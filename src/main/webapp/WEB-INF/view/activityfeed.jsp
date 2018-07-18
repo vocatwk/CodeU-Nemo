@@ -47,18 +47,20 @@ List<Event> events = (List<Event>) request.getAttribute("events");
           }
           else {
             String conversationTitle = information.get(1);
-              if (event.getType().equals("Conversation")) {
+              if (event.getType().equals("Conversation") && information.size() > 2) {
+                String conversationId = information.get(2);
               %>
                 <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
-                <a href="/chat/<%= conversationTitle %>"><%= conversationTitle %></a>
+                <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>
           </li>
               <%
               }
-              else if (event.getType().equals("Message")) {
+              else if (event.getType().equals("Message") && information.size() > 3) {
                 String messageContent = information.get(2);
+                String conversationId = information.get(3);
               %>
                 <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
-                <a href="/chat/<%= conversationTitle %>"><%= conversationTitle %></a>: "<%= messageContent %>"
+                <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>: "<%= messageContent %>"
           </li>
               <%
               }

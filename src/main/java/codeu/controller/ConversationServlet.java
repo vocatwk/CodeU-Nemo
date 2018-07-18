@@ -29,6 +29,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {
@@ -109,22 +111,11 @@ public class ConversationServlet extends HttpServlet {
       return;
     }
 
+    conversationTitle = Jsoup.clean(conversationTitle.trim(), Whitelist.none());
+
     if (conversationTitle.equals("")) {
-      request.setAttribute("error", "Please enter at least one letter or number");
+      request.setAttribute("error", "Please enter at least one character");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
-      return;
-    }
-
-    if (!conversationTitle.matches("[\\w*]*")) {
-      request.setAttribute("error", "Please enter only letters and numbers.");
-      request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
-      return;
-    }
-
-    if (conversationStore.isTitleTaken(conversationTitle)) {
-      // conversation title is already taken, just go into that conversation instead of creating a
-      // new one
-      response.sendRedirect("/chat/" + conversationTitle);
       return;
     }
 
@@ -137,10 +128,11 @@ public class ConversationServlet extends HttpServlet {
     List<String> conversationInformation = new ArrayList<>();
     conversationInformation.add(user.getName());
     conversationInformation.add(conversationTitle);
+    conversationInformation.add(conversation.getId().toString());
     Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", 
         conversation.getCreationTime(), conversationInformation);
     eventStore.addEvent(conversationEvent);
     
-    response.sendRedirect("/chat/" + conversationTitle);
+    response.sendRedirect("/chat/" + conversation.getId());
   }
 }
