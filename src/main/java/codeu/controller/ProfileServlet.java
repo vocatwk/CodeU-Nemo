@@ -119,8 +119,7 @@ public class ProfileServlet extends HttpServlet {
     }
     request.setAttribute("subscriptionsID",subscriptionsID);
     request.setAttribute("conversationNames", conversationNames);
-    request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
-  }
+
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
 
@@ -159,5 +158,5 @@ public class ProfileServlet extends HttpServlet {
     eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
-
+  }
 }
