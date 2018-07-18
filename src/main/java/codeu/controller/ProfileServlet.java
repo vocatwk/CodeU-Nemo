@@ -110,6 +110,17 @@ public class ProfileServlet extends HttpServlet {
 
     request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
+    List<UUID> subscriptionsID = subject.getSubscription();
+    List<String> conversationNames = new ArrayList<>();
+    for (UUID subID : subscriptionsID) {
+        Conversation convo = conversationStore.getConversation(subID);
+        String convoName = convo.getTitle();
+        conversationNames.add(convoName);
+    }
+    request.setAttribute("subscriptionsID",subscriptionsID);
+    request.setAttribute("conversationNames", conversationNames);
+    request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+  }
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
 
@@ -148,16 +159,5 @@ public class ProfileServlet extends HttpServlet {
     eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
-
-    List<UUID> subscriptionsID = subject.getSubscription();
-    List<String> conversationNames = new ArrayList<>();
-    for (UUID subID : subscriptionsID) {
-        Conversation convo = conversationStore.getConversation(subID);
-        String convoName = convo.getTitle();
-        conversationNames.add(convoName);
-    }
-    request.setAttribute("subscriptionsID",subscriptionsID);
-    request.setAttribute("conversationNames",conversationNames);
-  }
 
 }

@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 
@@ -8,8 +9,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");
 String user = (String) request.getSession().getAttribute("user");
 String aboutMe = (String) request.getAttribute("aboutMe");
-String requestUrl = (String) request.getRequestURI();
-String UrlStripped = (String) requestUrl.substring();
 %>
 
 <!DOCTYPE html>
