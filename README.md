@@ -16,6 +16,7 @@ in have access to only those two pages.
 * Nemo allows you to create conversations with titles that have multiple words.
 * Nemo has an dynamic search feature that allows users to search for other users. 
 * Nemo has a Bot Framework that allows developers to contribute their own Bots. 
+* Nemo has its own Bot, NemoBot, that functions as an assistant.
 
 ## Step 1: Download Java
 
