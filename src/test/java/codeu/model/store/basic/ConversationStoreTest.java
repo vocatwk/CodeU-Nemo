@@ -31,42 +31,14 @@ public class ConversationStoreTest {
   }
 
   @Test
-  public void testGetConversationWithTitle_found() {
-    Conversation resultConversation =
-        conversationStore.getConversationWithTitle(CONVERSATION_ONE.getTitle());
-
-    assertEquals(CONVERSATION_ONE, resultConversation);
-  }
-
-  @Test
-  public void testGetConversationWithTitle_notFound() {
-    Conversation resultConversation = conversationStore.getConversationWithTitle("unfound_title");
-
-    Assert.assertNull(resultConversation);
-  }
-
-  @Test
-  public void testIsTitleTaken_true() {
-    boolean isTitleTaken = conversationStore.isTitleTaken(CONVERSATION_ONE.getTitle());
-
-    Assert.assertTrue(isTitleTaken);
-  }
-
-  @Test
-  public void testIsTitleTaken_false() {
-    boolean isTitleTaken = conversationStore.isTitleTaken("unfound_title");
-
-    Assert.assertFalse(isTitleTaken);
-  }
-
-  @Test
   public void testAddConversation() {
+    UUID inputConversationId = UUID.randomUUID();
     Conversation inputConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+        new Conversation(inputConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
 
     conversationStore.addConversation(inputConversation);
     Conversation resultConversation =
-        conversationStore.getConversationWithTitle("test_conversation");
+        conversationStore.getConversation(inputConversationId);
 
     assertEquals(inputConversation, resultConversation);
     Mockito.verify(mockPersistentStorageAgent).writeThrough(inputConversation);

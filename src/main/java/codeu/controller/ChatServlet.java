@@ -117,18 +117,27 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    String requestUrl = request.getRequestURI();
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = getIdFromString(conversationIdAsString);
+
+    Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
-      System.out.println("Conversation was null: " + conversationTitle);
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }
 
-    UUID conversationId = conversation.getId();
+    String purpose = request.getHeader("purpose");
+    if(purpose != null && purpose.equals("Get members")){
+      String json = new Gson().toJson(conversation.getMembers());
+      response.setContentType("application/json");
+      response.setCharacterEncoding("UTF-8");
+      response.getWriter().write(json);
+      return;
+    }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
@@ -155,11 +164,13 @@ public class ChatServlet extends HttpServlet {
     User user = userStore.getUser(username);
 
     String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = getIdFromString(conversationIdAsString);
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }
@@ -181,8 +192,9 @@ public class ChatServlet extends HttpServlet {
 
       List<String> messageInformation = new ArrayList<String>();
       messageInformation.add(user.getName());
-      messageInformation.add(conversationTitle);
+      messageInformation.add(conversation.getTitle());
       messageInformation.add(cleanedMessageContent);
+      messageInformation.add(conversationId.toString());
       Event messageEvent = 
           new Event(
               UUID.randomUUID(), 
@@ -204,12 +216,11 @@ public class ChatServlet extends HttpServlet {
                 bot.getId(),
                 botResponse,
                 Instant.now());
-
         messageStore.addMessage(botMessage);
-
+        
         List<String> botMessageInformation = new ArrayList<String>();
         botMessageInformation.add(bot.getName());
-        botMessageInformation.add(conversationTitle);
+        botMessageInformation.add(conversation.getTitle());
         botMessageInformation.add(botResponse);
         Event botMessageEvent = 
             new Event(
@@ -222,7 +233,7 @@ public class ChatServlet extends HttpServlet {
     }
  
     // redirect to a GET request
-    response.sendRedirect("/chat/" + conversationTitle);
+    response.sendRedirect("/chat/" + conversationId);
   }
 
   @Override
@@ -232,11 +243,13 @@ public class ChatServlet extends HttpServlet {
     String username = (String) request.getSession().getAttribute("user");
 
     String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
+    String conversationIdAsString = requestUrl.substring("/chat/".length());
+    UUID conversationId = getIdFromString(conversationIdAsString);
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
+      System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
       return;
     }
@@ -258,7 +271,7 @@ public class ChatServlet extends HttpServlet {
       }
       conversationStore.updateConversation(conversation);
     }
-    else if(purpose.equals("Adding users")){
+    else if(purpose.equals("Setting users")){
 
       String jsonString = request.getReader().readLine();
       String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
@@ -272,6 +285,12 @@ public class ChatServlet extends HttpServlet {
         return;
       }
 
+      if(userNameArray == null || userNameArray.length == 0){
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.getWriter().write("Conversation must have at least one member.");
+        return;
+      }
+
       for(String user : userNameArray){
         if(userStore.getUser(user) == null){
           response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -279,14 +298,9 @@ public class ChatServlet extends HttpServlet {
         }
       }
 
-      HashSet<String> toBeAdded = new HashSet<>(Arrays.asList(userNameArray));
-      conversation.addMembers(toBeAdded);
+      HashSet<String> membersList = new HashSet<>(Arrays.asList(userNameArray));
+      conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
-
-      String json = new Gson().toJson(conversation.getMembers());
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.getWriter().write(json);
     }
     
   }
@@ -304,5 +318,22 @@ public class ChatServlet extends HttpServlet {
       }
     }
     return null;
+  }
+
+  /*
+  * This function converts from string to UUID.
+  * Returns null if string is not a proper representation of UUID.
+  */
+  private UUID getIdFromString(String input) {
+    UUID conversationId = null;
+
+    try{
+      conversationId = UUID.fromString(input);
+    }
+    catch(Exception e){
+      return null;
+    }
+
+    return conversationId;
   }
 }
