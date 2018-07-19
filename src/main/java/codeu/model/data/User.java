@@ -103,8 +103,8 @@ public class User {
     subscriptions.add(conversationId);
   }
 
-  /** get the subscription to the subscriptions list */
-  public List<UUID> getSubscription(){
+  /** get the subscriptions list*/
+  public List<UUID> getSubscriptions(){
     return subscriptions;
   }
 }

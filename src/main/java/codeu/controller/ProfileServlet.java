@@ -110,14 +110,14 @@ public class ProfileServlet extends HttpServlet {
 
     request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
-    List<UUID> subscriptionsID = subject.getSubscription();
+    List<UUID> subscriptionIds = subject.getSubscriptions();
     List<String> conversationNames = new ArrayList<>();
-    for (UUID subID : subscriptionsID) {
+    for (UUID subID : subscriptionIds) {
         Conversation convo = conversationStore.getConversation(subID);
         String convoName = convo.getTitle();
         conversationNames.add(convoName);
     }
-    request.setAttribute("subscriptionsID",subscriptionsID);
+    request.setAttribute("subscriptionIds",subscriptionIds);
     request.setAttribute("conversationNames", conversationNames);
 
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
