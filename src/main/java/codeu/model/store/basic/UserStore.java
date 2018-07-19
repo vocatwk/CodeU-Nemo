@@ -114,7 +114,7 @@ public class UserStore {
     }
 
     for (User user : users) {
-      if (user.getName().contains(username)) {
+      if (user.getName().toLowerCase().contains(username.toLowerCase())) {
         userResults.add(user);
       }
     }

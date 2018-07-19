@@ -24,7 +24,7 @@ public class EventStoreTest {
   private final List<String> INFORMATION_THREE =
       Arrays.asList("user_three", "conversation_title");
   private final List<String> INFORMATION_FOUR =
-      Arrays.asList("user_four", "conversation_title", "message_content");
+      Arrays.asList("user_four", "conversation_title", "message_content", UUID.randomUUID().toString());
 
   private final Event EVENT_ONE =
       new Event(UUID.randomUUID(), "User", Instant.now(), INFORMATION_ONE);
@@ -67,9 +67,16 @@ public class EventStoreTest {
     UUID eventId = UUID.randomUUID();
     List<String> testInformation =
         Arrays.asList(
+<<<<<<< HEAD
           "test_username",
           "test_conversation_title",
           "test_message_content");
+=======
+          "test_username",
+          "test_conversation_title",
+          "test_message_content",
+          UUID.randomUUID().toString());
+>>>>>>> a6cfeb0235dd15d6bdb22e345e20c57d1ded3948
     Event inputEvent = new Event(eventId, "Message", Instant.now(), testInformation);
 
     eventStore.addEvent(inputEvent);
