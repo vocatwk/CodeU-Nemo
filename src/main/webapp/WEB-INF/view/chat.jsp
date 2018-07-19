@@ -142,7 +142,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
-    $(document).ready(function()) {
+    $(document).ready(function() {
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",

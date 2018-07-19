@@ -350,7 +350,6 @@ public class ChatServletTest {
     testInformation.add("test_username");
     testInformation.add("test_conversation");
     testInformation.add("Test message @NemoBot.");
-    System.out.println(testInformation.toString());
     // Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
     NemoBot nemoBot = Mockito.mock(NemoBot.class);
