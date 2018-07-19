@@ -42,7 +42,8 @@ public class ServerStartupListener implements ServletContextListener {
 
       /** Controller class that gives control to Bots. */
       BotController botController = BotController.getInstance();
-      NemoBot nemoBot = new NemoBot("../../src/main/java/codeu/model/data/NemoBot.txt");
+      
+      NemoBot nemoBot = new NemoBot();
       botController.registerBot(nemoBot.getMentionKey(), nemoBot);
       ConversationStatBot conversationStatBot = new ConversationStatBot();
       botController.registerBot(conversationStatBot.getMentionKey(), conversationStatBot);
