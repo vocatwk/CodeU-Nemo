@@ -130,6 +130,13 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    String username = (String) request.getSession().getAttribute("user");
+    if(!conversation.containsMember(username)){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("You don't have access to this page");
+      return;
+    }
+
     String purpose = request.getHeader("purpose");
     if(purpose != null && purpose.equals("Get members")){
       String json = new Gson().toJson(conversation.getMembers());
@@ -172,6 +179,12 @@ public class ChatServlet extends HttpServlet {
       // couldn't find conversation, redirect to conversation list
       System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
+      return;
+    }
+
+    if(!conversation.containsMember(username)){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("You don't have access to this page");
       return;
     }
 
@@ -252,6 +265,12 @@ public class ChatServlet extends HttpServlet {
       // couldn't find conversation, redirect to conversation list
       System.out.println("Conversation was null: " + conversationIdAsString);
       response.sendRedirect("/conversations");
+      return;
+    }
+
+    if(!conversation.containsMember(username)){
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("You don't have access to this page");
       return;
     }
 
