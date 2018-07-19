@@ -113,7 +113,7 @@ public class NotificationServletTest{
 
     Mockito.verify(mockRequest).setAttribute("eventsToShow", spyEvents);
 
-    Mockito.verify(mockUser).setLastSeenNotifications(currentTime);
+    Mockito.verify(mockUser).setLastSeenNotifications(lastEventTime);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
 
   }

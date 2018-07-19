@@ -57,7 +57,7 @@ public class NotificationServlet extends HttpServlet{
 
 
         request.setAttribute("eventsToShow",eventsToShow);
-        user.setLastSeenNotifications(currentTime);
+        user.setLastSeenNotifications(lastEventTime);
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
