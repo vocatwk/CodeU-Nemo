@@ -69,7 +69,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
         var closeIcon = document.createElement("button");
         closeIcon.setAttribute("type", "button");
-        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("class", "close remove-user-button");
         closeIcon.setAttribute("aria-label", "Close");
         closeIcon.setAttribute("username", userName);
 
