@@ -23,7 +23,7 @@ public class NemoBot extends User implements Bot {
   /**
   * Constructs a new Bot.
   */
-  public NemoBot() {
+  public NemoBot(String file) {
     super(
         UUID.randomUUID(), 
         "NemoBot", 
@@ -33,7 +33,7 @@ public class NemoBot extends User implements Bot {
     setIsAdmin(true);
     setLastSeenNotifications(null);
     mentionKey = "@NemoBot";
-    initializeMap();
+    initializeMap(file);
   }
 
   /** Returns "@" + Bot's name. */
@@ -51,14 +51,11 @@ public class NemoBot extends User implements Bot {
   * 
   * Note that NemoBot ignores case only on keys so all keys are in lower case.
   */
-  private void initializeMap() {
+  private void initializeMap(String file) {
     answerMap = new HashMap<String, String>();
 
     try {
       String line;
-
-      ClassLoader classLoader = getClass().getClassLoader();
-      File file = new File(classLoader.getResource("NemoBot.txt").getFile());
 
       BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
