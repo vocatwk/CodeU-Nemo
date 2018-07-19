@@ -59,6 +59,9 @@
       <ul class="mdl-list">
     <%
       for(Conversation conversation : conversations){
+        if(!conversation.containsMember(navBarUsername)){
+          continue;
+      }
     %>
       <li><a href="/chat/<%= conversation.getId() %>">
         <%= conversation.getTitle() %></a></li>

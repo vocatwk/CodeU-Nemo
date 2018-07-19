@@ -132,8 +132,7 @@ public class ChatServlet extends HttpServlet {
 
     String username = (String) request.getSession().getAttribute("user");
     if(!conversation.containsMember(username)){
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write("You don't have access to this page");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
 
@@ -183,8 +182,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if(!conversation.containsMember(username)){
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write("You don't have access to this page");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
 
@@ -269,8 +267,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if(!conversation.containsMember(username)){
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-      response.getWriter().write("You don't have access to this page");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
 
@@ -301,19 +298,18 @@ public class ChatServlet extends HttpServlet {
         userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
       }
       catch(Exception e){
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to read json content.");
         return;
       }
 
       if(userNameArray == null || userNameArray.length == 0){
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().write("Conversation must have at least one member.");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Conversation must have at least one member.");
         return;
       }
 
       for(String user : userNameArray){
         if(userStore.getUser(user) == null){
-          response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid json content");
           return;
         }
       }
