@@ -17,6 +17,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="java.util.UUID" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -40,14 +41,14 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       overflow-y: scroll
     }
   </style>
-  
+
   <script>
 
     var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
     var membersAfterEditing = new Set(membersOfConversation);
 
     function AreSetsEqual(set1, set2){
-      
+
       if(set1.size !== set2.size){
         return false;
       }
@@ -141,7 +142,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
     // for make private/make public button
     var newChatPrivacyValue = "<%= privacySettingButtonValue %>";
-    $(document).ready(function() {
+    $(document).ready(function()) {
       $("#privacySettingButton").click(function() {
         fetch('/chat/<%= conversation.getId() %>', {
           method: "PUT",
@@ -164,7 +165,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // Add selected user
-    $(document).on('click', '.add-user-button', function(e) {             
+    $(document).on('click', '.add-user-button', function(e) {
       e.preventDefault();
       if(!this.classList.contains('isDisabled')){
 
@@ -184,8 +185,8 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // save changes to the list of members
-    $(document).on('click', '#saveChangesButton', function() {             
-     
+    $(document).on('click', '#saveChangesButton', function() {
+
       $('#setUsersModal').modal('hide');
 
       fetch('/chat/<%= conversation.getId() %>', {
@@ -214,6 +215,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     };
 
   </script>
+  
 </head>
 <body onload="scrollChat()">
 
@@ -224,11 +226,11 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       <div class="titleAndSettings">
         <!-- Conversation title -->
         <h1> <%= conversation.getTitle() %> </h1>
-          
+
         <!-- Setting button and content -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -242,7 +244,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
       <h1> <a href="" >&#8635;</a> </h1>
     </div>
-    
+
     <hr/>
 
     <div id="chat">

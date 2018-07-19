@@ -72,8 +72,10 @@ public class PersistentDataStore {
         User user = new User(uuid, userName, passwordHash, creationTime);
         String aboutMe = (String) entity.getProperty("about_me");
         Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
+        Instant lastSeenNotifications = Instant.parse((String) entity.getProperty("last_seen_notifications"));
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
+        if (lastSeenNotifications!= null) user.setLastSeenNotifications(lastSeenNotifications);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -207,6 +209,7 @@ public class PersistentDataStore {
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("about_me", user.getAboutMe());
     userEntity.setProperty("is_admin", user.getIsAdmin());
+    userEntity.setProperty("last_seen_notifications", user.getLastSeenNotifications().toString());
     datastore.put(userEntity);
   }
 
