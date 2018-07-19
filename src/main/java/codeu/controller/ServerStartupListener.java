@@ -41,9 +41,8 @@ public class ServerStartupListener implements ServletContextListener {
 
       /** Controller class that gives control to Bots. */
       BotController botController = BotController.getInstance();
-      ClassLoader classLoader = getClass().getClassLoader();
-
-      NemoBot nemoBot = new NemoBot(classLoader.getResource("NemoBot.txt").getFile());
+      
+      NemoBot nemoBot = new NemoBot();
       botController.registerBot(nemoBot.getMentionKey(), nemoBot);
 
     } catch (PersistentDataStoreException e) {
