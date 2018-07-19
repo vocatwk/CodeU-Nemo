@@ -118,8 +118,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           },
           credentials: "same-origin"
         }).then(function(response) {
-
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
@@ -198,11 +197,14 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           body: JSON.stringify(Array.from(membersAfterEditing)),
           credentials: "same-origin"
         }).then(function(response) {
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
+          if(!membersOfConversation.has("<%= user %>")){
+            window.location.replace("/conversations");
+          }
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
