@@ -23,9 +23,6 @@ import javax.servlet.ServletContextListener;
  */
 public class ServerStartupListener implements ServletContextListener {
 
-   /** Controller class that gives control to Bots. */
-  private BotController botController = BotController.getInstance();
-
   /** Loads data from Datastore. */
   @Override
   public void contextInitialized(ServletContextEvent sce) {
@@ -42,6 +39,8 @@ public class ServerStartupListener implements ServletContextListener {
       List<Event> events = PersistentStorageAgent.getInstance().loadEvents();
       EventStore.getInstance().setEvents(events);
 
+      /** Controller class that gives control to Bots. */
+      BotController botController = BotController.getInstance();
       NemoBot nemoBot = new NemoBot("../../src/main/java/codeu/model/data/NemoBot.txt");
       botController.registerBot(nemoBot.getMentionKey(), nemoBot);
 
