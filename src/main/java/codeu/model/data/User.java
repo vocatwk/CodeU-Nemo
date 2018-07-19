@@ -17,6 +17,7 @@ package codeu.model.data;
 import java.time.Instant;
 import java.util.UUID;
 
+
 /** Class representing a registered user. */
 public class User {
   private final UUID id;
@@ -41,7 +42,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-    lastSeenNotifications = Instant.now();
+    lastSeenNotifications = creation;
   }
 
   /** Returns the ID of this User. */
@@ -93,5 +94,5 @@ public class User {
   public Instant getLastSeenNotifications(){
     return lastSeenNotifications;
   }
-    
+
 }

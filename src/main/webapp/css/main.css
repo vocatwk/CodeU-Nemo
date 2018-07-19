@@ -42,7 +42,7 @@ nav a {
 /* This is for the search bar */
 #searchDiv {
   display: inline-block;
-  margin: 10px;
+  margin-top: 10px;
   border: none;
   box-sizing:border-box;
   position: relative;
@@ -129,13 +129,19 @@ button {
 }
 
 .selectedUser {
-  width: 50px;
-  height: 25px;
-  padding: 0;
-  font-size: 12px;
+  height: 30px;
+  padding: 0 5px;
+  font-size: 15px;
   margin-right: 5px;
 }
 
 .add-user-button{
   float: right;
+}
+
+button.remove-user-button {
+  font-size: 18px;
+  padding-left: 7px;
+  color: white;
+  font-weight: lighter;
 }

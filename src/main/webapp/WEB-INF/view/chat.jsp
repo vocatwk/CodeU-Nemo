@@ -17,6 +17,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="java.util.UUID" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -40,14 +41,14 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       overflow-y: scroll
     }
   </style>
-  
+
   <script>
 
     var membersOfConversation = new Set(JSON.parse('<%= membersOfConversation %>'));
     var membersAfterEditing = new Set(membersOfConversation);
 
     function AreSetsEqual(set1, set2){
-      
+
       if(set1.size !== set2.size){
         return false;
       }
@@ -68,7 +69,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
         var closeIcon = document.createElement("button");
         closeIcon.setAttribute("type", "button");
-        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("class", "close remove-user-button");
         closeIcon.setAttribute("aria-label", "Close");
         closeIcon.setAttribute("username", userName);
 
@@ -117,8 +118,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           },
           credentials: "same-origin"
         }).then(function(response) {
-
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
@@ -164,7 +164,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // Add selected user
-    $(document).on('click', '.add-user-button', function(e) {             
+    $(document).on('click', '.add-user-button', function(e) {
       e.preventDefault();
       if(!this.classList.contains('isDisabled')){
 
@@ -184,8 +184,8 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     });
 
     // save changes to the list of members
-    $(document).on('click', '#saveChangesButton', function() {             
-     
+    $(document).on('click', '#saveChangesButton', function() {
+
       $('#setUsersModal').modal('hide');
 
       fetch('/chat/<%= conversation.getId() %>', {
@@ -197,11 +197,14 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           body: JSON.stringify(Array.from(membersAfterEditing)),
           credentials: "same-origin"
         }).then(function(response) {
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
+          if(!membersOfConversation.has("<%= user %>")){
+            window.location.replace("/conversations");
+          }
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
@@ -214,6 +217,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     };
 
   </script>
+  
 </head>
 <body onload="scrollChat()">
 
@@ -224,11 +228,11 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       <div class="titleAndSettings">
         <!-- Conversation title -->
         <h1> <%= conversation.getTitle() %> </h1>
-          
+
         <!-- Setting button and content -->
         <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-cog"> </i>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -242,7 +246,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
       <h1> <a href="" >&#8635;</a> </h1>
     </div>
-    
+
     <hr/>
 
     <div id="chat">

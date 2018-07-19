@@ -47,10 +47,12 @@ public class PersistentDataStoreTest {
     String passwordHashOne = "$2a$10$BNte6sC.qoL4AVjO3Rk8ouY6uFaMnsW8B9NjtHWaDNe8GlQRPRT1S";
     Instant creationOne = Instant.ofEpochMilli(1000);
     boolean isAdminOne = true;
-    String aboutMeOne = "test_about_me_one";
+    Instant lastSeenNotificationsOne = Instant.ofEpochMilli(1000);
     User inputUserOne = new User(idOne, nameOne, passwordHashOne, creationOne);
+    String aboutMeOne = "test_about_me_one";
     inputUserOne.setIsAdmin(isAdminOne);
     inputUserOne.setAboutMe(aboutMeOne);
+    inputUserOne.setLastSeenNotifications(lastSeenNotificationsOne);
 
     UUID idTwo = UUID.fromString("10000001-2222-3333-4444-555555555555");
     String nameTwo = "test_username_two";
@@ -58,8 +60,10 @@ public class PersistentDataStoreTest {
     Instant creationTwo = Instant.ofEpochMilli(2000);
     String aboutMeTwo = "test_about_me_two";
     boolean isAdminTwo = false;
+    Instant lastSeenNotificationsTwo = Instant.ofEpochMilli(2000);
     User inputUserTwo = new User(idTwo, nameTwo, passwordHashTwo, creationTwo);
     inputUserTwo.setIsAdmin(isAdminTwo);
+    inputUserTwo.setLastSeenNotifications(lastSeenNotificationsTwo);
     inputUserTwo.setAboutMe(aboutMeTwo);
 
     // save
@@ -76,6 +80,7 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(passwordHashOne, resultUserOne.getPasswordHash());
     Assert.assertEquals(creationOne, resultUserOne.getCreationTime());
     Assert.assertEquals(isAdminOne, resultUserOne.getIsAdmin());
+    Assert.assertEquals(lastSeenNotificationsOne, resultUserOne.getLastSeenNotifications());
     Assert.assertEquals(aboutMeOne, resultUserOne.getAboutMe());
 
     User resultUserTwo = resultUsers.get(1);
@@ -84,8 +89,8 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(passwordHashTwo, resultUserTwo.getPasswordHash());
     Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
     Assert.assertEquals(isAdminTwo, resultUserTwo.getIsAdmin());
+    Assert.assertEquals(lastSeenNotificationsTwo, resultUserTwo.getLastSeenNotifications());
     Assert.assertEquals(aboutMeTwo, resultUserTwo.getAboutMe());
-
   }
 
   @Test
@@ -190,10 +195,10 @@ public class PersistentDataStoreTest {
     // generate test events
     for (int i = 0; i < 4; i++) {
       events.add(new Event(
-        UUID.randomUUID(), 
-        eventTypes.get(i), 
-        Instant.ofEpochMilli(1000 * (i + 1)), 
-        informationLists.get(i)));  
+        UUID.randomUUID(),
+        eventTypes.get(i),
+        Instant.ofEpochMilli(1000 * (i + 1)),
+        informationLists.get(i)));
     }
 
     // save

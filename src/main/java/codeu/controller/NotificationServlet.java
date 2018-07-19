@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
 import java.util.UUID;
+import java.time.Clock;
 
 public class NotificationServlet extends HttpServlet{
   private UserStore userStore;
   private EventStore eventStore;
+  private Clock clock = Clock.systemUTC();
+
 
   @Override
   public void init() throws ServletException {
@@ -43,15 +46,18 @@ public class NotificationServlet extends HttpServlet{
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+        Instant currentTime = clock.instant();
+        long nanosTosubtract = currentTime.getNano();
+        Instant lastEventTime = currentTime.minusNanos(nanosTosubtract);
+
         String username = (String)request.getSession().getAttribute("user");
         User user = userStore.getUser(username);
-        Instant userLookedAtPage = Instant.now();
         Instant lastSeenTime = user.getLastSeenNotifications();
-
         List<Event> eventsToShow = eventStore.getEventsSince(lastSeenTime);
-        user.setLastSeenNotifications(userLookedAtPage);
+
 
         request.setAttribute("eventsToShow",eventsToShow);
+        user.setLastSeenNotifications(lastEventTime);
 
         request.getRequestDispatcher("/WEB-INF/view/notifications.jsp").forward(request, response);
       }
