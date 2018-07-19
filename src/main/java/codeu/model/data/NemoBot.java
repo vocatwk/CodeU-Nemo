@@ -1,6 +1,7 @@
 package codeu.model.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class NemoBot extends User implements Bot {
   /**
   * Constructs a new Bot.
   */
-  public NemoBot(String filePath) {
+  public NemoBot() {
     super(
         UUID.randomUUID(), 
         "NemoBot", 
@@ -32,7 +33,7 @@ public class NemoBot extends User implements Bot {
     setIsAdmin(true);
     setLastSeenNotifications(null);
     mentionKey = "@NemoBot";
-    initializeMap(filePath);
+    initializeMap();
   }
 
   /** Returns "@" + Bot's name. */
@@ -50,13 +51,16 @@ public class NemoBot extends User implements Bot {
   * 
   * Note that NemoBot ignores case only on keys so all keys are in lower case.
   */
-  private void initializeMap(String filePath) {
+  private void initializeMap() {
     answerMap = new HashMap<String, String>();
 
     try {
       String line;
 
-      BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+      ClassLoader classLoader = getClass().getClassLoader();
+      File file = new File(classLoader.getResource("NemoBot.txt").getFile());
+
+      BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
       while ((line = bufferedReader.readLine()) != null) {
         if (line.length() > 0) {
