@@ -216,11 +216,16 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
   </script>
 
-  <div id="subscribeButton">
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-       autocomplete="off">
-      Subscribe
-    </button>
+  <div id="Subscribe">
+    <button class="btn btn-primary" value="subscribe"> Subscribe </button>
+  <script>
+    document.getElementById("Subscribe").onclick = function() {myFunction()};
+
+    function myFunction() {
+      document.getElementById("Subscribe").disabled = true;
+    }
+  </script>
+
   </div>
 
 </head>
