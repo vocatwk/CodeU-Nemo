@@ -106,21 +106,13 @@ public class ConversationStatBot extends User implements Bot {
     }
     else if (keyword.equalsIgnoreCase("users")) {
       int numberOfUsers = getNumberOfUsers(conversation);
-      if (numberOfUsers > 1) {
-        return String.format(botAnswer, numberOfUsers) + "s.";
-      }
-      else {
-        return String.format(botAnswer, numberOfUsers) + ".";
-      }
+      return String.format(botAnswer, numberOfUsers) 
+          + (numberOfUsers > 1 ? "s." : ".");
     }
     else if (keyword.equalsIgnoreCase("messages")) {
       int numberOfMessages = getNumberOfMessages(conversation);
-      if (numberOfMessages > 1) {
-        return String.format(botAnswer, numberOfMessages) + "s.";
-      }
-      else {
-        return String.format(botAnswer, numberOfMessages) + ".";
-      }
+      return String.format(botAnswer, numberOfMessages) 
+          + (numberOfMessages > 1 ? "s." : ".");
     }
 
     return answerMap.get(keyword);
