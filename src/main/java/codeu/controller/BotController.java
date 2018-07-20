@@ -48,8 +48,8 @@ public class BotController {
   }
 
   /** Adds an entry to the map and to the UserStore. */
-  public void registerBot(String mentionKey, Bot bot) {
-    botMap.put(mentionKey.toLowerCase(), bot);
+  public void registerBot(Bot bot) {
+    botMap.put(bot.getMentionKey().toLowerCase(), bot);
 
     userStore.addUser((User)bot);
   }

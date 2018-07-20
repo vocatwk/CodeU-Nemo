@@ -1,6 +1,7 @@
 package codeu.model.data;
 
 import java.util.UUID;
+import codeu.model.data.Conversation;
 
 /** Interface for Bot implementations. */
 public interface Bot {
@@ -15,6 +16,6 @@ public interface Bot {
   public UUID getId();
 
   /** Creates a reply based on the keyword. */
-  public String answerMessage(String message);
+  public String answerMessage(String message, Conversation conversation);
   
 }
