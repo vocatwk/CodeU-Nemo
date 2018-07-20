@@ -56,7 +56,7 @@ public class BotControllerTest {
   public void testRegisterBot() {
     NemoBot nemoBot = new NemoBot();
 
-    botController.registerBot(nemoBot.getMentionKey(), nemoBot);
+    botController.registerBot(nemoBot);
     Bot resultBot = botController.getBot(nemoBot.getMentionKey());
 
     Mockito.verify(mockUserStore).addUser((User)nemoBot);
@@ -68,7 +68,7 @@ public class BotControllerTest {
   public void testRegisterBot_upperCase() {
     NemoBot nemoBot = new NemoBot();
 
-    botController.registerBot("@NEMOBOT", nemoBot);
+    botController.registerBot(nemoBot);
     Bot resultBot = botController.getBot("@NEMOBOT");
 
     Mockito.verify(mockUserStore).addUser((User)nemoBot);
@@ -80,7 +80,7 @@ public class BotControllerTest {
   public void testRegisterBot_lowerCase() {
     NemoBot nemoBot = new NemoBot();
 
-    botController.registerBot("@nemobot", nemoBot);
+    botController.registerBot(nemoBot);
     Bot resultBot = botController.getBot("@nemobot");
 
     Mockito.verify(mockUserStore).addUser((User)nemoBot);

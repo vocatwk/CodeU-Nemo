@@ -219,7 +219,7 @@ public class ChatServlet extends HttpServlet {
       if (mentionKey != null) {
         // Generate a Bot response
         Bot bot = botController.getBot(mentionKey);
-        String botResponse = bot.answerMessage(cleanedMessageContent);
+        String botResponse = bot.answerMessage(cleanedMessageContent, conversation);
         Message botMessage =
             new Message(
                 UUID.randomUUID(),

@@ -1,5 +1,6 @@
 package codeu.model.data;
 
+import codeu.model.data.Conversation;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -81,7 +82,7 @@ public class NemoBot extends User implements Bot {
   }
 
   /** Creates a reply based on the keyword. */
-  public String answerMessage(String message) {
+  public String answerMessage(String message, Conversation conversation) {
     String keyword = getKeyword(message);
 
     if (keyword == null) {

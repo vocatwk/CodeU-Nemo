@@ -44,9 +44,9 @@ public class ServerStartupListener implements ServletContextListener {
       BotController botController = BotController.getInstance();
       
       NemoBot nemoBot = new NemoBot();
-      botController.registerBot(nemoBot.getMentionKey(), nemoBot);
+      botController.registerBot(nemoBot);
       ConversationStatBot conversationStatBot = new ConversationStatBot();
-      botController.registerBot(conversationStatBot.getMentionKey(), conversationStatBot);
+      botController.registerBot(conversationStatBot);
 
     } catch (PersistentDataStoreException e) {
       System.err.println("Server didn't start correctly. An error occurred during Datastore load!");
