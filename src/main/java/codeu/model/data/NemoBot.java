@@ -1,5 +1,6 @@
 package codeu.model.data;
 
+import codeu.model.data.User;
 import codeu.model.data.Conversation;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,7 +23,7 @@ public class NemoBot extends User implements Bot {
   private Map<String, String> answerMap;
   
   /**
-  * Constructs a new Bot.
+  * Constructs a new NemoBot.
   */
   public NemoBot() {
     super(
@@ -33,6 +34,23 @@ public class NemoBot extends User implements Bot {
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null);
+    mentionKey = "@NemoBot";
+    initializeMap();
+  }
+
+  /**
+  * Constructs a new NemoBot.
+  * This is based on the information of a (User) NemoBot stored in the UserStore.
+  */
+  public NemoBot(User userBot) {
+    super(
+        userBot.getId(),
+        userBot.getName(),
+        userBot.getPasswordHash(),
+        userBot.getCreationTime());
+    setAboutMe(userBot.getAboutMe());
+    setIsAdmin(userBot.getIsAdmin());
+    setLastSeenNotifications(userBot.getLastSeenNotifications());
     mentionKey = "@NemoBot";
     initializeMap();
   }

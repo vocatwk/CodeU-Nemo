@@ -42,6 +42,23 @@ public class ConversationStatBot extends User implements Bot {
   }
 
   /**
+  * Constructs a new ConversationStatBot.
+  * This is based on the information of a (User) ConversationStatBot stored in the UserStore.
+  */
+  public ConversationStatBot(User userBot) {
+    super(
+        userBot.getId(),
+        userBot.getName(),
+        userBot.getPasswordHash(),
+        userBot.getCreationTime());
+    setAboutMe(userBot.getAboutMe());
+    setIsAdmin(userBot.getIsAdmin());
+    setLastSeenNotifications(userBot.getLastSeenNotifications());
+    mentionKey = "@ConversationStatBot";
+    initializeMap();
+  }
+
+  /**
   * Initializes a map based on the given file path. 
   * 
   * The file should be formatted in the following way:

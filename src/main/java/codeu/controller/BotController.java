@@ -1,6 +1,8 @@
 package codeu.controller;
 
 import codeu.model.data.Bot;
+import codeu.model.data.NemoBot;
+import codeu.model.data.ConversationStatBot;
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
 import java.util.Map;
@@ -49,9 +51,32 @@ public class BotController {
 
   /** Adds an entry to the map and to the UserStore. */
   public void registerBot(Bot bot) {
-    botMap.put(bot.getMentionKey().toLowerCase(), bot);
+    // Check if the bot is already in the UserStore
+    User userStoreBot = userStore.getUser(bot.getName());
 
-    userStore.addUser((User)bot);
+    // First time adding to the UserStore
+    if (userStoreBot == null) {
+      botMap.put(bot.getMentionKey().toLowerCase(), bot);
+      userStore.addUser((User)bot);
+    }
+    // Don't add to the UserStore again.
+    // Instead, build the appropriate bot with the correspoding User information.
+    else {
+      String userStoreBotName = userStoreBot.getName();
+      Bot userBot = null;
+
+      if (userStoreBotName.equals("NemoBot")) {
+        userBot = new NemoBot(userStoreBot);
+      }
+      else if (userStoreBotName.equals("ConversationStatBot")) {
+        userBot = new ConversationStatBot(userStoreBot);
+      }
+      
+      // Only add to map if userBot isn't null
+      if (userBot != null) {
+        botMap.put(userBot.getMentionKey().toLowerCase(), userBot);
+      }
+    }
   }
 
   /** 
