@@ -99,10 +99,10 @@ public class User {
   }
 
   /** Add the subscription to the subscriptions list */
-  public void setSubscription(UUID conversationId){
+  public void addSubscription(UUID conversationId){
     subscriptions.add(conversationId);
   }
-
+  
   /** get the subscriptions list*/
   public List<UUID> getSubscriptions(){
     return subscriptions;

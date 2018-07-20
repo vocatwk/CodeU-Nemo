@@ -217,17 +217,17 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   </script>
 
 
-   <button id="subscriptionButton" class="btn btn-primary"  onclick="myFunction()"> subscribe </button>
+   <button id="subscribeToConversation" class="btn btn-primary"  onclick="myFunction()"> subscribe </button>
 
   <script>
-    document.getElementById("subscriptionButton").onclick = function()
-    {myFunction()};
-    function myFunction() {
-      document.getElementById("subscriptionButton").value = "subscribed";
-      document.getElementById("subscriptionButton").innerHTML =     document.getElementById("subscriptionButton").value;
-      var subscribed = document.getElementById("subscriptionButton").value;
-      request.setAttribute("subbed", subscribed);   
-    }
+  // subscribe to the chat
+  var subscribed = false;
+$(document).ready(function(){
+    document.getElementById("subscriptionButton").value = "subscribed";
+    document.getElementById("subscriptionButton").innerHTML = document.getElementById("subscriptionButton").value;
+    subscribed = true;
+    });
+    request.setAttribute("subbed", subscribed);
  </script>
 
 

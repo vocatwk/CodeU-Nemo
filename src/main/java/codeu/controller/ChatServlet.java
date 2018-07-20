@@ -129,7 +129,7 @@ public class ChatServlet extends HttpServlet {
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
 
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
-    
+
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
@@ -288,6 +288,13 @@ public class ChatServlet extends HttpServlet {
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
     }
+
+  Object answer = request.getAttribute("subbed");
+  boolean subbed = ((Boolean) answer).booleanValue();
+  if(subbed == true){
+    User user = userStore.getUser(username);
+    user.addSubscription(conversationId);
+  }
 
   }
 
