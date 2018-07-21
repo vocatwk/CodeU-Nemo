@@ -402,7 +402,6 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockUserStore.getUser("fakeUser1")).thenReturn(fakeUser1);
     Mockito.when(mockSession.getAttribute("subbed")).thenReturn(true);
-    Mockito.when((Boolean) answer).booleanValue();
 
     chatServlet.doPut(mockRequest, mockResponse);
     Mockito.verify(mockUser).addSubscription(fakeConversationId);

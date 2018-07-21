@@ -110,8 +110,9 @@ public class ProfileServlet extends HttpServlet {
 
     request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
+
     List<UUID> subscriptionIds = subject.getSubscriptions();
-    List<String> conversationNames = new ArrayList<>();
+    List<String> conversationNames =  new ArrayList<>();
     for (UUID subID : subscriptionIds) {
         Conversation convo = conversationStore.getConversation(subID);
         String convoName = convo.getTitle();

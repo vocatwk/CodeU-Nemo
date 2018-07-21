@@ -223,10 +223,12 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   // subscribe to the chat
   var subscribed = false;
 $(document).ready(function(){
-    document.getElementById("subscriptionButton").value = "subscribed";
-    document.getElementById("subscriptionButton").innerHTML = document.getElementById("subscriptionButton").value;
+    $("#subscribeToConversation").click(function() {
+    document.getElementById("subscribeToConversation").value = "subscribed";
+    document.getElementById("subscribeToConversation").innerHTML = document.getElementById("subscribeToConversation").value;
     subscribed = true;
-    });
+    })
+      });
     request.setAttribute("subbed", subscribed);
  </script>
 

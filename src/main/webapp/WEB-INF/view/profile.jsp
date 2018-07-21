@@ -62,15 +62,16 @@ String aboutMe = (String) request.getAttribute("aboutMe");
       </ul>
 
     </div>
-    <h2> <%= subject %>'s subscriptions </h2>
-    <%--Ids of subscribed to chats--%>
-    <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionsIds"); %>
-    <%--Names of the conversations stored on the id List--%>
-    <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
-    <% for (int i = 0; i< conversationsIds.size(); i++) { %>
-    <a class="btn btn-primary" href="/chat/<%=conversationsIds.get(i)%>" role="button"> <%=conversationNames.get(i)%> </a>
-    <% } %>
   </div>
-
+  <h2> <%= subject %>'s subscriptions </h2>
+  <%--Ids of subscribed to chats--%>
+  <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionsIds"); %>
+  <%--Names of the conversations stored on the id List--%>
+  <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
+  <%if(conversationNames.size() != 0){%>
+  <% for(int i = 0; i < conversationNames.size(); i++) { %>
+        <a href="/chat/<%=conversationsIds.get(i)%>" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> <%=conversationNames.get(i)%> </a>
+  <% } %>
+  <%}%>
 </body>
 </html>
