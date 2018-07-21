@@ -7,7 +7,7 @@ plenty of room for improvement.
 
 Changes we've made since we started:
 
-* Nemo has profile pages for users where they can update their about Me's and view their
+* Nemo has profile pages for users where they can update their About Me's and view their
 sent messages.
 * Nemo has private and public conversations.
 * Nemo uses filters to determine if a user has access to a specific page of the app.
