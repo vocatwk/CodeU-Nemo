@@ -4,6 +4,7 @@ Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
 
 ![Demo](images/demo.PNG)
+![Notifications](images/notifications.PNG)
 
 Changes we've made since we started:
 
