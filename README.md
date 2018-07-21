@@ -3,7 +3,7 @@
 Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
 
-![Demo](images/demo.png)
+![Demo](images/demo.PNG)
 
 Changes we've made since we started:
 
