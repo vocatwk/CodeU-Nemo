@@ -3,6 +3,8 @@
 Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
 
+![Demo](images/demo.png)
+
 Changes we've made since we started:
 
 * Nemo has profile pages for users where they can update their about Me's and view their
