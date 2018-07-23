@@ -108,6 +108,8 @@ public class ChatServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
     UUID conversationId = getIdFromString(conversationIdAsString);
+    String username = (String)request.getSession().getAttribute("user");
+    User user = userStore.getUser(username);
 
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
@@ -134,6 +136,8 @@ public class ChatServlet extends HttpServlet {
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
     request.setAttribute("membersOfConversation", membersOfConversation);
+    request.setAttribute("userSubscriptions", user.getSubscriptions(););
+
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -288,14 +292,12 @@ public class ChatServlet extends HttpServlet {
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
     }
-
-  Object answer = request.getAttribute("subbed");
-  boolean subbed = ((Boolean) answer).booleanValue();
-  if(subbed == true){
+/*
+  if(userSubscribed.equals("subscribed")){
     User user = userStore.getUser(username);
     user.addSubscription(conversationId);
   }
-
+*/
   }
 
   /*

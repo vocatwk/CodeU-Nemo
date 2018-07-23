@@ -18,12 +18,16 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.util.UUID" %>
+
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
+List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscriptions");
+String subscriptionButtonValue = (Boolean) request.getAttribute("subscriptionValue")? "subscribe":"subscribed";
+
 %>
 
 <!DOCTYPE html>
@@ -217,19 +221,17 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
   </script>
 
 
-   <button id="subscribeToConversation" class="btn btn-primary"  onclick="myFunction()"> subscribe </button>
-
+   <button id="subscribeToConversation" class="btn btn-primary" > subscribe </button>
+   <%List<UUID> = (List<UUID>) subject.getSubscriptions(); %>
   <script>
   // subscribe to the chat
-  var subscribed = false;
+
 $(document).ready(function(){
     $("#subscribeToConversation").click(function() {
-    document.getElementById("subscribeToConversation").value = "subscribed";
-    document.getElementById("subscribeToConversation").innerHTML = document.getElementById("subscribeToConversation").value;
-    subscribed = true;
+    document.getElementById("subscribeToConversation").value = '<%= conversation.getId() %>';
+    document.getElementById("subscribeToConversation").innerHTML = "subscribed"
     })
       });
-    request.setAttribute("subbed", subscribed);
  </script>
 
 
