@@ -1,6 +1,5 @@
 package codeu.model.data;
 
-import codeu.model.data.User;
 import codeu.model.data.Conversation;
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -1,8 +1,6 @@
 package codeu.controller;
 
 import codeu.model.data.Bot;
-import codeu.model.data.NemoBot;
-import codeu.model.data.ConversationStatBot;
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
 import java.util.Map;

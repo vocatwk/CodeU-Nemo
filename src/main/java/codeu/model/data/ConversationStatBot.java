@@ -1,7 +1,6 @@
 package codeu.model.data;
 
 import codeu.model.data.Conversation;
-import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.MessageStore;
 import java.io.InputStream;
