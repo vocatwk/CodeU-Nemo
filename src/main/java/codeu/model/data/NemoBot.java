@@ -22,13 +22,13 @@ public class NemoBot extends User implements Bot {
   private Map<String, String> answerMap;
   
   /**
-  * Constructs a new Bot.
+  * Constructs a new NemoBot.
   */
   public NemoBot() {
     super(
-        UUID.randomUUID(), 
+        UUID.nameUUIDFromBytes("NemoBot".getBytes()), 
         "NemoBot", 
-        BCrypt.hashpw("NemoBotPassword2018", BCrypt.gensalt()), 
+        BCrypt.hashpw("GoogleCodeUTeamNemoNemoBotPassword2018", BCrypt.gensalt()), 
         Instant.now());
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
