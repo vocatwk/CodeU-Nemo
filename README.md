@@ -3,17 +3,23 @@
 Welcome to Nemo, It's complete and functional, but leaves
 plenty of room for improvement.
 
+![Demo](images/demo.PNG)
+![Notifications](images/notifications.PNG)
+
 Changes we've made since we started:
 
-* Nemo has profile pages for users where they can update their about Me's and view their
-sent messages.
-* Nemo has private and public conversations.
 * Nemo uses filters to determine if a user has access to a specific page of the app.
 Logged in users no longer have access to login/register page and users that aren't logged
 in have access to only those two pages.
+* Nemo has profile pages for users where they can update their About Me's and view their
+sent messages.
+* Nemo has private and public conversations.
+* Nemo allows you to add/remove users from a conversation.
+* Nemo keeps your conversations safe by allowing only members access.
+* Nemo allows you to create conversations with titles that have multiple words.
+* Nemo features a notification page that allows you to see when messages and conversations are being made.
 * Nemo has an Activity Feed that allows users to see when new users join, create
  conversations, send messages, and update their About Me's.
-* Nemo allows you to create conversations with titles that have multiple words.
 * Nemo has an dynamic search feature that allows users to search for other users. 
 * Nemo has a Bot Framework that allows developers to contribute their own Bots. 
 * Nemo has NemoBot, a bot that functions as an assistant.
