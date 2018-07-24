@@ -31,7 +31,9 @@ public class ConversationStatBot extends User implements Bot {
     super(
         UUID.nameUUIDFromBytes("ConversationStatBot".getBytes()), 
         "ConversationStatBot", 
-        BCrypt.hashpw("ConversationStatBotPassword2018", BCrypt.gensalt()), 
+        BCrypt.hashpw(
+            "GoogleCodeUTeamNemoConversationStatBotPassword2018", 
+            BCrypt.gensalt()), 
         Instant.now());
     setAboutMe("I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);

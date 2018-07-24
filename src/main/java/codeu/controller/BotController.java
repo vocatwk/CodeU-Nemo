@@ -51,10 +51,7 @@ public class BotController {
   public void registerBot(Bot bot) {
     botMap.put(bot.getMentionKey().toLowerCase(), bot);
 
-    // First time adding to the UserStore
-    if (userStore.getUser(bot.getId()) == null) {
-      userStore.addUser((User)bot);
-    }
+    userStore.addUser((User)bot);
   }
 
   /** 
