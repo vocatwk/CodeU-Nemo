@@ -27,30 +27,13 @@ public class NemoBot extends User implements Bot {
   */
   public NemoBot() {
     super(
-        UUID.randomUUID(), 
+        UUID.nameUUIDFromBytes("NemoBot".getBytes()), 
         "NemoBot", 
         BCrypt.hashpw("NemoBotPassword2018", BCrypt.gensalt()), 
         Instant.now());
     setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null);
-    mentionKey = "@NemoBot";
-    initializeMap();
-  }
-
-  /**
-  * Constructs a new NemoBot.
-  * This is based on the information of a (User) NemoBot stored in the UserStore.
-  */
-  public NemoBot(User userBot) {
-    super(
-        userBot.getId(),
-        userBot.getName(),
-        userBot.getPasswordHash(),
-        userBot.getCreationTime());
-    setAboutMe(userBot.getAboutMe());
-    setIsAdmin(userBot.getIsAdmin());
-    setLastSeenNotifications(userBot.getLastSeenNotifications());
     mentionKey = "@NemoBot";
     initializeMap();
   }

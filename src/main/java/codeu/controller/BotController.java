@@ -51,31 +51,11 @@ public class BotController {
 
   /** Adds an entry to the map and to the UserStore. */
   public void registerBot(Bot bot) {
-    // Check if the bot is already in the UserStore
-    User userStoreBot = userStore.getUser(bot.getName());
+    botMap.put(bot.getMentionKey().toLowerCase(), bot);
 
     // First time adding to the UserStore
-    if (userStoreBot == null) {
-      botMap.put(bot.getMentionKey().toLowerCase(), bot);
+    if (userStore.getUser(bot.getId()) == null) {
       userStore.addUser((User)bot);
-    }
-    // Don't add to the UserStore again.
-    // Instead, build the appropriate bot with the correspoding User information.
-    else {
-      String userStoreBotName = userStoreBot.getName();
-      Bot userBot = null;
-
-      if (userStoreBotName.equals("NemoBot")) {
-        userBot = new NemoBot(userStoreBot);
-      }
-      else if (userStoreBotName.equals("ConversationStatBot")) {
-        userBot = new ConversationStatBot(userStoreBot);
-      }
-      
-      // Only add to map if userBot isn't null
-      if (userBot != null) {
-        botMap.put(userBot.getMentionKey().toLowerCase(), userBot);
-      }
     }
   }
 

@@ -30,30 +30,13 @@ public class ConversationStatBot extends User implements Bot {
   */
   public ConversationStatBot() {
     super(
-        UUID.randomUUID(), 
+        UUID.nameUUIDFromBytes("ConversationStatBot".getBytes()), 
         "ConversationStatBot", 
         BCrypt.hashpw("ConversationStatBotPassword2018", BCrypt.gensalt()), 
         Instant.now());
     setAboutMe("I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);
     setLastSeenNotifications(null);
-    mentionKey = "@ConversationStatBot";
-    initializeMap();
-  }
-
-  /**
-  * Constructs a new ConversationStatBot.
-  * This is based on the information of a (User) ConversationStatBot stored in the UserStore.
-  */
-  public ConversationStatBot(User userBot) {
-    super(
-        userBot.getId(),
-        userBot.getName(),
-        userBot.getPasswordHash(),
-        userBot.getCreationTime());
-    setAboutMe(userBot.getAboutMe());
-    setIsAdmin(userBot.getIsAdmin());
-    setLastSeenNotifications(userBot.getLastSeenNotifications());
     mentionKey = "@ConversationStatBot";
     initializeMap();
   }
