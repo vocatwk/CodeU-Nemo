@@ -136,7 +136,7 @@ public class ChatServlet extends HttpServlet {
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
     request.setAttribute("membersOfConversation", membersOfConversation);
-    request.setAttribute("userSubscriptions", user.getSubscriptions(););
+    request.setAttribute("userSubscriptions", user.getSubscriptions());
 
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
@@ -221,6 +221,12 @@ public class ChatServlet extends HttpServlet {
         eventStore.addEvent(botMessageEvent);
       }
     }
+    String subscriptionIdAsAString = request.getParameter("subscriptionField");
+    UUID subscriptionId = getIdFromString(subscriptionIdAsAString);
+    List<UUID> subscriptionIds = user.getSubscriptions();
+    if(!subscriptionIds.contains(subscriptionId)){
+      user.addSubscription(conversationId);
+    }
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationId);
@@ -292,12 +298,7 @@ public class ChatServlet extends HttpServlet {
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
     }
-/*
-  if(userSubscribed.equals("subscribed")){
-    User user = userStore.getUser(username);
-    user.addSubscription(conversationId);
-  }
-*/
+
   }
 
   /*

@@ -70,7 +70,7 @@ String aboutMe = (String) request.getAttribute("aboutMe");
   <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
   <%if(conversationNames.size() != 0){%>
   <% for(int i = 0; i < conversationNames.size(); i++) { %>
-        <a href="/chat/<%=conversationsIds.get(i)%>" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> <%=conversationNames.get(i)%> </a>
+        <a class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> <%=conversationNames.get(i)%> </a>
   <% } %>
   <%}%>
 </body>

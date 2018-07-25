@@ -26,8 +26,6 @@ String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
 List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscriptions");
-String subscriptionButtonValue = (Boolean) request.getAttribute("subscriptionValue")? "subscribe":"subscribed";
-
 %>
 
 <!DOCTYPE html>
@@ -220,21 +218,18 @@ String subscriptionButtonValue = (Boolean) request.getAttribute("subscriptionVal
 
   </script>
 
+   <form name="subscription" method="post" action="<%= conversation.getId() %>">
+   <input type="hidden" name="subscriptionField" value="">
+   <input id="subscribeToConversation" class="btn btn-primary" type="submit" value="Recieve Notifications">
 
-   <button id="subscribeToConversation" class="btn btn-primary" > subscribe </button>
-   <%List<UUID> = (List<UUID>) subject.getSubscriptions(); %>
-  <script>
-  // subscribe to the chat
-
-$(document).ready(function(){
-    $("#subscribeToConversation").click(function() {
-    document.getElementById("subscribeToConversation").value = '<%= conversation.getId() %>';
-    document.getElementById("subscribeToConversation").innerHTML = "subscribed"
-    })
-      });
- </script>
-
-
+   <script>
+   // subscribe to the chat
+ $(document).ready(function(){
+     document.getElementById("subscriptionField").value = "<%= conversation.getId() %>";
+     document.getElementById("btn btn-primary").value = "Sending Notifcations";
+         });
+  </script>
+</form>
 
 </head>
 <body onload="scrollChat()">
