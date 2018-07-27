@@ -11,12 +11,18 @@ import java.time.Instant;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.UploadOptions.Builder;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -29,6 +35,9 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  /** Store class that gives access to profile picture. */
+  BlobstoreService blobstoreService;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
@@ -36,6 +45,7 @@ public class ProfileServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
   }
 
   /**
@@ -70,6 +80,7 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
     String requestUrl = request.getRequestURI();
 
     if(requestUrl.length() <= "/profile/".length()){
@@ -111,6 +122,32 @@ public class ProfileServlet extends HttpServlet {
     User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){
+      // user is trying to edit another user's profile picture
+      // TODO respond with access denied
+      response.sendRedirect("/login");
+      return;
+    }
+
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("profilePicture");
+
+    if (blobKeys == null || blobKeys.isEmpty()) {
+      response.sendRedirect("/");
+    } else {
+      response.sendRedirect("/serve?blob-key=" + blobKeys.get(0).getKeyString());
+    }
+
+  }
+
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+    String requestUrl = request.getRequestURI();
+    String username = (String) request.getSession().getAttribute("user"); 
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
+
+    if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
       // TODO respond with access denied
       response.sendRedirect("/login");
@@ -135,4 +172,5 @@ public class ProfileServlet extends HttpServlet {
 
     response.sendRedirect("/profile/" + subject.getName());
   }
+
 }

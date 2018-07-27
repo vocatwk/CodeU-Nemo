@@ -107,7 +107,7 @@ public class ProfileServletTest {
   }
 
   @Test
-  public void testDoPost_SelfProfile() throws IOException, ServletException {
+  public void testDoPut_SelfProfile() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/me");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("me");
 
@@ -116,7 +116,7 @@ public class ProfileServletTest {
 
     Mockito.when(mockRequest.getParameter("aboutMe")).thenReturn("someMessage");
 
-    profileServlet.doPost(mockRequest, mockResponse);
+    profileServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockUser).setAboutMe("someMessage");
     Mockito.verify(mockUserStore).updateUser(mockUser);
@@ -140,14 +140,14 @@ public class ProfileServletTest {
   }
 
   @Test
-  public void testDoPost_OtherUserProfile() throws IOException, ServletException {
+  public void testDoPut_OtherUserProfile() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/notMe");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("me");
 
     Mockito.when(mockUserStore.getUser("notMe")).thenReturn(mockUser);
     Mockito.when(mockUser.getName()).thenReturn("notMe");
 
-    profileServlet.doPost(mockRequest, mockResponse);
+    profileServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
