@@ -47,9 +47,24 @@ public class NotificationServlet extends HttpServlet{
         User user = userStore.getUser(username);
         Instant userLookedAtPage = Instant.now();
         Instant lastSeenTime = user.getLastSeenNotifications();
-        List<UUID> eventsSubscribedTo = user.getSubscriptions();
-        List<Event> eventsToShow = eventStore.getEventsSince(lastSeenTime);
-        
+        List<UUID> conversationSubbedTo = user.getSubscriptions();
+        List<Event> eventsLastSeen = eventStore.getEventsSince(lastSeenTime);
+
+        List<Event> eventsToShow = new ArrayList<>();
+
+        for(Event subscibedEvent:eventsLastSeen){
+          String eventType = subscibedEvent.getType();
+          if(eventType.equals("Message")){
+            List<String> messageNotification= subscibedEvent.getInformation();
+            UUID conversationId = UUID.fromString(messageNotification.get(3));
+            if (conversationSubbedTo.contains(conversationId)){eventsToShow.add(subscibedEvent);}
+          } else if(eventType.equals("Conversation")){
+            List<String> conversationNotification= subscibedEvent.getInformation();
+            UUID conversationId = UUID.fromString(conversationNotification.get(2));
+            if (conversationSubbedTo.contains(conversationId)){eventsToShow.add(subscibedEvent);}
+          }
+
+        }
         user.setLastSeenNotifications(userLookedAtPage);
 
         request.setAttribute("eventsToShow",eventsToShow);
