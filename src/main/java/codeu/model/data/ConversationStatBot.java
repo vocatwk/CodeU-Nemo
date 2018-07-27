@@ -1,7 +1,6 @@
 package codeu.model.data;
 
 import codeu.model.data.Conversation;
-import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.MessageStore;
 import java.io.InputStream;
@@ -30,9 +29,11 @@ public class ConversationStatBot extends User implements Bot {
   */
   public ConversationStatBot() {
     super(
-        UUID.randomUUID(), 
+        UUID.nameUUIDFromBytes("ConversationStatBot".getBytes()), 
         "ConversationStatBot", 
-        BCrypt.hashpw("ConversationStatBotPassword2018", BCrypt.gensalt()), 
+        BCrypt.hashpw(
+            "GoogleCodeUTeamNemoConversationStatBotPassword2018", 
+            BCrypt.gensalt()), 
         Instant.now());
     setAboutMe("I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!");
     setIsAdmin(true);

@@ -127,6 +127,23 @@ public class UserStoreTest {
   }
 
   @Test
+  public void testAddUser_duplicateId() {
+    UUID USER_ONE_ID = USER_ONE.getId();
+    User duplicateIdUser = 
+        new User(
+            USER_ONE_ID,
+            "test_username_duplicateId",
+            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
+            Instant.now());
+
+    userStore.addUser(duplicateIdUser);
+    List<User> allUsers = userStore.getAllUsers();
+
+    Assert.assertEquals(3, allUsers.size());
+    Assert.assertNull(userStore.getUser(duplicateIdUser.getName()));
+  }
+
+  @Test
   public void testIsUserRegistered_true() {
     Assert.assertTrue(userStore.isUserRegistered(USER_ONE.getName()));
   }
