@@ -19,6 +19,7 @@ import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
+
 /** Class representing a registered user. */
 public class User {
   private final UUID id;
@@ -45,7 +46,7 @@ public class User {
     this.creation = creation;
     aboutMe = "";
     isAdmin = false;
-    lastSeenNotifications = Instant.now();
+    lastSeenNotifications = creation;
     subscriptions = new ArrayList<UUID>();
   }
 
@@ -102,7 +103,7 @@ public class User {
   public void addSubscription(UUID conversationId){
     subscriptions.add(conversationId);
   }
-  
+
   /** get the subscriptions list*/
   public List<UUID> getSubscriptions(){
     return subscriptions;

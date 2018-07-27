@@ -14,6 +14,9 @@
 /*
 package codeu.controller;
 
+import codeu.controller.BotController;
+import codeu.model.data.Bot;
+import codeu.model.data.NemoBot;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
@@ -48,6 +51,7 @@ public class ChatServletTest {
   private HttpSession mockSession;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
+  private BotController mockBotController;
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
@@ -69,6 +73,9 @@ public class ChatServletTest {
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/chat.jsp"))
         .thenReturn(mockRequestDispatcher);
+
+    mockBotController = Mockito.mock(BotController.class);
+    chatServlet.setBotController(mockBotController);
 
     mockConversationStore = Mockito.mock(ConversationStore.class);
     chatServlet.setConversationStore(mockConversationStore);
@@ -95,6 +102,7 @@ public class ChatServletTest {
   @Test
   public void testDoGet() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
@@ -130,6 +138,7 @@ public class ChatServletTest {
   @Test
   public void testDoGet_PurposeIsToGetMembers() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
@@ -173,6 +182,31 @@ public class ChatServletTest {
     Mockito.verify(mockResponse).sendRedirect("/conversations");
   }
 
+<<<<<<< HEAD
+=======
+  @Test
+  public void testDoGet_UserHasNoAccess() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("random_user");
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+
+    Conversation fakeConversation =
+        new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    
+    fakeConversation.addMember("test_user1");
+    fakeConversation.addMember("test_user2");
+
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
+        .thenReturn(fakeConversation);
+
+    chatServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
+    Mockito.verify(mockRequest, Mockito.never()).getHeader("purpose");
+    Mockito.verify(mockConversationStore, Mockito.never()).updateConversation(Mockito.any(Conversation.class));
+  }
+
+>>>>>>> fd324f4e08ac991281bd9e2e3fa30eb5aeb06e95
   @Test
   public void testDoPost_ConversationNotFound() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
@@ -212,6 +246,8 @@ public class ChatServletTest {
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    fakeConversation.addMember("test_username");
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
@@ -225,7 +261,7 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPost_StoresMessage() throws IOException, ServletException {
+  public void testDoPost_StoresMessage_NoBot() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
@@ -240,6 +276,8 @@ public class ChatServletTest {
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    fakeConversation.addMember("test_username");
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
@@ -261,11 +299,14 @@ public class ChatServletTest {
     testInformation.add(fakeConversationId.toString());
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
+    // This simulates the private method getMentionKey() to some extent.
+    Mockito.when(mockBotController.getBot("@NoBot")).thenReturn(null);
+
     Mockito.verify(mockResponse).sendRedirect("/chat/" + fakeConversationId);
   }
 
   @Test
-  public void testDoPost_CleansHtmlContent() throws IOException, ServletException {
+  public void testDoPost_CleansHtmlContent_NoBot() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
@@ -280,6 +321,7 @@ public class ChatServletTest {
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    fakeConversation.addMember("test_username");
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
@@ -303,7 +345,82 @@ public class ChatServletTest {
     testInformation.add(fakeConversationId.toString());
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
+    // This simulates the private method getMentionKey() to some extent.
+    Mockito.when(mockBotController.getBot("@NoBot")).thenReturn(null);
+
     Mockito.verify(mockResponse).sendRedirect("/chat/" + fakeConversationId);
+  }
+
+  @Test
+  public void testDoPost_StoresMessage_WithBot() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "$2a$10$bBiLUAVmUFK6Iwg5rmpBUOIBW6rIMhU1eKfi3KR60V9UXaYTwPfHy",
+            Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    Conversation fakeConversation =
+        new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    fakeConversation.addMember("test_username");
+
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
+        .thenReturn(fakeConversation);
+
+    Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message @NemoBot.");
+
+    chatServlet.doPost(mockRequest, mockResponse);
+
+    ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+    Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
+    Assert.assertEquals("Test message @NemoBot.", messageArgumentCaptor.getValue().getContent());
+
+    ArgumentCaptor<Event> eventArgumentCaptor = ArgumentCaptor.forClass(Event.class);
+    Mockito.verify(mockEventStore).addEvent(eventArgumentCaptor.capture());
+    Assert.assertEquals("Message", eventArgumentCaptor.getValue().getType());
+    List<String> testInformation = new ArrayList<>();
+    testInformation.add("test_username");
+    testInformation.add("test_conversation");
+    testInformation.add("Test message @NemoBot.");
+    // Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
+
+    NemoBot nemoBot = Mockito.mock(NemoBot.class);
+    Mockito.when(mockBotController.getBot("@NemoBot")).thenReturn(nemoBot);
+
+    Mockito.verify(mockResponse).sendRedirect("/chat/" + fakeConversationId);
+  }
+
+  @Test
+  public void testDoPost_UserHasNoAccess() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "$2a$10$bBiLUAVmUFK6Iwg5rmpBUOIBW6rIMhU1eKfi3KR60V9UXaYTwPfHy",
+            Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    Conversation fakeConversation =
+        new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
+    fakeConversation.addMember("test_username2");
+
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
+        .thenReturn(fakeConversation);
+
+    chatServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
+    Mockito.verify(mockRequest, Mockito.never()).getParameter("message");
+    Mockito.verify(mockResponse, Mockito.never()).sendRedirect("/chat/" + fakeConversationId);
   }
 
   @Test
@@ -314,6 +431,8 @@ public class ChatServletTest {
 
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
+
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Changing chat privacy");
 
     Mockito.when(mockReader.readLine())
@@ -334,6 +453,8 @@ public class ChatServletTest {
 
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
+
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Changing chat privacy");
 
     Mockito.when(mockReader.readLine())
@@ -354,6 +475,8 @@ public class ChatServletTest {
 
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
+
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Setting users");
 
     Mockito.when(mockReader.readLine())
@@ -405,6 +528,24 @@ public class ChatServletTest {
 
     chatServlet.doPut(mockRequest, mockResponse);
     Mockito.verify(mockUser).addSubscription(fakeConversationId);
+  }
+
+  @Test
+  public void testDoPut_UserHasNoAccess() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
+        .thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(false);
+
+    chatServlet.doPut(mockRequest, mockResponse);
+
+    Mockito.verify(mockResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
+    Mockito.verify(mockRequest, Mockito.never()).getParameter("message");
+    Mockito.verify(mockConversation, Mockito.never()).setMembers(Mockito.any(HashSet.class));
+    Mockito.verify(mockConversationStore, Mockito.never()).updateConversation(Mockito.any(Conversation.class));
   }
 }
 */

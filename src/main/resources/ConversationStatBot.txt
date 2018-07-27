@@ -1,0 +1,15 @@
+Hi	I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!
+
+Bye	Bye! Feel free to message me whenever you need my help.
+
+Owner	%s is the owner of this conversation.
+
+Created	This conversation was created on %s.
+
+Privacy	This conversation is %s.
+
+Users	This conversation has %d user
+
+Messages	This conversation has %d message
+
+Help	Feel free to ask me about the following for this conversation: The owner, when it was created, the privacy status, and the amount of users and messages. 

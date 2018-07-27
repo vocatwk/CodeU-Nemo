@@ -13,26 +13,26 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 public class EventStoreTest {
-  
+
   private EventStore eventStore;
   private PersistentStorageAgent mockPersistentStorageAgent;
 
-  private final List<String> INFORMATION_ONE = 
+  private final List<String> INFORMATION_ONE =
       Arrays.asList("user_one");
-  private final List<String> INFORMATION_TWO = 
+  private final List<String> INFORMATION_TWO =
       Arrays.asList("user_two", "about_me");
-  private final List<String> INFORMATION_THREE = 
+  private final List<String> INFORMATION_THREE =
       Arrays.asList("user_three", "conversation_title");
-  private final List<String> INFORMATION_FOUR = 
-      Arrays.asList("user_four", "conversation_title", "message_content");
+  private final List<String> INFORMATION_FOUR =
+      Arrays.asList("user_four", "conversation_title", "message_content", UUID.randomUUID().toString());
 
-  private final Event EVENT_ONE = 
+  private final Event EVENT_ONE =
       new Event(UUID.randomUUID(), "User", Instant.now(), INFORMATION_ONE);
-  private final Event EVENT_TWO = 
+  private final Event EVENT_TWO =
       new Event(UUID.randomUUID(), "About Me", Instant.now(), INFORMATION_TWO);
-  private final Event EVENT_THREE = 
+  private final Event EVENT_THREE =
       new Event(UUID.randomUUID(), "Conversation", Instant.now(), INFORMATION_THREE);
-  private final Event EVENT_FOUR = 
+  private final Event EVENT_FOUR =
       new Event(UUID.randomUUID(), "Message", Instant.now(), INFORMATION_FOUR);
 
   @Before
@@ -65,11 +65,12 @@ public class EventStoreTest {
   @Test
   public void testAddEvent() {
     UUID eventId = UUID.randomUUID();
-    List<String> testInformation = 
+    List<String> testInformation =
         Arrays.asList(
-          "test_username", 
-          "test_conversation_title", 
-          "test_message_content");
+          "test_username",
+          "test_conversation_title",
+          "test_message_content",
+          UUID.randomUUID().toString());
     Event inputEvent = new Event(eventId, "Message", Instant.now(), testInformation);
 
     eventStore.addEvent(inputEvent);
@@ -95,4 +96,5 @@ public class EventStoreTest {
     Assert.assertEquals(expectedEvent.getCreationTime(), actualEvent.getCreationTime());
     Assert.assertEquals(expectedEvent.getInformation(), actualEvent.getInformation());
   }
+
 }

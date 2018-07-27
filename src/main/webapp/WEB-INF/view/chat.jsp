@@ -71,7 +71,7 @@ List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscripti
 
         var closeIcon = document.createElement("button");
         closeIcon.setAttribute("type", "button");
-        closeIcon.setAttribute("class", "close");
+        closeIcon.setAttribute("class", "close remove-user-button");
         closeIcon.setAttribute("aria-label", "Close");
         closeIcon.setAttribute("username", userName);
 
@@ -120,8 +120,7 @@ List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscripti
           },
           credentials: "same-origin"
         }).then(function(response) {
-
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
@@ -200,11 +199,14 @@ List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscripti
           body: JSON.stringify(Array.from(membersAfterEditing)),
           credentials: "same-origin"
         }).then(function(response) {
-          if(!response.ok) {
+          if(response.status !== 200) {
             console.log("An error occured. Status code: " + response.status);
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
+          if(!membersOfConversation.has("<%= user %>")){
+            window.location.replace("/conversations");
+          }
         }, function(error) {
           console.log("An error occured. " + error.message);
         })
