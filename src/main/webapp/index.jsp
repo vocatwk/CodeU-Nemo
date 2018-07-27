@@ -47,5 +47,33 @@
     <%-- TODO more marketing info --%>
   <% } %>
 
+
+    <div class="flex center-container">
+      <div class="welcome-text">
+        <div class="logo">Logo goes here</div>
+        Chat with those you love!
+        <br>
+        Nemo is a free, open source chat platform.
+      </div>
+      <div class="login-container" class="rounded">
+        <div id="login-content">
+          <div>Login</div>
+          <br>
+          <form>
+            <div class="form-group">
+              <input type="email" class="form-control" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control"placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary" id="loginButton">
+              Sign In
+            </button>
+            <button type="submit" class="btn btn-light">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
