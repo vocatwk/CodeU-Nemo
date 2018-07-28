@@ -12,4 +12,4 @@ Users	This conversation has %d user
 
 Messages	This conversation has %d message
 
-Help	Feel free to ask me about the following for this conversation: The owner, when it was created, the privacy status, and the amount of users and messages. 
+Help	Feel free to ask me about the following for this conversation: The owner, when it was created, the privacy status, and the amount of users and messages.

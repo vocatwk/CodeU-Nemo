@@ -1,7 +1,6 @@
 package codeu.model.data;
 
 import codeu.model.data.Conversation;
-import java.time.Instant;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Before;
