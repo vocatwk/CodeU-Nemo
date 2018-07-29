@@ -147,14 +147,17 @@ public class ChatServlet extends HttpServlet {
     }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
-
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
-
+    List<UUID> userSubbedList = user.getSubscriptions();
+    Boolean subValue = false;
+    if(userSubbedList.contains(conversationId)){
+      subValue=true;
+    }
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
     request.setAttribute("membersOfConversation", membersOfConversation);
-    request.setAttribute("userSubscriptions", user.getSubscriptions());
+    request.setAttribute("subValue", subValue);
 
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
@@ -246,13 +249,6 @@ public class ChatServlet extends HttpServlet {
         eventStore.addEvent(botMessageEvent);
       }
     }
-    String subscriptionIdAsAString = request.getParameter("subscriptionField");
-    UUID subscriptionId = getIdFromString(subscriptionIdAsAString);
-    List<UUID> subscriptionIds = user.getSubscriptions();
-    if(!subscriptionIds.contains(subscriptionId)){
-      user.addSubscription(conversationId);
-    }
-
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationId);
   }
@@ -262,11 +258,10 @@ public class ChatServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String username = (String) request.getSession().getAttribute("user");
-
+    User currentUser = userStore.getUser(username);
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
     UUID conversationId = getIdFromString(conversationIdAsString);
-
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
@@ -326,9 +321,18 @@ public class ChatServlet extends HttpServlet {
       HashSet<String> membersList = new HashSet<>(Arrays.asList(userNameArray));
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
+    } else if(purpose.equals("recievingNotifications")){
+      String privacyCommand = request.getReader().readLine();
+      if(privacyCommand.equals("unmute")){
+        currentUser.addSubscription(conversationId);
+      }
+      else if(privacyCommand.equals("mute")){
+        currentUser.removeSubscription(conversationId);
+      }
+      userStore.updateUser(currentUser);
     }
+      }
 
-  }
 
   /**
   * This function scans through the source String and checks if it's a registered

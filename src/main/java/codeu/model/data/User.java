@@ -108,4 +108,8 @@ public class User {
   public List<UUID> getSubscriptions(){
     return subscriptions;
   }
+  /** get the subscription to the subscriptions list */
+  public void removeSubscription(UUID conversationId){
+    subscriptions.remove(conversationId);
+  }
 }

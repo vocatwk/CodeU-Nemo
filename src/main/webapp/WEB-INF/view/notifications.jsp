@@ -29,12 +29,12 @@
       <%if(type.equals("Conversation")){%>
         <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
             <%= Username %> opened a conversation!
-            Conversation title   <a href="/chat/<%= information.get(2) %>"> <%= notifcationInfo.get(1)%> </a>
+            Conversation title   <a href="/chat/<%= notifcationInfo.get(2) %>"> <%= notifcationInfo.get(1)%> </a>
         </li>
       <% }else if(type.equals("Message")){ %>
             <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
               <%= Username %> sent a message!
-              Check conversation:   <a href="/chat/<%=information.get(2)%>"><%= notifcationInfo.get(1)%></a>
+              Check conversation:   <a href="/chat/<%=notifcationInfo.get(3)%>"><%= notifcationInfo.get(1)%></a>
             </li>
         <%}%>
       <%}%>

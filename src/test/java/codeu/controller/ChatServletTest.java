@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-/*
+
 package codeu.controller;
 
 import codeu.controller.BotController;
@@ -122,9 +122,14 @@ public class ChatServletTest {
             UUID.randomUUID(),
             "test message",
             Instant.now()));
+
+    List<UUID> userSubbedList = new ArrayList<>();
+    userSubbedList.add(fakeConversationId);
+
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
         .thenReturn(fakeMessageList);
 
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(userSubbedList);
     chatServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
@@ -132,6 +137,7 @@ public class ChatServletTest {
     Mockito.verify(mockRequest).setAttribute("isPrivate",false);
     Mockito.verify(mockRequest)
         .setAttribute("membersOfConversation","[\"test_user2\",\"test_user1\"]");
+    Mockito.verify(mockRequest).setAttribute("userSubscriptions",userSubbedList);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -182,8 +188,6 @@ public class ChatServletTest {
     Mockito.verify(mockResponse).sendRedirect("/conversations");
   }
 
-<<<<<<< HEAD
-=======
   @Test
   public void testDoGet_UserHasNoAccess() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
@@ -192,7 +196,7 @@ public class ChatServletTest {
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
-    
+
     fakeConversation.addMember("test_user1");
     fakeConversation.addMember("test_user2");
 
@@ -206,7 +210,6 @@ public class ChatServletTest {
     Mockito.verify(mockConversationStore, Mockito.never()).updateConversation(Mockito.any(Conversation.class));
   }
 
->>>>>>> fd324f4e08ac991281bd9e2e3fa30eb5aeb06e95
   @Test
   public void testDoPost_ConversationNotFound() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
@@ -535,7 +538,7 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
     Mockito.when(mockConversation.containsMember("test_username")).thenReturn(false);
@@ -548,4 +551,3 @@ public class ChatServletTest {
     Mockito.verify(mockConversationStore, Mockito.never()).updateConversation(Mockito.any(Conversation.class));
   }
 }
-*/

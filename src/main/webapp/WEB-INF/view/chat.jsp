@@ -25,7 +25,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
-List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscriptions");
+String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmute";
 %>
 
 <!DOCTYPE html>
@@ -218,20 +218,23 @@ List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscripti
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
+    var newSubButtonValue = "<%= subButtonValue %>";
+    $(document).ready(function() {
+      $("#SubButton").click(function() {
+        fetch('/chat/<%= conversation.getId() %>', {
+          method: "PUT",
+          headers: {
+            "purpose" : "recievingNotifications"
+          },
+          body : newSubButtonValue,
+          credentials: "same-origin"
+        }).then(function() {
+          newSubButtonValue = newSubButtonValue === "unmute" ? "mute":"unmute";
+          $("#SubButton").html(newSubButtonValue);
+        })
+      });
+    });
   </script>
-
-   <form name="subscription" method="post" action="<%= conversation.getId() %>">
-   <input type="hidden" name="subscriptionField" value="">
-   <input id="subscribeToConversation" class="btn btn-primary" type="submit" value="Recieve Notifications">
-
-   <script>
-   // subscribe to the chat
- $(document).ready(function(){
-     document.getElementById("subscriptionField").value = "<%= conversation.getId() %>";
-     document.getElementById("btn btn-primary").value = "Sending Notifcations";
-         });
-  </script>
-</form>
 
 </head>
 <body onload="scrollChat()">
@@ -253,6 +256,7 @@ List<UUID> userSubscriptions = (List<UUID>) request.getAttribute("userSubscripti
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
             <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
             <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+            <button id="SubButton" class="dropdown-item btn btn-primary" type="button"><%= subButtonValue %></button>
           </div>
         </div>
       </div>

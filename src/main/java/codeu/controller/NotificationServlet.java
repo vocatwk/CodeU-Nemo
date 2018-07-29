@@ -60,13 +60,16 @@ public class NotificationServlet extends HttpServlet{
 
         for(Event subscibedEvent:eventsLastSeen){
           String eventType = subscibedEvent.getType();
-          if(eventType.equals("Message")){
+          List<String> information = subscibedEvent.getInformation();
+          if(eventType.equals("Message") && information.size() > 3){
             List<String> messageNotification= subscibedEvent.getInformation();
-            UUID conversationId = UUID.fromString(messageNotification.get(3));
+            String messageId = information.get(3);
+            UUID conversationId = UUID.fromString(messageId);
             if (conversationSubbedTo.contains(conversationId)){eventsToShow.add(subscibedEvent);}
-          } else if(eventType.equals("Conversation")){
+          } else if(eventType.equals("Conversation") && information.size() > 2){
             List<String> conversationNotification= subscibedEvent.getInformation();
-            UUID conversationId = UUID.fromString(conversationNotification.get(2));
+            String convoId = information.get(2);
+            UUID conversationId = UUID.fromString(convoId);
             if (conversationSubbedTo.contains(conversationId)){eventsToShow.add(subscibedEvent);}
           }
 
