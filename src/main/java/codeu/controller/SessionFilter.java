@@ -74,14 +74,13 @@ public class SessionFilter implements Filter {
         return;
       }
     }
-    else if (requestUrl.equals("/login") || requestUrl.equals("/register")) {
+    else if (requestUrl.equals("/") || requestUrl.equals("/login") || requestUrl.equals("/register")) {
       //user logged in, restrict access to login/register page until logout
-      request.getRequestDispatcher("/").forward(request,response);
+      request.getRequestDispatcher("/conversations").forward(request,response);
       return;
     }
 
     filterChain.doFilter(servletRequest,servletResponse);
-    
   }
 }
 
