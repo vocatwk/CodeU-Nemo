@@ -40,6 +40,15 @@ public class RegisterServletTest {
   }
 
   @Test
+  public void testDoGet() throws IOException, ServletException {
+    registerServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockRequest)
+        .setAttribute("registrationForm", true);
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
+  @Test
   public void testDoPost_BadUsername() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("bad !@#$% username");
 

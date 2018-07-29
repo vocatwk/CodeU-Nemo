@@ -53,6 +53,17 @@ public class RegisterServlet extends HttpServlet {
     this.eventStore = eventStore;
   }
 
+  /**
+   * This function fires when a user requests the /register URL. It simply forwards the request to
+   * index.jsp.
+   */
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    request.setAttribute("registrationForm", true); 
+    request.getRequestDispatcher("/index.jsp").forward(request, response);
+  }
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {

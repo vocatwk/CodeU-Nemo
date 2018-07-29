@@ -47,6 +47,13 @@ public class LoginServletTest {
   }
 
   @Test
+  public void testDoGet() throws IOException, ServletException {
+    loginServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
+  @Test
   public void testDoPost_NewUser() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
     Mockito.when(mockRequest.getParameter("password")).thenReturn("test password");

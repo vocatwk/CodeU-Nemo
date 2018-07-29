@@ -49,6 +49,16 @@ public class LoginServlet extends HttpServlet {
   }
 
   /**
+   * This function fires when a user requests the /login URL. It simply forwards the request to
+   * index.jsp.
+   */
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    request.getRequestDispatcher("/index.jsp").forward(request, response);
+  }
+
+  /**
    * This function fires when a user submits the login form. It gets the username and password from
    * the submitted form data, checks for validity and if correct adds the username to the session so
    * we know the user is logged in.
