@@ -78,9 +78,9 @@
               <div class="form-group">
                 <input type="password" name="password" class="form-control"placeholder="Password">
               </div>
-              <a href="#" onclick="document.getElementById('loginForm').submit();" class="btn btn-primary" id="loginButton">
+              <button type="submit" class="btn btn-primary" id="loginButton">
                 Sign In
-              </a>
+              </button>
               <a href="javascript:void(0)" onclick="showRegister()" class="btn btn-light">Register</a>
             </form>
           </div>
