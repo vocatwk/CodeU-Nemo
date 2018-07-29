@@ -39,7 +39,7 @@
   <script>
 
     $(window).ready(function(){
-      console.log(registrationForm);
+      var registrationForm = <%=registrationForm%>; 
       if(registrationForm){
         showRegister();
       }
@@ -81,7 +81,7 @@
               <a href="#" onclick="document.getElementById('loginForm').submit();" class="btn btn-primary" id="loginButton">
                 Sign In
               </a>
-              <a href="#" onclick="showRegister()" class="btn btn-light">Register</a>
+              <a href="javascript:void(0)" onclick="showRegister()" class="btn btn-light">Register</a>
             </form>
           </div>
         </div>

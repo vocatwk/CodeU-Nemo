@@ -35,7 +35,7 @@ public class RegisterServletTest {
     mockRequest = Mockito.mock(HttpServletRequest.class);
     mockResponse = Mockito.mock(HttpServletResponse.class);
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
-    Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/register.jsp"))
+    Mockito.when(mockRequest.getRequestDispatcher("/index.jsp"))
         .thenReturn(mockRequestDispatcher);
   }
 
@@ -121,7 +121,7 @@ public class RegisterServletTest {
     testInformation.add("test username");
     Assert.assertEquals(testInformation, eventArgumentCaptor.getValue().getInformation());
 
-    Mockito.verify(mockResponse).sendRedirect("/login");
+    Mockito.verify(mockResponse).sendRedirect("/index.jsp");
   }
 
   @Test
