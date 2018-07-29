@@ -14,6 +14,8 @@
  */
 
 body {
+
+  /*
   margin: 0;
   font-family: sans-serif;
   line-height: 1.6;
@@ -21,7 +23,56 @@ body {
   line-height: 1.6;
   color: #444;
   background-color: #eeeeee;
+  */
+  background-color: #ffffff; 
+  color: #444;
+  height: 100vh;
+  width: 100vw;
 }
+
+.landing {
+  color: #ff;
+}
+
+.flex {
+  display: flex;
+}
+
+.logo {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.center-container {
+  margin: auto;
+  padding-top: 200px;
+  max-width: 800px;
+}
+
+.welcome-text {
+  flex-basis: 40%;
+  margin: auto;
+}
+
+.login-container{
+  flex-basis: 60%;
+  background-color: white;
+  border-radius: 5px;
+  margin-left: 5%;
+  max-width: 300px;
+  padding: 20px;
+  color: #555;
+}
+
+#loginButton{
+  margin: 10px 25px;
+}
+
+#register{
+  display: none;
+}
+
+/* old
 
 nav {
   background-color: #283593;
@@ -38,6 +89,8 @@ nav a {
 #navTitle {
   font-size: 36px;
 }
+
+*/
 
 /* This is for the search bar */
 #searchDiv {

@@ -15,30 +15,43 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <% String currentUser = (String) request.getSession().getAttribute("user"); %>
   <% String navBarUsername = (String)request.getSession().getAttribute("user"); %>
   <% User navBarUser = UserStore.getInstance().getUser(navBarUsername);%>
-  <a id="navTitle" href="/">CodeU Chat App - Nemo</a>
 
-  <% if(currentUser!=null) { %>
-    <a href="/conversations">Conversations</a>
-    <% if(navBarUsername != null){ %>
-      <a href="/profile/<%=navBarUsername %>">
-        Hello <%= navBarUsername %>!</a>
-    <% } else{ %>
-      <a href="/login">Login</a>
-    <% } %>
-    <a href="/about.jsp">About</a>
-    <a href="/activityfeed">Activity Feed</a>
-    <a href="/notifications"> Notifications</a>
-    <form action="/logout" method="POST" style="float: right">
-        <input type="submit" value="Log out"/>
-    </form>
-    <%if(navBarUsername != null && navBarUser.getIsAdmin() == true){%>
-        <a href="/admin"> Admin Page</a>
-    <%}%>
-    
-    <%@ include file="searchbar.jsp" %>
-  <% } %>
+  <a class="navbar-brand" href="#">
+    <img src="logo.png" width="100" height="45" alt="">
+  </a>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/conversations">Conversations <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/notifications"> Notifications</a>
+      <a class="nav-item nav-link" href="/about.jsp">About</a>
+    </div>
+
+    <div class="navbar-nav">
+      <%if(navBarUsername != null && navBarUser.getIsAdmin() == true){%>
+          <a class="nav-item nav-link" href="/admin"> Admin Page</a>
+      <%}%>
+      <%@ include file="searchbar.jsp" %>
+
+      <div class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-user"></i>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="/profile/<%=navBarUsername %>">My Profile</a>
+          <div class="dropdown-divider"></div>
+          <form id="logout" class="form-inline" action="/logout" method="POST">
+            <a class="dropdown-item" href="#" onclick="document.getElementById('logout').submit();">Sign Out</a>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </nav>

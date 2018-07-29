@@ -54,12 +54,6 @@ public class RegisterServlet extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
-  }
-
-  @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
@@ -67,13 +61,15 @@ public class RegisterServlet extends HttpServlet {
 
     if (!username.matches("[\\w*\\s*]*")) {
       request.setAttribute("error", "Please enter only letters, numbers, and spaces.");
-      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      request.setAttribute("registrationForm", true);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 
     if (userStore.isUserRegistered(username)) {
       request.setAttribute("error", "That username is already taken.");
-      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      request.setAttribute("registrationForm", true);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 
@@ -81,7 +77,8 @@ public class RegisterServlet extends HttpServlet {
 
     if (password.length() < 6) {
       request.setAttribute("error", "Password must contain at least 6 characters.");
-      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      request.setAttribute("registrationForm", true);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 
@@ -95,7 +92,7 @@ public class RegisterServlet extends HttpServlet {
     Event userEvent = new Event(UUID.randomUUID(), "User", user.getCreationTime(), userInformation);
     eventStore.addEvent(userEvent);
 
-    response.sendRedirect("/login");
+    response.sendRedirect("/index.jsp");
   }
 
 }
