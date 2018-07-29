@@ -52,81 +52,60 @@
 
   </script>
 </head>
-  <body class="bg-primary landing">
-
-    <% if(user != null) {%>
-        <div id="container">
-        <div
-          style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
-
-          <h1>CodeU Chat App - Nemo</h1>
-          <h2>Welcome!</h2>
-
-          <ul>
-            <li>Go to the <a href="/conversations">conversations</a> page to
-                create or join a conversation.</li>
-            <li>View the <a href="/about.jsp">about</a> page to learn more about the
-                project.</li>
-          </ul>
+  <body class="bg-primary" id="landing">
+    <div class="flex center-container">
+      <div class="welcome-text">
+        <div class="logo">
+          <img src="logo.png">
         </div>
+        Chat with those you love!
+        <br>
+        Nemo is a free, open source chat platform.
       </div>
-    <% } else {%>
-        <div class="flex center-container">
-          <div class="welcome-text">
-            <div class="logo">
-              <img src="logo.png">
-            </div>
-            Chat with those you love!
+        
+        <!-- login form -->
+        <div id="login" class="login-container" class="rounded">
+          <div id="login-content">
+            <% if(request.getAttribute("error") != null){ %>
+                <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+            <% } %>
+            <div>Login</div>
             <br>
-            Nemo is a free, open source chat platform.
-          </div>
-            
-            <!-- login form -->
-            <div id="login" class="login-container" class="rounded">
-              <div id="login-content">
-                <% if(request.getAttribute("error") != null){ %>
-                    <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-                <% } %>
-                <div>Login</div>
-                <br>
-                <form id="loginForm" action='/login' method="POST">
-                  <div class="form-group">
-                    <input class="form-control" name="username" placeholder="Enter username">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" name="password" class="form-control"placeholder="Password">
-                  </div>
-                  <a href="#" onclick="document.getElementById('loginForm').submit();" class="btn btn-primary" id="loginButton">
-                    Sign In
-                  </a>
-                  <a href="#" onclick="showRegister()" class="btn btn-light">Register</a>
-                </form>
+            <form id="loginForm" action='/login' method="POST">
+              <div class="form-group">
+                <input class="form-control" name="username" placeholder="Enter username">
               </div>
-            </div>
-
-            <!-- registration form -->
-            <div id="register" class="login-container" class="rounded">
-              <div id="login-content">
-                <% if(request.getAttribute("error") != null){ %>
-                    <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-                <% } %>
-                <div>Register a new user</div>
-                <br>
-                <form action="/register" method="POST">
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="username" placeholder="Enter username">
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Password">
-                  </div>
-                  <button class="btn btn-primary" type="submit">Submit</button>
-                </form>
+              <div class="form-group">
+                <input type="password" name="password" class="form-control"placeholder="Password">
               </div>
-            </div>
-
+              <a href="#" onclick="document.getElementById('loginForm').submit();" class="btn btn-primary" id="loginButton">
+                Sign In
+              </a>
+              <a href="#" onclick="showRegister()" class="btn btn-light">Register</a>
+            </form>
           </div>
         </div>
-    <% } %>
 
+        <!-- registration form -->
+        <div id="register" class="login-container" class="rounded">
+          <div id="login-content">
+            <% if(request.getAttribute("error") != null){ %>
+                <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+            <% } %>
+            <div>Register a new user</div>
+            <br>
+            <form action="/register" method="POST">
+              <div class="form-group">
+                <input type="text" class="form-control" name="username" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Password">
+              </div>
+              <button class="btn btn-primary" type="submit">Register</button>
+            </form>
+          </div>
+        </div>
+
+    </div>
   </body>
 </html>

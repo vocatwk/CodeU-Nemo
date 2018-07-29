@@ -21,7 +21,7 @@
   <% User navBarUser = UserStore.getInstance().getUser(navBarUsername);%>
 
   <a class="navbar-brand" href="#">
-    <img src="logo.png" width="100" height="45" alt="">
+    <img src="/logo.png" width="100" height="45" alt="">
   </a>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
