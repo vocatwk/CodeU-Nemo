@@ -2,9 +2,6 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
-
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");
@@ -22,10 +19,9 @@ String aboutMe = (String) request.getAttribute("aboutMe");
   <script>
     // scroll the messages div to the bottom
     function scrollChat() {
-      var chatDiv = document.getElementById('messages');
+      var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
-
   </script>
 </head>
 <body onload="scrollChat()">
@@ -44,18 +40,13 @@ String aboutMe = (String) request.getAttribute("aboutMe");
 
     <% if ((user != null) && (user.equals(subject))) { %>
       <h2> Edit your About Me (only you can see this) </h2>
-      <form action="/profile/<%= subject %>" method="PUT">
+      <form action="/profile/<%= subject %>" method="POST">
         <input type="text" name="aboutMe">
         <br/>
         <button type="submit">Submit</button>
       </form>
     <% } %>
     <hr/>
-
-    <form action="/profile/<%= subject %>" enctype="multipart/form-data" method="POST">
-      <input type="file" name="profilePicture" />    
-      <input type="submit" value="Upload"/>
-    </form>
 
     <h2> <%= subject %>'s sent messages <a href="" style="float: right">&#8635;</a></h2>
 
