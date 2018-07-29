@@ -26,7 +26,7 @@
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/conversations">Conversations <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/conversations">Conversations <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="/notifications"> Notifications</a>
       <a class="nav-item nav-link" href="/about.jsp">About</a>
     </div>
