@@ -24,55 +24,74 @@
 </head>
 <body>
 
-  <div id="container">
+  <div id="conversationContainer">
+    <div id="conversationInput">
 
-    <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-    <% } %>
+      <% if(request.getAttribute("error") != null){ %>
+          <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+      <% } %>
 
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <h1>New Conversation</h1>
       <form action="/conversations" method="POST">
-          <div class="form-group">
-            <label class="form-control-label">Title:</label>
-          <input type="text" name="conversationTitle">
+        <label for="conversationName">New Conversation</label>
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <input type="text" class="form-control mb-2" id="conversationName" placeholder="Conversation Title">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-2">Create</button>
+          </div>
         </div>
-
-        <button type="submit">Create</button>
       </form>
 
-      <hr/>
-    <% } %>
+    </div>
 
-    <h1>Conversations</h1>
+    <br>
 
-    <%
-    List<Conversation> conversations =
-      (List<Conversation>) request.getAttribute("conversations");
-    if(conversations == null || conversations.isEmpty()){
-    %>
-      <p>Create a conversation to get started.</p>
-    <%
-    }
-    else{
-    %>
-      <ul class="mdl-list">
-    <%
-      for(Conversation conversation : conversations){
-        if(!conversation.containsMember(navBarUsername)){
-          continue;
+    <div id="conversationList">
+
+      <label for="card">Conversations</label>
+
+      <%
+      Boolean listIsEmpty = true;
+      Boolean oneFound = false;
+      List<Conversation> conversations =
+        (List<Conversation>) request.getAttribute("conversations");
+      if(conversations != null){
+        for(Conversation conversation : conversations){
+          if(!conversation.containsMember(navBarUsername)){
+            continue;
+          }
+          if(!oneFound){
+      %>
+            <div class="card">
+            <table class="table table-bordered" id="conversationsTable">
+              <tbody>
+      <%
+            listIsEmpty=false;
+            oneFound=true;
+          }
+      %>
+          <tr><td>
+            <a href="/chat/<%= conversation.getId() %>"> <%= conversation.getTitle() %></a></li>
+          </td></tr>
+      <%
+        }
       }
-    %>
-      <li><a href="/chat/<%= conversation.getId() %>">
-        <%= conversation.getTitle() %></a></li>
-    <%
+      if(listIsEmpty || conversations == null){
+      %>
+        <p>Create a conversation to get started.</p>
+      <%
       }
-    %>
-      </ul>
-    <%
-    }
-    %>
-    <hr/>
+      else{
+      %>
+            </tbody>
+          </table>
+        </div>
+      <%
+      }
+      %>
+    </div>
+
   </div>
 </body>
 </html>
