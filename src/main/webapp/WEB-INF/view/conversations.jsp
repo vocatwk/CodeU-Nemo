@@ -35,7 +35,7 @@
         <label for="conversationName">New Conversation</label>
         <div class="form-row align-items-center">
           <div class="col-auto">
-            <input type="text" class="form-control mb-2" id="conversationName" placeholder="Conversation Title">
+            <input type="text" class="form-control mb-2" id="conversationName" name="conversationTitle" placeholder="Conversation Title">
           </div>
           <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-2">Create</button>
