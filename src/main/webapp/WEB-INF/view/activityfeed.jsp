@@ -32,10 +32,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
           Date date = Date.from(event.getCreationTime());
           List<String> information = event.getInformation();
           String userName = information.get(0);
-        %>
-          <!-- <li> -->
-            <!-- <b><%= date %></b> -->
-          <%
+
           if (event.getType().equals("User")) {
           %>
             <li>
