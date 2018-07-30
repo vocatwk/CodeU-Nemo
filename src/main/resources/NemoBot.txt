@@ -12,6 +12,6 @@ Notifications	Always stay up-to-date with your notifications!
 
 Search	You can search for other users by using our instant search bar! Simply type a user's name and select the user you want.
 
-Bots	We currently have 1 Bot - Me! Developers are encouraged to use our open source Bot Framework to add bots of their own!
+Bots	We currently have 2 Bots - ConversationStatBot and me! Developers are encouraged to use our open source Bot Framework to add bots of their own!
 
-Help	Feel free to ask me about the following: Conversations, Profiles, Activtity Feed, Notifications, Searching for users, and Bots.  
+Help	Feel free to ask me about the following: Conversations, Profiles, Activtity Feed, Notifications, Searching for users, and Bots.
