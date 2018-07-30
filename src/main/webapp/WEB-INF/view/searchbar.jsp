@@ -61,7 +61,7 @@
   }
 </script>
 
-<div id ="searchDiv">
+<div class="nav-item" id ="searchDiv">
   <input onkeyup="fetchResults('result','searchBar')" type="text" autocomplete="off" placeholder="Search for Users. . ." name="searchRequest" id="searchBar">
   <div id="result">
     <!-- resultItem divs will go here -->
