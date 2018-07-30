@@ -71,14 +71,19 @@ body {
 .card{
   overflow-x: scroll;
   max-height: 500px;
+  margin-left: 10px;
 }
 
 #conversationName {
-  width:460px;
+  width:450px;
 }
 
 #conversationsTable{
   margin-bottom: 0;
+}
+
+#conversationInput{
+  padding-left: 10px;
 }
 
 /* This is for the search bar */

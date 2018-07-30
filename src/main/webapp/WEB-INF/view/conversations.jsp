@@ -25,7 +25,7 @@
 <body>
 
   <div id="conversationContainer">
-    <div id="conversationInput">
+    <div>
 
       <% if(request.getAttribute("error") != null){ %>
           <h2 style="color:red"><%= request.getAttribute("error") %></h2>
@@ -33,7 +33,7 @@
 
       <form action="/conversations" method="POST">
         <label for="conversationName">New Conversation</label>
-        <div class="form-row align-items-center">
+        <div class="form-row align-items-center" id="conversationInput">
           <div class="col-auto">
             <input type="text" class="form-control mb-2" id="conversationName" name="conversationTitle" placeholder="Conversation Title">
           </div>
@@ -47,7 +47,7 @@
 
     <br>
 
-    <div id="conversationList">
+    <div>
 
       <label for="card">Conversations</label>
 
