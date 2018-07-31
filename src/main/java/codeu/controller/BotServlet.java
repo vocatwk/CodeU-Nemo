@@ -15,7 +15,7 @@ public class BotServlet extends HttpServlet {
   /** Controller class that gives control to Bots. */
   private BotController botController;
 
-  /** Set up state for handling activty feed requests. */
+  /** Set up state for handling bots page requests. */
   @Override
   public void init() throws ServletException {
     super.init();

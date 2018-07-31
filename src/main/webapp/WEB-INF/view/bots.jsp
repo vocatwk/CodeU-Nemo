@@ -13,9 +13,8 @@ List<Bot> bots = (List<Bot>) request.getAttribute("bots");
 </head>
 <body>
 
-  <div id="container">
-    <h1>Bots
-      <a href="" style="float: right">&#8635;</a></h1>
+  <div id="botsContainer">
+    <h3>Bots</h3>
 
     <% for (Bot bot : bots) { 
       String name = bot.getName();

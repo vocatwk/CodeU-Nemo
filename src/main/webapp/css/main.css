@@ -149,9 +149,22 @@ button {
 /* End of Activity Feed */
 
 /* This is for the Bots Page */
+#botsContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: 100%;
+}
+
+#botsContainer h3 {
+  color: #757575;
+  margin-top: 10px;
+}
+
 #bots a {
   text-decoration: none;
 }
+/* End of Bots Page */
 
 .headerContainer {
   display: flex;
