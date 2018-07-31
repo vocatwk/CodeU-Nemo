@@ -204,6 +204,7 @@ button {
 
 #selectedUserList {
   display: flex;
+  flex-wrap : wrap;
 }
 
 .selectedUser {
@@ -211,6 +212,7 @@ button {
   padding: 0 5px;
   font-size: 15px;
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 .add-user-button{
