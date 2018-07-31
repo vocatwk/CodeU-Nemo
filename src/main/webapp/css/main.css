@@ -125,8 +125,7 @@ button {
 
 /* This is for the Activity Feed Page */
 #activity {
-  background-color: white;
-  height: 500px;
+  max-height: 500px;
   overflow-y: scroll;
 }
 

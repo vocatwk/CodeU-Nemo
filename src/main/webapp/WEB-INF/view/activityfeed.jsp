@@ -19,14 +19,14 @@ ConversationStore conversationStore = ConversationStore.getInstance();
 <body>
 
   <div id="container">
-    <h1>Activity
+    <h1>Activity Feed
       <a href="" style="float: right">&#8635;</a></h1>
 
     <p>Here's everything that's happened on the site so far!</p>
 
     <div id="activity">
-      <ul>
-        <%
+      <ul class="list-group">
+      <%
         for (int i = events.size() - 1; i >= 0; i--) {
           Event event = events.get(i);
           Date date = Date.from(event.getCreationTime());
@@ -35,7 +35,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
 
           if (event.getType().equals("User")) {
           %>
-            <li>
+            <li class="list-group-item">
             <b><%= date %></b>
             <a href="/profile/<%= userName %>"><%= userName %></a> joined!
           </li>
@@ -44,7 +44,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
           else if (event.getType().equals("About Me")) {
             String aboutMe = information.get(1);
           %>
-            <li>
+            <li class="list-group-item">
             <b><%= date %></b>
             <a href="/profile/<%= userName %>"><%= userName%></a> updated their About Me:
             "<%= aboutMe %>"
@@ -56,7 +56,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
                 String conversationId = information.get(2);
                 if (!conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate()) {
               %>
-                  <li>
+                  <li class="list-group-item">
                     <b><%= date %></b>
                     <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
                     <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>
@@ -69,7 +69,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
                 String conversationId = information.get(3);
                 if (!conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate()) {
               %>
-                  <li>
+                  <li class="list-group-item">
                     <b><%= date %></b>
                     <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
                     <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>: "<%= messageContent %>"
@@ -79,10 +79,10 @@ ConversationStore conversationStore = ConversationStore.getInstance();
               }
             }
           }
-          %>
-      </ul> 
+        %>
+      </ul>
     </div>
-    
+
   </div>
   
 </body>
