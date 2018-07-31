@@ -18,7 +18,6 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.util.UUID" %>
-<%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Iterator" %>
 
 <%
@@ -27,7 +26,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
-HashSet<String> members = (HashSet<String>) request.getAttribute("members");
 %>
 
 <!DOCTYPE html>
@@ -61,6 +59,23 @@ HashSet<String> members = (HashSet<String>) request.getAttribute("members");
         }
       }
       return true;
+    }
+
+    $(window).ready(function(){
+      updateMembersList();
+    })
+
+    function updateMembersList(){
+      var it = membersOfConversation.values();
+
+      if(membersOfConversation.size >= 3){
+        $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and " 
+          + (membersOfConversation.size - 2) + " others.");
+      }else if(membersOfConversation.size == 2) {
+        $(".memberList").html("People: " + it.next().value + " and " + it.next().value);
+      }else{
+        $(".memberList").html("People: " + it.next().value);
+      }
     }
 
     function AddUserAsTag(userName){
@@ -205,17 +220,7 @@ HashSet<String> members = (HashSet<String>) request.getAttribute("members");
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
-          var it = membersOfConversation.values();
-          alert(membersOfConversation.values());
-
-          if(membersOfConversation.size >= 3){
-            $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and " 
-              + (membersOfConversation.size - 2) + " others.");
-          }else if(membersOfConversation.size == 2) {
-            $(".memberList").html("People: " + it.next().value + " and " + it.next().value);
-          }else{
-            $(".memberList").html("People: " + it.next().value);
-          }
+          updateMembersList();
 
           if(!membersOfConversation.has("<%= user %>")){
             window.location.replace("/conversations");
@@ -260,27 +265,7 @@ HashSet<String> members = (HashSet<String>) request.getAttribute("members");
       <%@ include file="addUserBox.jsp" %>
 
       <div class="flex text-primary"> 
-        <%
-          Iterator it = members.iterator();
-          if(members.size() >= 3){
-        %>
-            <h3 class="memberList"> People: <%= it.next() %>, <%= it.next() %>, and 
-              <%= members.size() - 2 %> others. </h3>
-        <% 
-          } 
-          else if(members.size() == 2) {
-
-        %>
-            <h3 class="memberList"> People: <%= it.next() %> and <%= it.next() %> </h3>
-        <%
-          }
-          else {
-        %>
-            <h3 class="memberList"> People: <%= it.next() %></h3>
-        <%
-          }
-        %>
-
+        <h3 class="memberList"> </h3>
         <a href="" ><h2> &#8635; </h2></a>
       </div>
     </div>
