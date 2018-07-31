@@ -68,25 +68,32 @@ body {
 #conversationContainer{
   padding-top: 50px;
   padding-left: 50px;
-  width: 600px;
+  width: 100%;
+  height:100%;
 }
 
-.card{
-  overflow-x: scroll;
-  max-height: 500px;
-  margin-left: 10px;
-}
-
-#conversationName {
-  width:450px;
-}
-
-#conversationsTable{
-  margin-bottom: 0;
+#conversationForm{
+  align-items: flex-start;
+  width: 100%;
 }
 
 #conversationInput{
   padding-left: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  width: 40%
+}
+
+.card{
+  overflow-x: scroll;
+  max-height: 67%;
+  margin-left: 10px;
+  width: 47%;
+}
+
+#conversationsTable{
+  margin-bottom: 0;
 }
 
 /* chat page */
