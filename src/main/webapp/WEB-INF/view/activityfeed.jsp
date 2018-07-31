@@ -18,9 +18,9 @@ ConversationStore conversationStore = ConversationStore.getInstance();
 </head>
 <body>
 
-  <div id="container">
-    <h1>Activity Feed
-      <a href="" style="float: right">&#8635;</a></h1>
+  <div id="activityContainer">
+    <h3 id="activityHeader">Activity Feed
+      <a href="" style="float: right">&#8635;</a></h3>
 
     <p>Here's everything that's happened on the site so far!</p>
 
