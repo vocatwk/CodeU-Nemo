@@ -20,6 +20,7 @@ body {
   width: 100vw;
 }
 
+/* index.jsp */
 #landing {
   color: #fff;
 }
@@ -62,6 +63,8 @@ body {
   display: none;
 }
 
+/* conversations page. */
+
 #conversationContainer{
   padding-top: 50px;
   padding-left: 50px;
@@ -84,6 +87,38 @@ body {
 
 #conversationInput{
   padding-left: 10px;
+}
+
+/* chat page */
+
+#chatContainer{
+  background-color:#e5e6e8;
+  min-height: 550px;
+}
+
+#messageInput{
+  width: 930px;
+}
+
+#container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+}
+
+#settings-dropdown-trigger{
+  padding-right:20px;
+}
+
+.memberList{
+  padding-right: 15px;
+  font-size: 1.5em;
+}
+
+/* chat page messages. */
+
+#messagesContainer {
+    padding: 10px;
 }
 
 /* This is for the search bar */
@@ -121,6 +156,7 @@ body {
   background-color: #AED6F1;
 }
 /* End of search bar */
+
 
 #container {
   margin-left: auto;
@@ -162,13 +198,8 @@ button {
 }
 
 .headerContainer {
-  display: flex;
   justify-content: space-between;
   margin-top: 25px;
-}
-
-.titleAndSettings {
-  display: flex;
 }
 
 #selectedUserList {

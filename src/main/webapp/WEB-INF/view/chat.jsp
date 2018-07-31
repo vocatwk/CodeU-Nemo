@@ -18,12 +18,16 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.util.UUID" %>
+<%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Iterator" %>
+
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
+HashSet<String> members = (HashSet<String>) request.getAttribute("members");
 %>
 
 <!DOCTYPE html>
@@ -201,6 +205,18 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
+          var it = membersOfConversation.values();
+          alert(membersOfConversation.values());
+
+          if(membersOfConversation.size >= 3){
+            $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and " 
+              + (membersOfConversation.size - 2) + " others.");
+          }else if(membersOfConversation.size == 2) {
+            $(".memberList").html("People: " + it.next().value + " and " + it.next().value);
+          }else{
+            $(".memberList").html("People: " + it.next().value);
+          }
+
           if(!membersOfConversation.has("<%= user %>")){
             window.location.replace("/conversations");
           }
@@ -222,58 +238,82 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
   <div id="container">
 
-    <div class="headerContainer">
+    <div class="headerContainer flex">
 
-      <div class="titleAndSettings">
-        <!-- Conversation title -->
-        <h1> <%= conversation.getTitle() %> </h1>
+      <div class="titleAndSettings flex">
 
         <!-- Setting button and content -->
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <h3 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-cog"> </i>
-          </button>
+          </h3>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
             <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
             <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
           </div>
         </div>
+
+        <!-- Conversation title -->
+        <h3> <%= conversation.getTitle() %> </h3>
       </div>
 
       <%@ include file="addUserBox.jsp" %>
 
-      <h1> <a href="" >&#8635;</a> </h1>
+      <div class="flex text-primary"> 
+        <%
+          Iterator it = members.iterator();
+          if(members.size() >= 3){
+        %>
+            <h3 class="memberList"> People: <%= it.next() %>, <%= it.next() %>, and 
+              <%= members.size() - 2 %> others. </h3>
+        <% 
+          } 
+          else if(members.size() == 2) {
+
+        %>
+            <h3 class="memberList"> People: <%= it.next() %> and <%= it.next() %> </h3>
+        <%
+          }
+          else {
+        %>
+            <h3 class="memberList"> People: <%= it.next() %></h3>
+        <%
+          }
+        %>
+
+        <a href="" ><h2> &#8635; </h2></a>
+      </div>
+    </div>
+
+    <div id="chatContainer" class="rounded">
+      <div class="flex" id="messagesContainer">
+        <ul>
+          <%
+            for (Message message : messages) {
+              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+          %>
+              <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
+              <%= message.getContent() %> </li>
+
+          <%
+              }
+          %>
+        </ul>
+      </div>
     </div>
 
     <hr/>
 
-    <div id="chat">
-      <ul>
-    <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong> <a href="/profile/<%=author %>"><%= author %></a>:
-          </strong> <%= message.getContent() %></li>
-    <%
-      }
-    %>
-      </ul>
-    </div>
-
-    <hr/>
-
-    <% if (request.getSession().getAttribute("user") != null) { %>
     <form action="/chat/<%= conversation.getId() %>" method="POST">
-        <input type="text" name="message">
-        <br/>
-        <button type="submit">Send</button>
+      <div class="form-row align-items-center">
+        <div class="col-auto" id="messageInput">
+          <input type="text" class="form-control mb-2" name="message" placeholder="Type your message here ... ">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary mb-2">Send</button>
+        </div>
+      </div>
     </form>
-    <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
-    <% } %>
 
     <hr/>
 
