@@ -47,7 +47,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = creation;
-    subscriptions = new ArrayList<UUID>();
+    subscriptions = new ArrayList<>();
   }
 
   /** Returns the ID of this User. */
@@ -99,7 +99,7 @@ public class User {
     return lastSeenNotifications;
   }
 
-  /** Add the subscription to the subscriptions list */
+  /** Add a conversation id to the subscriptions list */
   public void addSubscription(UUID conversationId){
     subscriptions.add(conversationId);
   }
@@ -108,7 +108,7 @@ public class User {
   public List<UUID> getSubscriptions(){
     return subscriptions;
   }
-  /** get the subscription to the subscriptions list */
+  /** remove a conversation id from the subscriptions list */
   public void removeSubscription(UUID conversationId){
     subscriptions.remove(conversationId);
   }

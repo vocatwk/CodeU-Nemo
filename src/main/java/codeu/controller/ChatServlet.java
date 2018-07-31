@@ -123,8 +123,8 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = getIdFromString(conversationIdAsString);
     String username = (String)request.getSession().getAttribute("user");
     User user = userStore.getUser(username);
-
     Conversation conversation = conversationStore.getConversation(conversationId);
+
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
       System.out.println("Conversation was null: " + conversationIdAsString);
@@ -145,14 +145,16 @@ public class ChatServlet extends HttpServlet {
       response.getWriter().write(json);
       return;
     }
-
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
-    String membersOfConversation = new Gson().toJson(conversation.getMembers());
     List<UUID> userSubbedList = user.getSubscriptions();
     Boolean subValue = false;
     if(userSubbedList.contains(conversationId)){
       subValue=true;
     }
+
+
+    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    String membersOfConversation = new Gson().toJson(conversation.getMembers());
+
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
@@ -321,15 +323,15 @@ public class ChatServlet extends HttpServlet {
       HashSet<String> membersList = new HashSet<>(Arrays.asList(userNameArray));
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
+
     } else if(purpose.equals("recievingNotifications")){
       String privacyCommand = request.getReader().readLine();
+
       if(privacyCommand.equals("unmute")){
         currentUser.addSubscription(conversationId);
-      }
-      else if(privacyCommand.equals("mute")){
+      }else if(privacyCommand.equals("mute")){
         currentUser.removeSubscription(conversationId);
       }
-      userStore.updateUser(currentUser);
     }
       }
 

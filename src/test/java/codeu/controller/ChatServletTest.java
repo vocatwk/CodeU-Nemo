@@ -102,7 +102,12 @@ public class ChatServletTest {
   @Test
   public void testDoGet() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    UUID randomConversationId = UUID.randomUUID();
+    List<UUID> subbedId = new ArrayList<>();
+    subbedId.add(randomConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
@@ -114,6 +119,8 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
+
     List<Message> fakeMessageList = new ArrayList<>();
     fakeMessageList.add(
         new Message(
@@ -123,13 +130,9 @@ public class ChatServletTest {
             "test message",
             Instant.now()));
 
-    List<UUID> userSubbedList = new ArrayList<>();
-    userSubbedList.add(fakeConversationId);
-
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
         .thenReturn(fakeMessageList);
 
-    Mockito.when(mockUser.getSubscriptions()).thenReturn(userSubbedList);
     chatServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
@@ -137,7 +140,7 @@ public class ChatServletTest {
     Mockito.verify(mockRequest).setAttribute("isPrivate",false);
     Mockito.verify(mockRequest)
         .setAttribute("membersOfConversation","[\"test_user2\",\"test_user1\"]");
-    Mockito.verify(mockRequest).setAttribute("userSubscriptions",userSubbedList);
+    Mockito.verify(mockRequest).setAttribute("subValue",false);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -145,6 +148,8 @@ public class ChatServletTest {
   public void testDoGet_PurposeIsToGetMembers() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
@@ -169,9 +174,12 @@ public class ChatServletTest {
   @Test
   public void testDoGet_badConversation() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    UUID randomConversationId = UUID.randomUUID();
+    List<UUID> subbedId = new ArrayList<>();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
-        .thenReturn(null);
+      .thenReturn(null);
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
 
     chatServlet.doGet(mockRequest, mockResponse);
 
@@ -517,20 +525,29 @@ public class ChatServletTest {
   }
 
   @Test
-  public void testDoPut_SettingSubscriptions() throws IOException, ServletException {
-    User fakeUser1 =
-        new User(
-            UUID.randomUUID(),
-            "test_user1",
-            "$2a$10$eDhncK/4cNH2KE.Y51AWpeL8/5znNBQLuAFlyJpSYNODR/SJQ/Fg6",
-            Instant.now());
-
+  public void testDoPut_RecievingNotificationsUnmute() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
-    Mockito.when(mockUserStore.getUser("fakeUser1")).thenReturn(fakeUser1);
-    Mockito.when(mockSession.getAttribute("subbed")).thenReturn(true);
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
+    Mockito.when(mockReader.readLine()).thenReturn("unmute");
 
     chatServlet.doPut(mockRequest, mockResponse);
-    Mockito.verify(mockUser).addSubscription(fakeConversationId);
+
+    Mockito.verify(mockUser).addSubscription(fakeConversationId);;
+  }
+
+  @Test
+  public void testDoPut_RecievingNotificationsMute() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
+    Mockito.when(mockReader.readLine()).thenReturn("mute");
+
+    chatServlet.doPut(mockRequest, mockResponse);
+    Mockito.verify(mockUser).removeSubscription(fakeConversationId);;
+
   }
 
   @Test
