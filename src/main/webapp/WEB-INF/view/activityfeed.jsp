@@ -52,9 +52,11 @@ ConversationStore conversationStore = ConversationStore.getInstance();
           }
           else {
             String conversationTitle = information.get(1);
+            String conversationId = information.get(information.size() - 1);
+            boolean isPrivate =
+                conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate();
               if (event.getType().equals("Conversation") && information.size() > 2) {
-                String conversationId = information.get(2);
-                if (!conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate()) {
+                if (!isPrivate) {
               %>
                   <li class="list-group-item">
                     <b><%= date %></b>
@@ -66,8 +68,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
               }
               else if (event.getType().equals("Message") && information.size() > 3) {
                 String messageContent = information.get(2);
-                String conversationId = information.get(3);
-                if (!conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate()) {
+                if (!isPrivate) {
               %>
                   <li class="list-group-item">
                     <b><%= date %></b>
@@ -80,7 +81,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
             }
           }
         %>
-      </ul>
+      </ul> 
     </div>
 
   </div>
