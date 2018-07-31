@@ -1,8 +1,12 @@
 <%@ page import="codeu.model.data.Event" %>
+<%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.store.basic.ConversationStore" %>
+<%@ page import="java.util.UUID" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
 <%
 List<Event> events = (List<Event>) request.getAttribute("events");
+ConversationStore conversationStore = ConversationStore.getInstance();
 %>
 
 <!DOCTYPE html>
@@ -28,12 +32,11 @@ List<Event> events = (List<Event>) request.getAttribute("events");
           Date date = Date.from(event.getCreationTime());
           List<String> information = event.getInformation();
           String userName = information.get(0);
-        %>
-          <li>
-            <b><%= date %></b>
-          <%
+
           if (event.getType().equals("User")) {
           %>
+            <li>
+            <b><%= date %></b>
             <a href="/profile/<%= userName %>"><%= userName %></a> joined!
           </li>
           <%
@@ -41,32 +44,43 @@ List<Event> events = (List<Event>) request.getAttribute("events");
           else if (event.getType().equals("About Me")) {
             String aboutMe = information.get(1);
           %>
+            <li>
+            <b><%= date %></b>
             <a href="/profile/<%= userName %>"><%= userName%></a> updated their About Me:
             "<%= aboutMe %>"
           <%
           }
           else {
             String conversationTitle = information.get(1);
+            String conversationId = information.get(information.size() - 1);
+            boolean isPrivate =
+                conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate();
               if (event.getType().equals("Conversation") && information.size() > 2) {
-                String conversationId = information.get(2);
+                if (!isPrivate) {
               %>
-                <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
-                <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>
-          </li>
+                  <li>
+                    <b><%= date %></b>
+                    <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
+                    <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>
+                  </li>
               <%
+                }
               }
               else if (event.getType().equals("Message") && information.size() > 3) {
                 String messageContent = information.get(2);
-                String conversationId = information.get(3);
+                if (!isPrivate) {
               %>
-                <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
-                <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>: "<%= messageContent %>"
-          </li>
+                  <li>
+                    <b><%= date %></b>
+                    <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
+                    <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>: "<%= messageContent %>"
+                  </li>
               <%
+                }
               }
             }
           }
-          %>
+        %>
       </ul> 
     </div>
     
