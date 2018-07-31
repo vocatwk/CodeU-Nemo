@@ -98,19 +98,29 @@ body {
 
 /* chat page */
 
-#chatContainer{
+#chatContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+#centeredChatContainer{
+  margin: auto;
+  width: 60%;
+}
+
+#chatBox{
   background-color:#e5e6e8;
   min-height: 550px;
 }
 
-#messageInput{
-  width: 930px;
+#messageForm{
+  align-items: flex-start;
 }
 
-#container {
-  margin-left: auto;
-  margin-right: auto;
-  width: 1000px;
+#messageInput{
+  width: 930px;
+  padding-right: 10px;
 }
 
 #settings-dropdown-trigger{

@@ -34,7 +34,7 @@
       <label for="conversationName">New Conversation</label>
       <div class="flex" id="conversationForm">
         <div class="form-group" id="conversationInput">
-          <input type="text" class="form-control mb-2" id="conversationName" name="conversationTitle" placeholder="Conversation Title">
+          <input type="text" class="form-control" id="conversationName" name="conversationTitle" placeholder="Conversation Title">
           <small id="conversationTitleHelp" class="form-text text-muted">Conversations will show up below</small>
         </div>
         <button type="submit" class="btn btn-primary">Create</button>

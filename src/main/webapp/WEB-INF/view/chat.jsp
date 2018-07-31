@@ -241,67 +241,67 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 </head>
 <body onload="scrollChat()">
 
-  <div id="container">
+  <div id="chatContainer">
 
-    <div class="headerContainer flex">
+    <div id="centeredChatContainer">
 
-      <div class="titleAndSettings flex">
+      <div class="headerContainer flex">
 
-        <!-- Setting button and content -->
-        <div class="dropdown">
-          <h3 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-cog"> </i>
-          </h3>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+        <div class="titleAndSettings flex">
+
+          <!-- Setting button and content -->
+          <div class="dropdown">
+            <h3 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-cog"> </i>
+            </h3>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+              <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+            </div>
           </div>
+
+          <!-- Conversation title -->
+          <h3> <%= conversation.getTitle() %> </h3>
         </div>
 
-        <!-- Conversation title -->
-        <h3> <%= conversation.getTitle() %> </h3>
+        <%@ include file="addUserBox.jsp" %>
+
+        <div class="flex text-primary"> 
+          <h3 class="memberList"> </h3>
+          <a href="" ><h2> &#8635; </h2></a>
+        </div>
       </div>
 
-      <%@ include file="addUserBox.jsp" %>
+      <div id="chatBox" class="rounded">
+        <div id="messagesContainer">
+          <ul>
+            <%
+              for (Message message : messages) {
+                String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+            %>
+                <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
+                <%= message.getContent() %> </li>
 
-      <div class="flex text-primary"> 
-        <h3 class="memberList"> </h3>
-        <a href="" ><h2> &#8635; </h2></a>
+            <%
+                }
+            %>
+          </ul>
+        </div>
       </div>
+
+      <hr/>
+
+      <form action="/chat/<%= conversation.getId() %>" method="POST">
+        <div class="flex" id="messageForm">
+          <div class="form-group" id="messageInput">
+            <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
+          </div>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </form>
+
+      <hr/>
     </div>
-
-    <div id="chatContainer" class="rounded">
-      <div class="flex" id="messagesContainer">
-        <ul>
-          <%
-            for (Message message : messages) {
-              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-          %>
-              <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
-              <%= message.getContent() %> </li>
-
-          <%
-              }
-          %>
-        </ul>
-      </div>
-    </div>
-
-    <hr/>
-
-    <form action="/chat/<%= conversation.getId() %>" method="POST">
-      <div class="form-row align-items-center">
-        <div class="col-auto" id="messageInput">
-          <input type="text" class="form-control mb-2" name="message" placeholder="Type your message here ... ">
-        </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-primary mb-2">Send</button>
-        </div>
-      </div>
-    </form>
-
-    <hr/>
-
   </div>
 
 </body>
