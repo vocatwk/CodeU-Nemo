@@ -30,7 +30,10 @@ public class NemoBot extends User implements Bot {
         "NemoBot", 
         BCrypt.hashpw("GoogleCodeUTeamNemoNemoBotPassword2018", BCrypt.gensalt()), 
         Instant.now());
-    setAboutMe("I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!");
+    setAboutMe(
+        "I'm NemoBot. Want to talk to me? Simply @ mention me in any conversation!"
+            + " Feel free to ask me about the following: Conversations, Profiles, " 
+            + "Activtity Feed, Notifications, Searching for users, and Bots.");
     setIsAdmin(true);
     setLastSeenNotifications(null);
     mentionKey = "@NemoBot";

@@ -22,7 +22,9 @@ public class ConversationStatBotTest {
   public void testCreate() {
     String name = "ConversationStatBot";
     UUID id = UUID.nameUUIDFromBytes(name.getBytes());
-    String aboutMe = "I'm " + name + ". Want to talk to me? Simply @ mention me in any conversation!";
+    String aboutMe = "I'm " + name + ". Want to talk to me? Simply @ mention me in any conversation!"
+        + " Feel free to ask me about the following for any conversation: "
+        + "The owner, when it was created, the privacy status, and the amount of users and messages.";
     String mentionKey = "@" + name;
 
     Assert.assertEquals(id, conversationStatBot.getId());

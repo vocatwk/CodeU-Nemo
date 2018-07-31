@@ -129,11 +129,9 @@ button {
   overflow-y: scroll;
 }
 
-/* This is for the Search Results Page */
-#results {
-  background-color: white;
-  height: 500px;
-  overflow-y: scroll;
+/* This is for the Bots Page */
+#bots a {
+  text-decoration: none;
 }
 
 .headerContainer {

@@ -125,8 +125,8 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-  <servlet>
 
+  <servlet>
     <servlet-name>NotificationServlet</servlet-name>
     <servlet-class>codeu.controller.NotificationServlet</servlet-class>
   </servlet>
@@ -136,5 +136,14 @@
     <url-pattern>/notifications</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>BotServlet</servlet-name>
+    <servlet-class>codeu.controller.BotServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>BotServlet</servlet-name>
+    <url-pattern>/bots</url-pattern>
+  </servlet-mapping>
 
 </web-app>
