@@ -97,7 +97,7 @@ public class NemoBot extends User implements Bot {
   *
   * @return null if no word is registered.
   */
-  private String getKeyword(String message) {
+  public String getKeyword(String message) {
     for (String word : message.split("[[\\p{Punct}&&[^@]]\\s]+")) {
       word = word.toLowerCase();
       if (answerMap.get(word) != null) {

@@ -14,29 +14,52 @@
  */
 
 body {
-  margin: 0;
-  font-family: sans-serif;
-  line-height: 1.6;
-  font-size: 18px;
-  line-height: 1.6;
+  background-color: #ffffff; 
   color: #444;
-  background-color: #eeeeee;
+  height: 100vh;
+  width: 100vw;
 }
 
-nav {
-  background-color: #283593;
+#landing {
+  color: #fff;
 }
 
-nav a {
-  color: white;
-  display: inline-block;
-  font-size: 24px;
-  margin: 10px;
-  text-decoration: none;
+.flex {
+  display: flex;
 }
 
-#navTitle {
-  font-size: 36px;
+.logo {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
+
+.center-container {
+  margin: auto;
+  padding-top: 200px;
+  max-width: 800px;
+}
+
+.welcome-text {
+  flex-basis: 40%;
+  margin: auto;
+}
+
+.login-container{
+  flex-basis: 60%;
+  background-color: white;
+  border-radius: 5px;
+  margin-left: 5%;
+  max-width: 300px;
+  padding: 20px;
+  color: #555;
+}
+
+#loginButton{
+  margin: 10px 25px;
+}
+
+#register{
+  display: none;
 }
 
 /* This is for the search bar */

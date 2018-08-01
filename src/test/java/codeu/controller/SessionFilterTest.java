@@ -62,8 +62,11 @@ public class SessionFilterTest {
 
     mockResponse = Mockito.mock(HttpServletResponse.class);
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
-    Mockito.when(mockRequest.getRequestDispatcher("/"))
+    Mockito.when(mockRequest.getRequestDispatcher("/conversations"))
         .thenReturn(mockRequestDispatcher);
+
+    Mockito.when(mockRequest.getRequestDispatcher("/"))
+    .thenReturn(mockRequestDispatcher);
 
     mockUserStore = Mockito.mock(UserStore.class);
     sessionFilter.init(mockFilterConfig);

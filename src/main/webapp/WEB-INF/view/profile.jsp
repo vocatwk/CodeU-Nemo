@@ -3,12 +3,14 @@
 <%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
-
+<%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.store.basic.ConversationStore" %>
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 String subject = (String) request.getAttribute("subject");
 String user = (String) request.getSession().getAttribute("user");
 String aboutMe = (String) request.getAttribute("aboutMe");
+ConversationStore conversationStore = ConversationStore.getInstance();
 %>
 
 <!DOCTYPE html>
@@ -55,10 +57,13 @@ String aboutMe = (String) request.getAttribute("aboutMe");
     <div id="messages">
 
       <ul>
-        <% for (Message message : messages) { %>
-          <li> <strong> <%= Date.from(message.getCreationTime()) %>:
-               </strong> <%= message.getContent() %> </li>
-        <% } %>
+        <% for (Message message : messages) {
+            if (!conversationStore.getConversation(message.getConversationId()).isPrivate()) {
+        %>
+              <li> <strong> <%= Date.from(message.getCreationTime()) %>:
+                 </strong> <%= message.getContent() %> </li>
+        <%  }
+          } %>
       </ul>
 
     </div>
@@ -72,6 +77,6 @@ String aboutMe = (String) request.getAttribute("aboutMe");
   <% for(int i = 0; i < conversationNames.size(); i++) { %>
         <a href="/chat/<%=conversationsIds.get(i)%>"> <%=conversationNames.get(i)%> </a> <br/>
   <% } %>
-  
+
 </body>
 </html>

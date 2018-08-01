@@ -50,12 +50,12 @@ public class LoginServlet extends HttpServlet {
 
   /**
    * This function fires when a user requests the /login URL. It simply forwards the request to
-   * login.jsp.
+   * index.jsp.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+    request.getRequestDispatcher("/index.jsp").forward(request, response);
   }
 
   /**
@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
 
     if (!userStore.isUserRegistered(username)) {
       request.setAttribute("error", "That username was not found.");
-      request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 
@@ -79,7 +79,7 @@ public class LoginServlet extends HttpServlet {
 
     if (!BCrypt.checkpw(password, user.getPasswordHash())) {
       request.setAttribute("error", "Please enter a correct password.");
-      request.getRequestDispatcher("/WEB-INF/view/login.jsp").forward(request, response);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
       return;
     }
 
