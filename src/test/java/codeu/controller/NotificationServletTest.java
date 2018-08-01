@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.Instant;
 import java.util.UUID;
-import java.time.Clock;
-import java.time.ZoneId;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,7 +33,7 @@ public class NotificationServletTest{
   private EventStore mockEventStore;
   private UserStore mockUserStore;
   private User mockUser;
-  private Clock mockClock;
+  private Event mockEvent;
 
   @Before
   public void setup() {
@@ -58,7 +56,7 @@ public class NotificationServletTest{
     NotificationServlet.setUserStore(mockUserStore);
 
     mockUser = Mockito.mock(User.class);
-    mockClock = Mockito.mock(Clock.class);
+    mockEvent = Mockito.mock(Event.class);
 
   }
 
@@ -127,12 +125,66 @@ public class NotificationServletTest{
 
   @Test
   public void testDoGet_ifConversation() throws IOException, ServletException {
-  
+    List<Event> fakeEventList = new ArrayList<>();
+    List<Event> eventsToShow = new ArrayList<>();
+    UUID fakeConversationId = UUID.randomUUID();
+    UUID fakeUserId = UUID.randomUUID();
+    Instant fakeLastSeenTime = Instant.ofEpochMilli(1500);
+
+    List<UUID> subbedId = new ArrayList<>();
+    subbedId.add(fakeConversationId);
+
+    Conversation fakeConversation = new Conversation(fakeConversationId, fakeUserId, "testConversation", Instant.ofEpochMilli(2000));
+    List<String> conversationInformation = new ArrayList<>();
+    conversationInformation.add("fakeUser");
+    conversationInformation.add(fakeConversation.getTitle());
+    conversationInformation.add(fakeConversationId.toString());
+    Event conversationEvent = new Event(UUID.randomUUID(), "Conversation", fakeConversation.getCreationTime(), conversationInformation);
+    fakeEventList.add(conversationEvent);
+    eventsToShow.add(conversationEvent);
+
+    Mockito.when(mockUser.getLastSeenNotifications()).thenReturn(fakeLastSeenTime);
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
+
+    Mockito.when(mockEvent.getType()).thenReturn("Conversation");
+    Mockito.when(mockEvent.getInformation()).thenReturn(conversationInformation);
+
+    NotificationServlet.doGet(mockRequest, mockResponse);
+    Mockito.verify(mockRequest).setAttribute("eventsToShow", eventsToShow);
+
   }
 
   @Test
   public void testDoGet_ifMessage() throws IOException, ServletException {
+    List<Event> fakeEventList = new ArrayList<>();
+    List<Event> eventsToShow = new ArrayList<>();
+    UUID fakeUserId = UUID.randomUUID();
+    UUID fakeConversationId = UUID.randomUUID();
+    Instant fakeLastSeenTime = Instant.ofEpochMilli(1500);
 
+    List<UUID> subbedId = new ArrayList<>();
+    subbedId.add(fakeConversationId);
+
+    Message fakeMessage = new Message(UUID.randomUUID(), fakeConversationId, fakeUserId, "testMessage", Instant.ofEpochMilli(3000));
+    List<String> messageInformation = new ArrayList<>();
+    messageInformation.add("fakeUser");
+    messageInformation.add("fakeConversation");
+    messageInformation.add(fakeMessage.getContent());
+    messageInformation.add(fakeConversationId.toString());
+    Event messageEvent = new Event(UUID.randomUUID(), "Message", fakeMessage.getCreationTime(), messageInformation);
+    fakeEventList.add(messageEvent);
+    eventsToShow.add(messageEvent);
+
+    Mockito.when(mockUser.getLastSeenNotifications()).thenReturn(fakeLastSeenTime);
+
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
+
+    Mockito.when(mockEvent.getType()).thenReturn("Message");
+    Mockito.when(mockEvent.getInformation()).thenReturn(messageInformation);
+    Mockito.when(mockEvent.getInformation()).thenReturn(messageInformation);
+
+    NotificationServlet.doGet(mockRequest, mockResponse);
+    Mockito.verify(mockRequest).setAttribute("eventsToShow", eventsToShow);
 
   }
 

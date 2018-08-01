@@ -552,8 +552,7 @@ public class ChatServletTest {
 
     Mockito.when(mockReader.readLine()).thenReturn("mute");
     chatServlet.doPut(mockRequest, mockResponse);
-
-    //Mockito.verify(mockUser).removeSubscription(fakeConversationId);
+    Mockito.verify(mockUser).removeSubscription(fakeConversationId);
   }
 
   @Test
