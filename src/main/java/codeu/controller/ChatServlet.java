@@ -325,11 +325,12 @@ public class ChatServlet extends HttpServlet {
       conversationStore.updateConversation(conversation);
 
     } else if(purpose.equals("recievingNotifications")){
-      String privacyCommand = request.getReader().readLine();
+      String notificationCommand = request.getReader().readLine();
 
-      if(privacyCommand.equals("unmute")){
+      if(notificationCommand.equals("unmute")){
         currentUser.addSubscription(conversationId);
-      }else if(privacyCommand.equals("mute")){
+      }
+      if(notificationCommand.equals("mute")){
         currentUser.removeSubscription(conversationId);
       }
     }

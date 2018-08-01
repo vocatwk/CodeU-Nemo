@@ -125,4 +125,15 @@ public class NotificationServletTest{
 
   }
 
+  @Test
+  public void testDoGet_ifConversation() throws IOException, ServletException {
+  
+  }
+
+  @Test
+  public void testDoGet_ifMessage() throws IOException, ServletException {
+
+
+  }
+
 }

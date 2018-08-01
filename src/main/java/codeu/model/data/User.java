@@ -47,7 +47,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = creation;
-    subscriptions = new ArrayList<>();
+    this.subscriptions = new ArrayList<>();
   }
 
   /** Returns the ID of this User. */
@@ -112,4 +112,18 @@ public class User {
   public void removeSubscription(UUID conversationId){
     subscriptions.remove(conversationId);
   }
+  /** set the subscriptions list*/
+  public void setSubscriptions(List<UUID> subscriptions){
+     this.subscriptions = subscriptions;
+  }
+
+  public List<String> getSubscriptionsAsString(){
+    List<String> idsAsStrings = new ArrayList<>();
+    for(UUID subId: subscriptions){
+      String subIdAsString = subId.toString();
+      idsAsStrings.add(subIdAsString);
+    }
+    return idsAsStrings;
+  }
+
 }
