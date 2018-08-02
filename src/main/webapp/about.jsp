@@ -41,13 +41,12 @@
 
     </div>
   </div>
-
+<br>
   <div id="bioTitle">
     <div style="text-align:center;">
        <h1> Team Nemo </h1>
        </div>
   </div>
-
 
   <div class="veronicaBio">
     <p class="label success new-label"><span class="name">Veronica T Woldehanna</span>
