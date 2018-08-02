@@ -224,11 +224,29 @@ button {
 }
 
 /* This is for the Activity Feed Page */
+#activityContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: 100%;
+}
+
+#activityHeader {
+  color: #757575;
+  margin-top: 10px;
+}
+
 #activity {
-  background-color: white;
-  height: 500px;
+  margin: auto;
+  width: 100%;
+  max-height: 67%;
   overflow-y: auto;
 }
+
+#activity .list-group {
+  word-break: break-word;
+}
+/* End of Activity Feed */
 
 /* This is for the Search Results Page */
 #results {
