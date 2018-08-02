@@ -13,224 +13,184 @@
  * limitations under the License.
  */
 
-body {
-  background-color: #ffffff;
-  color: #444;
-  height: 100vh;
-  width: 100vw;
-}
+ body {
+   background-color: #ffffff;
+   color: #444;
+   height: 100vh;
+   width: 100vw;
+ }
 
-#landing {
-  color: #fff;
-}
+ #landing {
+   color: #fff;
+ }
 
-.flex {
-  display: flex;
-}
+ .flex {
+   display: flex;
+ }
 
-.logo {
-  font-size: 2em;
-  margin-bottom: 30px;
-}
+ .logo {
+   font-size: 2em;
+   margin-bottom: 30px;
+ }
 
-.center-container {
-  margin: auto;
-  padding-top: 200px;
-  max-width: 800px;
-}
+ .center-container {
+   margin: auto;
+   padding-top: 200px;
+   max-width: 800px;
+ }
 
-.welcome-text {
-  flex-basis: 40%;
-  margin: auto;
-}
+ .welcome-text {
+   flex-basis: 40%;
+   margin: auto;
+ }
 
-.login-container{
-  flex-basis: 60%;
-  background-color: white;
-  border-radius: 5px;
-  margin-left: 5%;
-  max-width: 300px;
-  padding: 20px;
-  color: #555;
-}
+ .login-container{
+   flex-basis: 60%;
+   background-color: white;
+   border-radius: 5px;
+   margin-left: 5%;
+   max-width: 300px;
+   padding: 20px;
+   color: #555;
+ }
 
-#loginButton{
-  margin: 10px 25px;
-}
+ #loginButton{
+   margin: 10px 25px;
+ }
 
-#register{
-  display: none;
-}
+ #register{
+   display: none;
+ }
 
-/* This is for the search bar */
-#searchDiv {
-  display: inline-block;
-  margin-top: 10px;
-  border: none;
-  box-sizing:border-box;
-  position: relative;
-}
+ /* This is for the search bar */
+ #searchDiv {
+   display: inline-block;
+   margin-top: 10px;
+   border: none;
+   box-sizing:border-box;
+   position: relative;
+ }
 
-#result {
-  background-color: #eeeeee;
-  position: absolute;
-  width: 100%;
-}
+ #result {
+   background-color: #eeeeee;
+   position: absolute;
+   width: 100%;
+ }
 
-.resultItem {
-  background-color: #eeeeee;
-  border: 1px solid black;
-  text-align: center;
-}
+ .resultItem {
+   background-color: #eeeeee;
+   border: 1px solid black;
+   text-align: center;
+ }
 
-.resultItem a {
-  font-size: 16px;
-  color: black;
-  margin: 0;
-  padding: 0;
-  display: block;
-  height: 100%;
-  width: 100%;
-}
+ .resultItem a {
+   font-size: 16px;
+   color: black;
+   margin: 0;
+   padding: 0;
+   display: block;
+   height: 100%;
+   width: 100%;
+ }
 
-.resultItem a:hover {
-  background-color: #AED6F1;
-}
-/* End of search bar */
+ .resultItem a:hover {
+   background-color: #AED6F1;
+ }
+ /* End of search bar */
 
-#container {
-  margin-left: auto;
-  margin-right: auto;
-  width: 800px;
-}
+ #container {
+   margin-left: auto;
+   margin-right: auto;
+   width: 800px;
+ }
 
-h1 {
-  color: #757575;
-}
+ h1 {
+   color: #757575;
+ }
 
-input {
-  font-size: 18px;
-}
+ input {
+   font-size: 18px;
+ }
 
-button {
-  font-size: 18px;
-}
+ button {
+   font-size: 18px;
+ }
 
-/* This is for Profile Pages */
-#messages {
-  background-color: white;
-  height: 500px;
-  overflow-y: scroll;
-}
+ /* This is for Profile Pages */
+ #messages {
+   background-color: white;
+   height: 500px;
+   overflow-y: scroll;
+ }
 
-/* This is for the Activity Feed Page */
-#activity {
-  background-color: white;
-  height: 500px;
-  overflow-y: scroll;
-}
+ /* This is for the Activity Feed Page */
+ #activity {
+   background-color: white;
+   height: 500px;
+   overflow-y: scroll;
+ }
 
-/* This is for the Search Results Page */
-#results {
-  background-color: white;
-  height: 500px;
-  overflow-y: scroll;
-}
+ /* This is for the Search Results Page */
+ #results {
+   background-color: white;
+   height: 500px;
+   overflow-y: scroll;
+ }
 
-.headerContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 25px;
-}
+ .headerContainer {
+   display: flex;
+   justify-content: space-between;
+   margin-top: 25px;
+ }
 
-.titleAndSettings {
-  display: flex;
-}
+ .titleAndSettings {
+   display: flex;
+ }
 
-#selectedUserList {
-  display: flex;
-}
+ #selectedUserList {
+   display: flex;
+ }
 
-.selectedUser {
-  height: 30px;
-  padding: 0 5px;
-  font-size: 15px;
-  margin-right: 5px;
-}
+ .selectedUser {
+   height: 30px;
+   padding: 0 5px;
+   font-size: 15px;
+   margin-right: 5px;
+ }
 
-.add-user-button{
-  float: right;
-}
+ .add-user-button{
+   float: right;
+ }
 
-button.remove-user-button {
-  font-size: 18px;
-  padding-left: 7px;
-  color: white;
-  font-weight: lighter;
-}
+ button.remove-user-button {
+   font-size: 18px;
+   padding-left: 7px;
+   color: white;
+   font-weight: lighter;
+ }
 
-.jasmineBio {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    background-color: #bfbfb;
-    height:30px;
-    line-height:15px;
-}
-.jasmineBio.success {
-    background-color: #46a546;
-}
-span.add-label{
- display:none;
-}
-.jasmineBio:hover span.name{
- display:none;
-}
-.jasmineBio:hover span.add-label{
- display:block;
-}
+ .bio {
+     text-align: center;
+     font-size: 20px;
+     line-height:15px;
+ }
+ span.add-label{
+  display:none;
+ }
+ .bio:hover span.Jasname{
+  display:none;
+ }
+ .bio:hover span.Memoname{
+  display:none;
+ }
+ .bio:hover span.Vername{
+  display:none;
+ }
+ .bio:hover span.add-label{
+  display:block;
+ }
 
-.veronicaBio {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    background-color: #bfbfb;
-    height:30px;
-    line-height:15px;
-}
-.veronicaBio.success {
-    background-color: #46a546;
-}
-span.add-label{
- display:none;
-}
-.veronicaBio:hover span.name{
- display:none;
-}
-.veronicaBio:hover span.add-label{
- display:block;
-}
-
-.memoBio {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: black;
-    background-color: #bfbfb;
-    height:30px;
-    line-height:15px;
-}
-.memoBio.success {
-    background-color: #46a546;
-}
-memoBio.add-label{
- display:none;
-}
-.memoBio:hover span.name{
- display:none;
-}
-.memoBio:hover span.add-label{
- display:block;
-}
+ #aboutChat{
+   width:75%;
+   margin: 100px auto;
+ }

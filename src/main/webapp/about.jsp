@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,9 +24,6 @@
 <body>
 
   <div id="aboutChat">
-    <div
-      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px; text-align:left;">
-
       <h1>About Nemo Chat</h1>
      This is a chat app created by Team Nemo. It features:
       <li> a profile pages for users where they can update their About Me's and view their sent messages.</li>
@@ -38,32 +36,26 @@
       <li> a Bot Framework that allows developers to contribute their own Bots. </li>
       <li> NemoBot, a bot that functions as an assistant.</li>
       <li> ConversationStatBot, a bot that provides conversation statistics.</li>
-
-    </div>
   </div>
 <br>
   <div id="bioTitle">
     <div style="text-align:center;">
-       <h1> Team Nemo </h1>
+       <h4> Team Nemo </h4>
        </div>
   </div>
 
-  <div class="veronicaBio">
-    <p class="label success new-label"><span class="name">Veronica T Woldehanna</span>
+  <div class="bio">
+    <p class="label success new-label"><span class="nameVer">Veronica T Woldehanna</span>
     <span class="add-label">I'm from Ethiopia. I'm a rising junior at Columbia University majoring in Computer
       Science and minoring in Statistics.</p>
-    </div>
-
-    <div class="jasmineBio">
-        <p class="label success new-label"><span class="name">Jasmine Chau</span>
-          <span class="add-label">I'm from California.
-            I'm a rising sophmore at Middlebury College and I am  majoring in Computer Science. I love baking and memes.</p>
-    </div>
-
-   <div class="memoBio">
-        <p class="label success new-label"><span class="name">Guillermo M. Leal Gamboa</span>
-        <span class="add-label">I'm a rising sophomore at the University of Southern California majoring in Computer Science.
-          My hobbies include anything soccer related.</p>
+      <br>
+    <p class="label success new-label"><span class="nameJas">Jasmine Chau</span>
+    <span class="add-label">I'm from California.I'm a rising sophmore at Middlebury College and I am majoring in Computer Science.
+      I love baking and memes.</p>
+      <br>
+    <p class="label success new-label"><span class="nameMemo">Guillermo M. Leal Gamboa</span>
+    <span class="add-label">I'm a rising sophomore at the University of Southern California majoring in Computer Science.
+      My hobbies include anything soccer related.</p>
   </div>
 
 </body>
