@@ -274,18 +274,29 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
       <div id="chatBox" class="rounded">
         <div id="messagesContainer">
-          <ul>
-            <%
-              for (Message message : messages) {
-                String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-            %>
-                <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
-                <%= message.getContent() %> </li>
-
-            <%
-                }
-            %>
-          </ul>
+          <%
+            for (Message message : messages) {
+              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+              if(user.equals(author)){
+          %>
+                <div class="messageContainer">
+                  <div class="box rightBubble right">
+                    <%= message.getContent() %>
+                  </div>
+                </div>
+          <%
+              }else{
+          %>
+                <div class="messageContainer">
+                  <div class="box leftBubble left">
+                    <%= message.getContent() %>
+                    <span class="author"> <a href="/profile/<%=author %>"><%= author %></a> </span>
+                  </div>
+                </div>
+          <%
+              }
+            } 
+          %>
         </div>
       </div>
 
