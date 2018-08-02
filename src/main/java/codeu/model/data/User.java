@@ -16,6 +16,7 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+import java.util.HashMap;
 
 
 /** Class representing a registered user. */
@@ -27,6 +28,7 @@ public class User {
   private String aboutMe;
   private boolean isAdmin;
   private Instant lastSeenNotifications;
+  private HashMap<UUID, Instant> lastSeenConversations;
   /**
    * Constructs a new User.
    *
@@ -43,6 +45,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = creation;
+    lastSeenConversations = new HashMap<>();
   }
 
   /** Returns the ID of this User. */
@@ -93,6 +96,18 @@ public class User {
   /** Returns the Instant the last time the user visted the notification page */
   public Instant getLastSeenNotifications(){
     return lastSeenNotifications;
+  }
+
+  public HashMap<UUID, Instant> getLastSeenConversations(){
+    return lastSeenConversations;
+  }
+
+  public void setLastSeenConversations(HashMap<UUID, Instant> lastSeens){
+    lastSeenConversations = lastSeens;
+  }
+
+  public void sawConversation(UUID conversationId){
+    lastSeenConversations.put(conversationId, Instant.now());
   }
 
 }
