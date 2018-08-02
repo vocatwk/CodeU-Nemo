@@ -21,61 +21,51 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  
-  <div id="container">
+
+  <div id="aboutChat">
     <div
-      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
+      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px; text-align:left;">
 
-      <h1>About the CodeU Chat App</h1>
-      <p>
-        This is an example chat application designed to be a starting point
-        for your CodeU project team work. Here's some stuff to think about:
-      </p>
+      <h1>About Nemo Chat</h1>
+     This is a chat app created by Team Nemo. It features:
+      <li> a profile pages for users where they can update their About Me's and view their sent messages.</li>
+      <li> private and public conversations.</li>
+      <li> allows you to add/remove users from a conversation.</li>
+      <li> a notification page that allows you to see when messages and conversations are being made that you are member of.</li>
+      <li> an Activity Feed that allows users to see when new users join, create
+  conversations, send messages, and update their About Me's.</li>
+      <li> has a dynamic search feature that allows users to search for other users.</li>
+      <li> a Bot Framework that allows developers to contribute their own Bots. </li>
+      <li> NemoBot, a bot that functions as an assistant.</li>
+      <li> ConversationStatBot, a bot that provides conversation statistics.</li>
 
-      <ul>
-        <li><strong>Algorithms and data structures:</strong> We've made the app
-            and the code as simple as possible. You will have to extend the
-            existing data structures to support your enhancements to the app,
-            and also make changes for performance and scalability as your app
-            increases in complexity.</li>
-        <li><strong>Look and feel:</strong> The focus of CodeU is on the Java
-          side of things, but if you're particularly interested you might use
-          HTML, CSS, and JavaScript to make the chat app prettier.</li>
-        <li><strong>Customization:</strong> Think about a group you care about.
-          What needs do they have? How could you help? Think about technical
-          requirements, privacy concerns, and accessibility and
-          internationalization.</li>
-      </ul>
-
-      <p>
-        This is your code now. Get familiar with it and get comfortable
-        working with your team to plan and make changes. Start by updating the
-        homepage and this about page to tell your users more about your team.
-        This page should also be used to describe the features and improvements
-        you've added.
-      </p>
-      
-      <h1> Our team </h1>
-
-    	<ul>
-    	  <li> <strong> Veronica T Woldehanna:</strong> I'm from Ethiopia. I'm a
-    		rising junior at Columbia University majoring in Computer Science
-    		and minoring in Statistics.</li>
-    	</ul>
-
-
-      <ul>
-    	  <li> <strong> Jasmine Chau:</strong> I'm from California. I'm a
-    		rising Freshman at Middlebury College majoring in Computer Science.
-        I love baking and memes.</li>
-    	</ul>
-
-      <ul>
-        <li><strong>Guillermo M. Leal Gamboa:</strong> I'm a rising sophomore 
-          at the University of Southern California majoring in Computer 
-          Science. My hobbies include anything soccer related.</li>
-      </ul>
     </div>
   </div>
+
+  <div id="bioTitle">
+    <div style="text-align:center;">
+       <h1> Team Nemo </h1>
+       </div>
+  </div>
+
+
+  <div class="veronicaBio">
+    <p class="label success new-label"><span class="name">Veronica T Woldehanna</span>
+    <span class="add-label">I'm from Ethiopia. I'm a rising junior at Columbia University majoring in Computer
+      Science and minoring in Statistics.</p>
+    </div>
+
+    <div class="jasmineBio">
+        <p class="label success new-label"><span class="name">Jasmine Chau</span>
+          <span class="add-label">I'm from California.
+            I'm a rising sophmore at Middlebury College and I am  majoring in Computer Science. I love baking and memes.</p>
+    </div>
+
+   <div class="memoBio">
+        <p class="label success new-label"><span class="name">Guillermo M. Leal Gamboa</span>
+        <span class="add-label">I'm a rising sophomore at the University of Southern California majoring in Computer Science.
+          My hobbies include anything soccer related.</p>
+  </div>
+
 </body>
 </html>
