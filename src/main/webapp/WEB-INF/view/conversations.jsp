@@ -15,6 +15,7 @@
 --%>
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="java.time.Instant" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,55 +25,76 @@
 </head>
 <body>
 
-  <div id="container">
+  <div id="conversationContainer">
 
     <% if(request.getAttribute("error") != null){ %>
         <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <h1>New Conversation</h1>
-      <form action="/conversations" method="POST">
-          <div class="form-group">
-            <label class="form-control-label">Title:</label>
-          <input type="text" name="conversationTitle">
+    <form action="/conversations" method="POST">
+      <label for="conversationName">New Conversation</label>
+      <div class="flex" id="conversationForm">
+        <div class="form-group" id="conversationInput">
+          <input type="text" class="form-control" id="conversationName" name="conversationTitle" placeholder="Conversation Title">
+          <small id="conversationTitleHelp" class="form-text text-muted">Conversations will show up below</small>
         </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+      </div>
+    </form>
 
-        <button type="submit">Create</button>
-      </form>
+    <br>
 
-      <hr/>
-    <% } %>
-
-    <h1>Conversations</h1>
+    <label for="card">Conversations</label>
 
     <%
+    Boolean listIsEmpty = true;
+    Boolean oneFound = false;
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
-    if(conversations == null || conversations.isEmpty()){
+    if(conversations != null){
+      for(Conversation conversation : conversations){
+        if(!conversation.containsMember(navBarUsername)){
+          continue;
+        }
+        Instant lastSeen = navBarUser.getLastSeenConversations().get(conversation.getId());
+        Integer count = (lastSeen != null) ? conversation.getNewMessagesCount(lastSeen) : null;
+        if(!oneFound){
+    %>
+          <div class="card">
+          <table class="table table-bordered" id="conversationsTable">
+            <tbody>
+    <%
+          listIsEmpty=false;
+          oneFound=true;
+        }
+    %>
+        <tr><td>
+          <a href="/chat/<%= conversation.getId() %>"> <%= conversation.getTitle() %></a>
+    <%
+        if(count != null && count != 0){
+    %>
+          <div class="oval bg-primary"> <div id="number"> <%= count %> </div> </div>
+    <% 
+        }
+    %>
+        </td></tr>
+    <%
+      }
+    }
+    if(listIsEmpty || conversations == null){
     %>
       <p>Create a conversation to get started.</p>
     <%
     }
     else{
     %>
-      <ul class="mdl-list">
-    <%
-      for(Conversation conversation : conversations){
-        if(!conversation.containsMember(navBarUsername)){
-          continue;
-      }
-    %>
-      <li><a href="/chat/<%= conversation.getId() %>">
-        <%= conversation.getTitle() %></a></li>
-    <%
-      }
-    %>
-      </ul>
+          </tbody>
+        </table>
+      </div>
     <%
     }
     %>
-    <hr/>
+
   </div>
 </body>
 </html>

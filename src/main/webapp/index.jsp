@@ -56,7 +56,7 @@
     <div class="flex center-container">
       <div class="welcome-text">
         <div class="logo">
-          <img src="logo.png">
+          <img src="/logo.png">
         </div>
         Chat with those you love!
         <br>

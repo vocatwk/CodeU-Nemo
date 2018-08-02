@@ -25,11 +25,14 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.EmbeddedEntity;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -76,6 +79,16 @@ public class PersistentDataStore {
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
         if (lastSeenNotifications!= null) user.setLastSeenNotifications(Instant.parse(lastSeenNotifications));
+
+        EmbeddedEntity ee = (EmbeddedEntity) entity.getProperty("lastSeenConversation");
+        if (ee != null) {
+          HashMap<UUID, Instant> lastSeenConversations = new HashMap<>();
+          for (String key : ee.getProperties().keySet()) {
+              lastSeenConversations.put(UUID.fromString(key), Instant.parse((String) ee.getProperty(key)));
+          }
+          user.setLastSeenConversations(lastSeenConversations);
+        }
+
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -213,6 +226,13 @@ public class PersistentDataStore {
     if(last_seen_notifications != null){
       userEntity.setProperty("last_seen_notifications", last_seen_notifications.toString());
     }
+
+    EmbeddedEntity ee = new EmbeddedEntity();
+    for(Entry<UUID, Instant> e : user.getLastSeenConversations().entrySet()) {
+      ee.setProperty(e.getKey().toString(), e.getValue().toString());
+    }
+    userEntity.setProperty("lastSeenConversation", ee);
+
     datastore.put(userEntity);
   }
 
