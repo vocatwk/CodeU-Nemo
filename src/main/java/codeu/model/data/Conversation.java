@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.UUID;
 import java.util.HashSet;
 import java.util.Collection;
+import codeu.model.store.basic.MessageStore;
 
 /**
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
@@ -111,5 +112,9 @@ public class Conversation {
   /** Removes a member of this conversation. */
   public void removeMember(String username) {
     members.remove(username);
+  }
+
+  public int getNewMessagesCount(Instant lastSeen){
+    return MessageStore.getInstance().getNewMessageCountInConversation(this.id, lastSeen);
   }
 }

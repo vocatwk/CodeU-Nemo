@@ -13,184 +13,312 @@
  * limitations under the License.
  */
 
- body {
-   background-color: #ffffff;
-   color: #444;
-   height: 100vh;
-   width: 100vw;
- }
+body {
+  background-color: #ffffff;
+  color: #444;
+  height: 100vh;
+  width: 100vw;
+}
 
- #landing {
-   color: #fff;
- }
+/* index.jsp */
+#landing {
+  color: #fff;
+}
 
- .flex {
-   display: flex;
- }
+.flex {
+  display: flex;
+}
 
- .logo {
-   font-size: 2em;
-   margin-bottom: 30px;
- }
+.logo {
+  font-size: 2em;
+  margin-bottom: 30px;
+}
 
- .center-container {
-   margin: auto;
-   padding-top: 200px;
-   max-width: 800px;
- }
+.center-container {
+  margin: auto;
+  padding-top: 200px;
+  max-width: 800px;
+}
 
- .welcome-text {
-   flex-basis: 40%;
-   margin: auto;
- }
+.welcome-text {
+  flex-basis: 40%;
+  margin: auto;
+}
 
- .login-container{
-   flex-basis: 60%;
-   background-color: white;
-   border-radius: 5px;
-   margin-left: 5%;
-   max-width: 300px;
-   padding: 20px;
-   color: #555;
- }
+.login-container{
+  flex-basis: 60%;
+  background-color: white;
+  border-radius: 5px;
+  margin-left: 5%;
+  max-width: 300px;
+  padding: 20px;
+  color: #555;
+}
 
- #loginButton{
-   margin: 10px 25px;
- }
+#loginButton{
+  margin: 10px 25px;
+}
 
- #register{
-   display: none;
- }
+#register{
+  display: none;
+}
 
- /* This is for the search bar */
- #searchDiv {
-   display: inline-block;
-   margin-top: 10px;
-   border: none;
-   box-sizing:border-box;
-   position: relative;
- }
+/* conversations page. */
 
- #result {
-   background-color: #eeeeee;
-   position: absolute;
-   width: 100%;
- }
+#conversationContainer{
+  padding-top: 50px;
+  padding-left: 50px;
+  width: 100%;
+  height: 92%;
+}
 
- .resultItem {
-   background-color: #eeeeee;
-   border: 1px solid black;
-   text-align: center;
- }
+#conversationForm{
+  align-items: flex-start;
+  width: 100%;
+}
 
- .resultItem a {
-   font-size: 16px;
-   color: black;
-   margin: 0;
-   padding: 0;
-   display: block;
-   height: 100%;
-   width: 100%;
- }
+#conversationInput{
+  padding-left: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  width: 40%
+}
 
- .resultItem a:hover {
-   background-color: #AED6F1;
- }
- /* End of search bar */
+.card{
+  overflow-x: auto;
+  max-height: 75%;
+  margin-left: 10px;
+  width: 47%;
+}
 
- #container {
-   margin-left: auto;
-   margin-right: auto;
-   width: 800px;
- }
+#conversationsTable{
+  margin-bottom: 0;
+}
 
- h1 {
-   color: #757575;
- }
+/* chat page */
 
- input {
-   font-size: 18px;
- }
+#chatContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 87%;
+}
 
- button {
-   font-size: 18px;
- }
+#centeredChatContainer{
+  margin: auto;
+  width: 60%;
+  height: 100%
+}
 
- /* This is for Profile Pages */
- #messages {
-   background-color: white;
-   height: 500px;
-   overflow-y: scroll;
- }
+#chatBox{
+  background-color:#e5e6e8;
+  min-height: 77%;
+  max-height: 77%;
+  overflow-y: auto;
+}
 
- /* This is for the Activity Feed Page */
- #activity {
-   background-color: white;
-   height: 500px;
-   overflow-y: scroll;
- }
+#messageForm{
+  align-items: flex-start;
+}
 
- /* This is for the Search Results Page */
- #results {
-   background-color: white;
-   height: 500px;
-   overflow-y: scroll;
- }
+#messageInput{
+  width: 930px;
+  padding-right: 10px;
+}
 
- .headerContainer {
-   display: flex;
-   justify-content: space-between;
-   margin-top: 25px;
- }
+#settings-dropdown-trigger{
+  padding-right:20px;
+}
 
- .titleAndSettings {
-   display: flex;
- }
+.memberList{
+  padding-right: 15px;
+  font-size: 1.5em;
+}
 
- #selectedUserList {
-   display: flex;
- }
+.oval {
+  border-radius: 500px;
+  text-align: center;
+  min-width: 40px;
+  max-height: 25px;
+  line-height: 10px;
+  float:right;
+}
 
- .selectedUser {
-   height: 30px;
-   padding: 0 5px;
-   font-size: 15px;
-   margin-right: 5px;
- }
+#number{
+  padding:5px;
+}
 
- .add-user-button{
-   float: right;
- }
+/* chat page messages. */
 
- button.remove-user-button {
-   font-size: 18px;
-   padding-left: 7px;
-   color: white;
-   font-weight: lighter;
- }
+#messagesContainer {
+  padding: 10px;
+}
 
- .bio {
-     text-align: center;
-     font-size: 20px;
-     line-height:15px;
- }
- span.add-label{
-  display:none;
- }
- .bio:hover span.Jasname{
-  display:none;
- }
- .bio:hover span.Memoname{
-  display:none;
- }
- .bio:hover span.Vername{
-  display:none;
- }
- .bio:hover span.add-label{
-  display:block;
- }
+#userResult{
+  max-height: 300px;
+  overflow-y:auto;
+  margin-top: 10px;
+}
 
- #aboutChat{
-   width:75%;
-   margin: 100px auto;
- }
+/* This is for the search bar */
+#searchDiv {
+  display: inline-block;
+  margin-top: 10px;
+  border: none;
+  box-sizing:border-box;
+  position: relative;
+}
+
+#result {
+  background-color: #eeeeee;
+  position: absolute;
+  width: 100%;
+}
+
+.resultItem {
+  background-color: #eeeeee;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.resultItem a {
+  font-size: 16px;
+  color: black;
+  margin: 0;
+  padding: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.resultItem a:hover {
+  background-color: #AED6F1;
+}
+/* End of search bar */
+
+
+#container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+}
+
+h1 {
+  color: #757575;
+}
+
+input {
+  font-size: 18px;
+}
+
+button {
+  font-size: 18px;
+}
+
+/* This is for Profile Pages */
+#messages {
+  background-color: white;
+  height: 500px;
+  overflow-y: auto;
+}
+
+/* This is for the Activity Feed Page */
+#activityContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: 100%;
+}
+
+#activityHeader {
+  color: #757575;
+  margin-top: 10px;
+}
+
+#activity {
+  margin: auto;
+  width: 100%;
+  max-height: 67%;
+  overflow-y: auto;
+}
+
+#activity .list-group {
+  word-break: break-word;
+}
+/* End of Activity Feed */
+
+/* This is for the Bots Page */
+#botsContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: 100%;
+}
+
+#botsContainer h3 {
+  color: #757575;
+  margin-top: 10px;
+}
+
+#bots a {
+  text-decoration: none;
+}
+/* End of Bots Page */
+
+.headerContainer {
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+#selectedUserList {
+  display: flex;
+  flex-wrap : wrap;
+  overflow-y: auto;
+  max-height: 70px;
+}
+
+.selectedUser {
+  height: 30px;
+  padding: 0 5px;
+  font-size: 15px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.add-user-button{
+  float: right;
+}
+
+button.remove-user-button {
+  font-size: 18px;
+  padding-left: 7px;
+  color: white;
+  font-weight: lighter;
+}
+
+.bio {
+    text-align: center;
+    font-size: 20px;
+    line-height:15px;
+}
+span.add-label{
+ display:none;
+}
+.bio:hover span.Jasname{
+ display:none;
+}
+.bio:hover span.Memoname{
+ display:none;
+}
+.bio:hover span.Vername{
+ display:none;
+}
+.bio:hover span.add-label{
+ display:block;
+}
+
+#aboutChat{
+  width:75%;
+  margin: 100px auto;
+}

@@ -3,6 +3,8 @@ package codeu.controller;
 import codeu.model.data.Bot;
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -75,5 +77,12 @@ public class BotController {
     for (Bot bot : botMap.values()) {
       userStore.addUser((User)bot);
     }
+  }
+
+  /** Access the current set of Bots known to the application. */
+  public List<Bot> getAllBots() {
+    List<Bot> bots = new ArrayList<Bot>(botMap.values());
+
+    return bots;
   }
 }

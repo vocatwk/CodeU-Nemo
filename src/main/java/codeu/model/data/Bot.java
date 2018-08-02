@@ -15,6 +15,9 @@ public interface Bot {
   /** Returns the Bot's id. */
   public UUID getId();
 
+  /** Returns the Bot's "About Me". */
+  public String getAboutMe();
+
   /** Creates a reply based on the keyword. */
   public String answerMessage(String message, Conversation conversation);
   

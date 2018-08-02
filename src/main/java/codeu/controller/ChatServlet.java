@@ -136,6 +136,10 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    User user = userStore.getUser(username);
+    user.sawConversation(conversationId);
+    userStore.updateUser(user);
+
     String purpose = request.getHeader("purpose");
     if(purpose != null && purpose.equals("Get members")){
       String json = new Gson().toJson(conversation.getMembers());

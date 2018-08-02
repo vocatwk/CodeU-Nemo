@@ -23,7 +23,9 @@ public class NemoBotTest {
   public void testCreate() {
     String name = "NemoBot";
     UUID id = UUID.nameUUIDFromBytes(name.getBytes());
-    String aboutMe = "I'm " + name + ". Want to talk to me? Simply @ mention me in any conversation!";
+    String aboutMe = "I'm " + name + ". Want to talk to me? Simply @ mention me in any conversation!"
+        + " Feel free to ask me about the following: Conversations, Profiles, " 
+        + "Activtity Feed, Notifications, Searching for users, and Bots.";
     String mentionKey = "@" + name;
     
     Assert.assertEquals(id, nemoBot.getId());
