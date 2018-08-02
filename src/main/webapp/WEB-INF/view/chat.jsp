@@ -251,9 +251,9 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
           <!-- Setting button and content -->
           <div class="dropdown">
-            <h3 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <h4 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fa fa-cog"> </i>
-            </h3>
+            </h4>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
               <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
@@ -261,13 +261,13 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
           </div>
 
           <!-- Conversation title -->
-          <h3> <%= conversation.getTitle() %> </h3>
+          <h4> <%= conversation.getTitle() %> </h4>
         </div>
 
         <%@ include file="addUserBox.jsp" %>
 
         <div class="flex text-primary"> 
-          <h3 class="memberList"> </h3>
+          <strong class="memberList"> </strong>
           <a href="" ><h2> &#8635; </h2></a>
         </div>
       </div>
