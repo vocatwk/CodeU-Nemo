@@ -530,12 +530,11 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
-    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
-        .thenReturn(mockConversation);
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId)).thenReturn(mockConversation);
 
+    chatServlet.doPut(mockRequest, mockResponse);
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
     Mockito.when(mockReader.readLine()).thenReturn("unmute");
-    chatServlet.doPut(mockRequest, mockResponse);
     Mockito.verify(mockUser).addSubscription(fakeConversationId);
   }
 
@@ -545,13 +544,11 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
-    Mockito.when(mockConversationStore.getConversation(fakeConversationId))
-        .thenReturn(mockConversation);
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId)).thenReturn(mockConversation);
 
-    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
-
-    Mockito.when(mockReader.readLine()).thenReturn("mute");
     chatServlet.doPut(mockRequest, mockResponse);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
+    Mockito.when(mockReader.readLine()).thenReturn("mute");
     Mockito.verify(mockUser).removeSubscription(fakeConversationId);
   }
 
