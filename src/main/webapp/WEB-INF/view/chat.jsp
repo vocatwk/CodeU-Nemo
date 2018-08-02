@@ -18,6 +18,8 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.util.UUID" %>
+<%@ page import="java.util.Iterator" %>
+
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -57,6 +59,23 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         }
       }
       return true;
+    }
+
+    $(window).ready(function(){
+      updateMembersList();
+    })
+
+    function updateMembersList(){
+      var it = membersOfConversation.values();
+
+      if(membersOfConversation.size >= 3){
+        $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and " 
+          + (membersOfConversation.size - 2) + " others.");
+      }else if(membersOfConversation.size == 2) {
+        $(".memberList").html("People: " + it.next().value + " and " + it.next().value);
+      }else{
+        $(".memberList").html("People: " + it.next().value);
+      }
     }
 
     function AddUserAsTag(userName){
@@ -201,6 +220,8 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
             return;
           }
           membersOfConversation = new Set(membersAfterEditing);
+          updateMembersList();
+
           if(!membersOfConversation.has("<%= user %>")){
             window.location.replace("/conversations");
           }
@@ -220,63 +241,67 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 </head>
 <body onload="scrollChat()">
 
-  <div id="container">
+  <div id="chatContainer">
 
-    <div class="headerContainer">
+    <div id="centeredChatContainer">
 
-      <div class="titleAndSettings">
-        <!-- Conversation title -->
-        <h1> <%= conversation.getTitle() %> </h1>
+      <div class="headerContainer flex">
 
-        <!-- Setting button and content -->
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-cog"> </i>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+        <div class="titleAndSettings flex">
+
+          <!-- Setting button and content -->
+          <div class="dropdown">
+            <h4 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-cog"> </i>
+            </h4>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
+              <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+            </div>
           </div>
+
+          <!-- Conversation title -->
+          <h4> <%= conversation.getTitle() %> </h4>
+        </div>
+
+        <%@ include file="addUserBox.jsp" %>
+
+        <div class="flex text-primary"> 
+          <strong class="memberList"> </strong>
+          <a href="" ><h2> &#8635; </h2></a>
         </div>
       </div>
 
-      <%@ include file="addUserBox.jsp" %>
+      <div id="chatBox" class="rounded">
+        <div id="messagesContainer">
+          <ul>
+            <%
+              for (Message message : messages) {
+                String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+            %>
+                <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
+                <%= message.getContent() %> </li>
 
-      <h1> <a href="" >&#8635;</a> </h1>
+            <%
+                }
+            %>
+          </ul>
+        </div>
+      </div>
+
+      <hr/>
+
+      <form action="/chat/<%= conversation.getId() %>" method="POST">
+        <div class="flex" id="messageForm">
+          <div class="form-group" id="messageInput">
+            <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
+          </div>
+          <button type="submit" class="btn btn-primary">Send</button>
+        </div>
+      </form>
+
+      <hr/>
     </div>
-
-    <hr/>
-
-    <div id="chat">
-      <ul>
-    <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong> <a href="/profile/<%=author %>"><%= author %></a>:
-          </strong> <%= message.getContent() %></li>
-    <%
-      }
-    %>
-      </ul>
-    </div>
-
-    <hr/>
-
-    <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getId() %>" method="POST">
-        <input type="text" name="message">
-        <br/>
-        <button type="submit">Send</button>
-    </form>
-    <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
-    <% } %>
-
-    <hr/>
-
   </div>
 
 </body>

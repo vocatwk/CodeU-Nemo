@@ -20,6 +20,7 @@ body {
   width: 100vw;
 }
 
+/* index.jsp */
 #landing {
   color: #fff;
 }
@@ -62,6 +63,104 @@ body {
   display: none;
 }
 
+/* conversations page. */
+
+#conversationContainer{
+  padding-top: 50px;
+  padding-left: 50px;
+  width: 100%;
+  height: 92%;
+}
+
+#conversationForm{
+  align-items: flex-start;
+  width: 100%;
+}
+
+#conversationInput{
+  padding-left: 10px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+  width: 40%
+}
+
+.card{
+  overflow-x: auto;
+  max-height: 75%;
+  margin-left: 10px;
+  width: 47%;
+}
+
+#conversationsTable{
+  margin-bottom: 0;
+}
+
+/* chat page */
+
+#chatContainer {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 87%;
+}
+
+#centeredChatContainer{
+  margin: auto;
+  width: 60%;
+  height: 100%
+}
+
+#chatBox{
+  background-color:#e5e6e8;
+  min-height: 77%;
+  max-height: 77%;
+  overflow-y: auto;
+}
+
+#messageForm{
+  align-items: flex-start;
+}
+
+#messageInput{
+  width: 930px;
+  padding-right: 10px;
+}
+
+#settings-dropdown-trigger{
+  padding-right:20px;
+}
+
+.memberList{
+  padding-right: 15px;
+  font-size: 1.5em;
+}
+
+.oval {
+  border-radius: 500px;
+  text-align: center;
+  min-width: 40px;
+  max-height: 25px;
+  line-height: 10px;
+  float:right;
+}
+
+#number{
+  padding:5px;
+}
+
+/* chat page messages. */
+
+#messagesContainer {
+  padding: 10px;
+}
+
+#userResult{
+  max-height: 300px;
+  overflow-y:auto;
+  margin-top: 10px;
+}
+
 /* This is for the search bar */
 #searchDiv {
   display: inline-block;
@@ -98,6 +197,7 @@ body {
 }
 /* End of search bar */
 
+
 #container {
   margin-left: auto;
   margin-right: auto;
@@ -120,35 +220,33 @@ button {
 #messages {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* This is for the Activity Feed Page */
 #activity {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* This is for the Search Results Page */
 #results {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .headerContainer {
-  display: flex;
   justify-content: space-between;
   margin-top: 25px;
 }
 
-.titleAndSettings {
-  display: flex;
-}
-
 #selectedUserList {
   display: flex;
+  flex-wrap : wrap;
+  overflow-y: auto;
+  max-height: 70px;
 }
 
 .selectedUser {
@@ -156,6 +254,7 @@ button {
   padding: 0 5px;
   font-size: 15px;
   margin-right: 5px;
+  margin-bottom: 5px;
 }
 
 .add-user-button{
