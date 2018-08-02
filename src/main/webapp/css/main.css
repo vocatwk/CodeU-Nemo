@@ -152,7 +152,13 @@ body {
 /* chat page messages. */
 
 #messagesContainer {
-    padding: 10px;
+  padding: 10px;
+}
+
+#userResult{
+  max-height: 300px;
+  overflow-y:scroll;
+  margin-top: 10px;
 }
 
 /* This is for the search bar */
