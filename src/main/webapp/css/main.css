@@ -86,7 +86,7 @@ body {
 }
 
 .card{
-  overflow-x: scroll;
+  overflow-x: auto;
   max-height: 75%;
   margin-left: 10px;
   width: 47%;
@@ -115,7 +115,7 @@ body {
   background-color:#e5e6e8;
   min-height: 77%;
   max-height: 77%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 #messageForm{
@@ -157,7 +157,7 @@ body {
 
 #userResult{
   max-height: 300px;
-  overflow-y:scroll;
+  overflow-y:auto;
   margin-top: 10px;
 }
 
@@ -220,21 +220,21 @@ button {
 #messages {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* This is for the Activity Feed Page */
 #activity {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 /* This is for the Search Results Page */
 #results {
   background-color: white;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .headerContainer {
@@ -245,7 +245,7 @@ button {
 #selectedUserList {
   display: flex;
   flex-wrap : wrap;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 70px;
 }
 
