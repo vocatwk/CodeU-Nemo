@@ -16,8 +16,12 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
+<<<<<<< HEAD
 import java.util.List;
 import java.util.ArrayList;
+=======
+import java.util.HashMap;
+>>>>>>> b652a61b5f9a9b16bdece4ae90d1dad33b6d73f7
 
 
 /** Class representing a registered user. */
@@ -29,8 +33,12 @@ public class User {
   private String aboutMe;
   private boolean isAdmin;
   private Instant lastSeenNotifications;
+<<<<<<< HEAD
   private List<UUID> subscriptions;
 
+=======
+  private HashMap<UUID, Instant> lastSeenConversations;
+>>>>>>> b652a61b5f9a9b16bdece4ae90d1dad33b6d73f7
   /**
    * Constructs a new User.
    *
@@ -47,7 +55,11 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = creation;
+<<<<<<< HEAD
     this.subscriptions = new ArrayList<>();
+=======
+    lastSeenConversations = new HashMap<>();
+>>>>>>> b652a61b5f9a9b16bdece4ae90d1dad33b6d73f7
   }
 
   /** Returns the ID of this User. */
@@ -99,31 +111,41 @@ public class User {
     return lastSeenNotifications;
   }
 
-  /** Add a conversation id to the subscriptions list */
-  public void addSubscription(UUID conversationId){
-    subscriptions.add(conversationId);
+  public HashMap<UUID, Instant> getLastSeenConversations(){
+    return lastSeenConversations;
   }
 
-  /** get the subscriptions list*/
-  public List<UUID> getSubscriptions(){
-    return subscriptions;
-  }
-  /** remove a conversation id from the subscriptions list */
-  public void removeSubscription(UUID conversationId){
-    subscriptions.remove(conversationId);
-  }
-  /** set the subscriptions list*/
-  public void setSubscriptions(List<UUID> subscriptions){
-     this.subscriptions = subscriptions;
+  public void setLastSeenConversations(HashMap<UUID, Instant> lastSeens){
+    lastSeenConversations = lastSeens;
   }
 
-  public List<String> getSubscriptionsAsString(){
-    List<String> idsAsStrings = new ArrayList<>();
-    for(UUID subId: subscriptions){
-      String subIdAsString = subId.toString();
-      idsAsStrings.add(subIdAsString);
+  public void sawConversation(UUID conversationId){
+    lastSeenConversations.put(conversationId, Instant.now());
+    /** Add a conversation id to the subscriptions list */
+    public void addSubscription(UUID conversationId){
+      subscriptions.add(conversationId);
     }
-    return idsAsStrings;
+
+    /** get the subscriptions list*/
+    public List<UUID> getSubscriptions(){
+      return subscriptions;
+    }
+    /** remove a conversation id from the subscriptions list */
+    public void removeSubscription(UUID conversationId){
+      subscriptions.remove(conversationId);
+    }
+    /** set the subscriptions list*/
+    public void setSubscriptions(List<UUID> subscriptions){
+       this.subscriptions = subscriptions;
+    }
+
+    public List<String> getSubscriptionsAsString(){
+      List<String> idsAsStrings = new ArrayList<>();
+      for(UUID subId: subscriptions){
+        String subIdAsString = subId.toString();
+        idsAsStrings.add(subIdAsString);
+      }
+      return idsAsStrings;
   }
 
 }

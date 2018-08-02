@@ -120,6 +120,7 @@ public class ChatServletTest {
         .thenReturn(fakeConversation);
 
     Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
 
     List<Message> fakeMessageList = new ArrayList<>();
     fakeMessageList.add(
@@ -134,6 +135,9 @@ public class ChatServletTest {
         .thenReturn(fakeMessageList);
 
     chatServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockUser).sawConversation(fakeConversationId);
+    Mockito.verify(mockUserStore).updateUser(mockUser);
 
     Mockito.verify(mockRequest).setAttribute("conversation", fakeConversation);
     Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
@@ -161,9 +165,15 @@ public class ChatServletTest {
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
+
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Get members");
 
     chatServlet.doGet(mockRequest, mockResponse);
+
+    Mockito.verify(mockUser).sawConversation(fakeConversationId);
+    Mockito.verify(mockUserStore).updateUser(mockUser);
+
 
     Mockito.verify(mockResponse).setContentType("application/json");
     Mockito.verify(mockResponse).setCharacterEncoding("UTF-8");

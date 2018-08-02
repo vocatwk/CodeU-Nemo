@@ -3,7 +3,6 @@ package codeu.controller;
 import codeu.model.data.Event;
 import codeu.model.store.basic.EventStore;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,14 +41,5 @@ public class ActivityFeedServlet extends HttpServlet {
     request.setAttribute("events", events);
 
     request.getRequestDispatcher("/WEB-INF/view/activityfeed.jsp").forward(request, response);
-  }
-
-  /**
-  * TODO: Describe functionality
-  */
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) 
-      throws IOException, ServletException {
-    // TODO
   }
 }
