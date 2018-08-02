@@ -67,9 +67,8 @@ public class PersistentDataStoreTest {
     boolean isAdminTwo = false;
     Instant lastSeenNotificationsTwo = Instant.ofEpochMilli(2000);
     List<UUID> subscriptionsTwo = new ArrayList<>();
+    subscriptionsOne.add(UUID.fromString("10000006-2222-3333-4444-555555555555"));
     User inputUserTwo = new User(idTwo, nameTwo, passwordHashTwo, creationTwo);
-    subscriptionsTwo.add(UUID.fromString("10000006-2222-3333-4444-555555555555"));
-    subscriptionsTwo.add(UUID.fromString("10000007-2222-3333-4444-555555555555"));
     inputUserTwo.setIsAdmin(isAdminTwo);
     inputUserTwo.setLastSeenNotifications(lastSeenNotificationsTwo);
     inputUserTwo.setAboutMe(aboutMeTwo);

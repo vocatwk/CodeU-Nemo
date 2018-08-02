@@ -122,7 +122,6 @@ public class ChatServlet extends HttpServlet {
     String conversationIdAsString = requestUrl.substring("/chat/".length());
     UUID conversationId = getIdFromString(conversationIdAsString);
     String username = (String)request.getSession().getAttribute("user");
-    User user = userStore.getUser(username);
     Conversation conversation = conversationStore.getConversation(conversationId);
 
     if (conversation == null) {

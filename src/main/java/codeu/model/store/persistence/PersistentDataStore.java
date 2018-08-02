@@ -89,7 +89,14 @@ public class PersistentDataStore {
           }
           user.setLastSeenConversations(lastSeenConversations);
         }
-
+        List<UUID> subIdAsId = new ArrayList<>();
+        if(subscriptionsAsString!= null){
+          for(String subIdAsAString:subscriptionsAsString){
+            UUID subId = UUID.fromString(subIdAsAString);
+            subIdAsId.add(subId);
+          }
+          user.setSubscriptions(subIdAsId);
+        }
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
