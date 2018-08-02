@@ -29,6 +29,7 @@
       <a class="nav-item nav-link" href="/conversations">Conversations <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="/notifications"> Notifications</a>
       <a class="nav-item nav-link" href="/activityfeed">Activity</a>
+      <a class="nav-item nav-link" href="/bots">Bots</a>
       <a class="nav-item nav-link" href="/about.jsp">About</a>
     </div>
 

@@ -35,7 +35,10 @@ public class ConversationStatBot extends User implements Bot {
             "GoogleCodeUTeamNemoConversationStatBotPassword2018", 
             BCrypt.gensalt()), 
         Instant.now());
-    setAboutMe("I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!");
+    setAboutMe(
+        "I'm ConversationStatBot. Want to talk to me? Simply @ mention me in any conversation!"
+            + " Feel free to ask me about the following for any conversation: "
+            + "The owner, when it was created, the privacy status, and the amount of users and messages.");
     setIsAdmin(true);
     setLastSeenNotifications(null);
     mentionKey = "@ConversationStatBot";
