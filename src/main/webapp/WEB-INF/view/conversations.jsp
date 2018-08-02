@@ -15,6 +15,7 @@
 --%>
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="java.time.Instant" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,6 +56,8 @@
         if(!conversation.containsMember(navBarUsername)){
           continue;
         }
+        Instant lastSeen = navBarUser.getLastSeenConversations().get(conversation.getId());
+        Integer count = (lastSeen != null) ? conversation.getNewMessagesCount(lastSeen) : null;
         if(!oneFound){
     %>
           <div class="card">
@@ -67,6 +70,13 @@
     %>
         <tr><td>
           <a href="/chat/<%= conversation.getId() %>"> <%= conversation.getTitle() %></a>
+    <%
+        if(count != null && count != 0){
+    %>
+          <div class="oval bg-primary"> <div id="number"> <%= count %> </div> </div>
+    <% 
+        }
+    %>
         </td></tr>
     <%
       }

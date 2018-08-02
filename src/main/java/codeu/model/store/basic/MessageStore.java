@@ -19,6 +19,9 @@ import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.ListIterator;
+import java.time.Instant;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -88,6 +91,25 @@ public class MessageStore {
     }
 
     return messagesInConversation;
+  }
+
+  public int getNewMessageCountInConversation(UUID conversationId, Instant lastSeenTimeStamp){
+    
+    int count = 0;
+    ListIterator<Message> it = messages.listIterator(messages.size());
+
+    while (it.hasPrevious()) {
+      Message currentMessage = it.previous();
+      if(currentMessage.getCreationTime().compareTo(lastSeenTimeStamp) < 0 ){
+        break;
+      }
+
+      if(currentMessage.getConversationId().equals(conversationId)){
+        count ++;
+      }  
+    }
+    
+    return count;
   }
 
   /** Access the current set of Messages from the given author. */
