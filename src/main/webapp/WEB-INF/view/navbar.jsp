@@ -20,30 +20,45 @@
   <% String navBarUsername = (String)request.getSession().getAttribute("user"); %>
   <% User navBarUser = UserStore.getInstance().getUser(navBarUsername);%>
 
-  <a class="navbar-brand" href="#">
+  <a class="navbar-brand" href="/conversations">
     <img src="/logo.png" width="100" height="45" alt="">
   </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/conversations">Conversations <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/notifications"> Notifications</a> 
-      <a class="nav-item nav-link" href="/activityfeed">Activity</a>
-      <a class="nav-item nav-link" href="/bots">Bots</a>
-      <a class="nav-item nav-link" href="/about.jsp">About</a>
-    </div>
-
-    <div class="navbar-nav">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/conversations">Conversations</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/notifications">Notifications</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/activityfeed">Activity</a>
+      </li>
+      <li>
+        <a class="nav-link" href="/bots">Bots</a>
+      </li>
+      <li>
+        <a class="nav-link" href="/about.jsp">About</a>
+      </li>
       <%if(navBarUsername != null && navBarUser.getIsAdmin() == true){%>
-          <a class="nav-item nav-link" href="/admin"> Admin Page</a>
+        <li>
+          <a class="nav-link" href="/admin">Admin Page</a>
+        </li>
       <%}%>
-      <%@ include file="searchbar.jsp" %>
+    </ul>
+
+    <%@ include file="searchbar.jsp" %>
+
+    <div class="navbar-nav nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-user"></i>
+      </a>
 
       <div class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-user"></i>
-        </a>
-
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="/profile/<%=navBarUsername %>">My Profile</a>
           <div class="dropdown-divider"></div>
@@ -55,5 +70,4 @@
     </div>
 
   </div>
-
 </nav>
