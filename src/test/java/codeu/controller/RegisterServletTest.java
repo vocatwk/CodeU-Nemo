@@ -49,6 +49,17 @@ public class RegisterServletTest {
   }
 
   @Test
+  public void testDoPost_EmptyUsername() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("username")).thenReturn("   ");
+
+    registerServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockRequest)
+        .setAttribute("error", "Username must contain at least one letter or number.");
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
+  @Test
   public void testDoPost_BadUsername() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("bad !@#$% username");
 

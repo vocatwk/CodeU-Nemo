@@ -161,6 +161,72 @@ body {
   margin-top: 10px;
 }
 
+.messageContainer{
+  margin-bottom:10px;
+  display:flex;
+  word-break: break-word;
+}
+
+.right{
+  justify-content: flex-end;
+}
+
+.box {
+  background: #ffffff;
+  color: #007bff;
+  max-width: 30%;
+  margin-left:25px;
+  margin-top:10px;
+  margin-right:25px;
+  padding: 20px;
+  text-align: left;
+  font-weight: 900;
+  font-family: arial;
+  position:relative;
+  border-radius:10px;
+}
+
+.box.blue{
+  background: #007bff;
+  color: #ffffff;
+}
+
+.triangle:before{
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  top: 6px;
+  border-bottom: 10px solid transparent;
+}
+
+.leftBubble:before {
+  border-left: 10px solid transparent;
+  border-right: 10px solid #ffffff;
+  border-top: 10px solid #ffffff;
+  left: -19px;
+}
+
+.rightBubble:before {
+  border-left: 10px solid #007bff;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #007bff;
+  right: -19px;
+}
+
+.dot {
+  height: 50px;
+  width: 50px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.author{
+  font-size: 0.6em;
+  float: left ;
+}
 /* This is for the search bar */
 #searchDiv {
   display: inline-block;
@@ -321,4 +387,7 @@ span.add-label{
 #aboutChat{
   width:75%;
   margin: 100px auto;
+}
+#notifications p {
+  left margin:20px;
 }

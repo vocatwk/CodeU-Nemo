@@ -233,7 +233,7 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
 
     // scroll the chat div to the bottom
     function scrollChat() {
-      var chatDiv = document.getElementById('chat');
+      var chatDiv = document.getElementById('chatBox');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
@@ -291,18 +291,32 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
 
       <div id="chatBox" class="rounded">
         <div id="messagesContainer">
-          <ul>
-            <%
-              for (Message message : messages) {
-                String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-            %>
-                <li> <strong> <a href="/profile/<%=author %>"><%= author %></a>: </strong>
-                <%= message.getContent() %> </li>
-
-            <%
-                }
-            %>
-          </ul>
+          <%
+            for (Message message : messages) {
+              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+              if(user.equals(author)){
+          %>
+                <div class="messageContainer right">
+                  <div class="box triangle rightBubble blue">
+                    <%= message.getContent() %>
+                  </div>
+                  <img class="dot" src="/default-user.png">
+                </div>
+          <%
+              }else{
+          %>
+                <div class="messageContainer">
+                  <img class="dot" src="/default-user.png">
+                  <div class="box triangle leftBubble">
+                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
+                    <br>
+                    <%= message.getContent() %>
+                  </div>
+                </div>
+          <%
+              }
+            } 
+          %>
         </div>
       </div>
 
