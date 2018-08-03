@@ -280,17 +280,17 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
               if(user.equals(author)){
           %>
                 <div class="messageContainer right">
-                  <div class="box rightBubble blue">
+                  <div class="box triangle rightBubble blue">
                     <%= message.getContent() %>
                   </div>
-                  <img class="dot rightImg" src="/default-user.png">
+                  <img class="dot" src="/default-user.png">
                 </div>
           <%
               }else{
           %>
                 <div class="messageContainer">
-                  <img class="dot leftImg" src="/default-user.png">
-                  <div class="box leftBubble">
+                  <img class="dot" src="/default-user.png">
+                  <div class="box triangle leftBubble">
                     <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
                     <br>
                     <%= message.getContent() %>

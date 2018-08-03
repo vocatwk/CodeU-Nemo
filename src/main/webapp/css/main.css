@@ -162,9 +162,7 @@ body {
 }
 
 .messageContainer{
-  width:100%;
   margin-bottom:10px;
-  overflow:hidden;
   display:flex;
 }
 
@@ -180,7 +178,7 @@ body {
   margin-top:10px;
   margin-right:25px;
   padding: 20px;
-  text-align: center;
+  text-align: left;
   font-weight: 900;
   font-family: arial;
   position:relative;
@@ -192,30 +190,27 @@ body {
   color: #ffffff;
 }
 
-.leftBubble:before {
+.triangle:before{
   content: "";
   width: 0px;
   height: 0px;
   position: absolute;
+  top: 6px;
+  border-bottom: 10px solid transparent;
+}
+
+.leftBubble:before {
   border-left: 10px solid transparent;
   border-right: 10px solid #ffffff;
   border-top: 10px solid #ffffff;
-  border-bottom: 10px solid transparent;
   left: -19px;
-  top: 6px;
 }
 
 .rightBubble:before {
-  content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
   border-left: 10px solid #007bff;
   border-right: 10px solid transparent;
   border-top: 10px solid #007bff;
-  border-bottom: 10px solid transparent;
   right: -19px;
-  top: 6px;
 }
 
 .dot {
@@ -224,14 +219,7 @@ body {
   background-color: #bbb;
   border-radius: 50%;
   display: inline-block;
-}
-
-.leftImg{
-  margin-left: 5px;
-}
-
-.rightImg{
-  margin-right: 5px;
+  margin: 0 5px;
 }
 
 .author{
