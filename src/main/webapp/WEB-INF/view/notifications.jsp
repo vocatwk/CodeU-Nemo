@@ -28,14 +28,22 @@
       %>
       <%if(type.equals("Conversation")){%>
         <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
-            <%= Username %> opened a conversation!
-            Conversation title <%= notifcationInfo.get(1)%>
+          <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <strong><%= Username %></strong> opened a conversation!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
         </li>
       <% }else if(type.equals("Message")){ %>
-            <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
-              <%= Username %> sent a message!
-              Check conversation: <%= notifcationInfo.get(1)%>
-            </li>
+          <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+              <strong><%= Username %></strong> sent a message!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </li>
         <%}%>
       <%}%>
     </ul>
