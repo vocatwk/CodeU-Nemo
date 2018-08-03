@@ -279,18 +279,21 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
               String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
               if(user.equals(author)){
           %>
-                <div class="messageContainer">
-                  <div class="box rightBubble right">
+                <div class="messageContainer right">
+                  <div class="box rightBubble blue">
                     <%= message.getContent() %>
                   </div>
+                  <img class="dot rightImg" src="/default-user.png">
                 </div>
           <%
               }else{
           %>
                 <div class="messageContainer">
-                  <div class="box leftBubble left">
+                  <img class="dot leftImg" src="/default-user.png">
+                  <div class="box leftBubble">
+                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
+                    <br>
                     <%= message.getContent() %>
-                    <span class="author"> <a href="/profile/<%=author %>"><%= author %></a> </span>
                   </div>
                 </div>
           <%

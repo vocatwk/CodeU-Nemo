@@ -165,9 +165,16 @@ body {
   width:100%;
   margin-bottom:10px;
   overflow:hidden;
+  display:flex;
+}
+
+.right{
+  justify-content: flex-end;
 }
 
 .box {
+  background: #ffffff;
+  color: #007bff;
   max-width: 30%;
   margin-left:25px;
   margin-top:10px;
@@ -180,22 +187,9 @@ body {
   border-radius:10px;
 }
 
-.right{
-  float:right;
+.box.blue{
   background: #007bff;
   color: #ffffff;
-}
-
-.left{
-  float: left;
-  background: #ffffff;
-  color: #007bff;
-}
-
-.author{
-  font-size:0.6em;
-  color: #007bff;
-  margin-left:25px;
 }
 
 .leftBubble:before {
@@ -224,6 +218,26 @@ body {
   top: 6px;
 }
 
+.dot {
+  height: 50px;
+  width: 50px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.leftImg{
+  margin-left: 5px;
+}
+
+.rightImg{
+  margin-right: 5px;
+}
+
+.author{
+  font-size: 0.6em;
+  float: left ;
+}
 /* This is for the search bar */
 #searchDiv {
   display: inline-block;
