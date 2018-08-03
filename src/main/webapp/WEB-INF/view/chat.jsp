@@ -232,7 +232,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
     // scroll the chat div to the bottom
     function scrollChat() {
-      var chatDiv = document.getElementById('chat');
+      var chatDiv = document.getElementById('chatBox');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
