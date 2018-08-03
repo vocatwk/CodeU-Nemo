@@ -70,6 +70,13 @@ public class RegisterServlet extends HttpServlet {
 
     String username = request.getParameter("username");
 
+    if (username.trim().length() < 1) {
+      request.setAttribute("error", "Username must contain at least one letter or number.");
+      request.setAttribute("registrationForm", true);
+      request.getRequestDispatcher("/index.jsp").forward(request, response);
+      return;
+    }
+
     if (!username.matches("[\\w*\\s*]*")) {
       request.setAttribute("error", "Please enter only letters, numbers, and spaces.");
       request.setAttribute("registrationForm", true);
