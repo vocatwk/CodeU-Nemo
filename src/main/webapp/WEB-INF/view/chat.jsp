@@ -265,19 +265,6 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
       <div class="headerContainer flex">
 
         <div class="titleAndSettings flex">
-
-<<<<<<< HEAD
-        <!-- Setting button and content -->
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="settingsDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-cog"> </i>
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
-            <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
-            <button id="SubButton" class="dropdown-item btn btn-primary" type="button"><%= subButtonValue %></button>
-=======
           <!-- Setting button and content -->
           <div class="dropdown">
             <h4 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -286,8 +273,8 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
               <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+              <button id="SubButton" class="dropdown-item btn btn-primary" type="button"><%= subButtonValue %></button>
             </div>
->>>>>>> b652a61b5f9a9b16bdece4ae90d1dad33b6d73f7
           </div>
 
           <!-- Conversation title -->

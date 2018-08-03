@@ -62,8 +62,8 @@ public class NotificationServlet extends HttpServlet{
           String eventType = subscibedEvent.getType();
           List<String> information = subscibedEvent.getInformation();
           if(eventType.equals("Message") && information.size() > 3){
-            String messageId = information.get(3);
-            UUID conversationId = UUID.fromString(messageId);
+            String convoId = information.get(3);
+            UUID conversationId = UUID.fromString(convoId);
             if (conversationSubbedTo.contains(conversationId)){eventsToShow.add(subscibedEvent);}
           } else if(eventType.equals("Conversation") && information.size() > 2){
             String convoId = information.get(2);
