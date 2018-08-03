@@ -25,6 +25,25 @@ ConversationStore conversationStore = ConversationStore.getInstance();
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
+
+    function readImage() {
+  
+      if (this.files && this.files[0]) {
+        
+        var FR = new FileReader();
+        
+        FR.addEventListener("load", function(e) {
+          document.getElementById("image").src       = e.target.result;
+          document.getElementById("imageName").innerHTML = e.target.result;
+          alert("upload done");
+        }); 
+        
+        FR.readAsDataURL( this.files[0] );
+      }
+  
+    }
+
+    document.getElementById("profilePicture").addEventListener("change", readImage);
   </script>
 </head>
 <body onload="scrollChat()">
@@ -49,6 +68,11 @@ ConversationStore conversationStore = ConversationStore.getInstance();
         <button type="submit">Submit</button>
       </form>
     <% } %>
+
+    <input id="profilePicture" type='file'>
+    <p id="imageName"></p>
+    <img id="image" height="150">
+
     <hr/>
 
     <h2> <%= subject %>'s sent messages <a href="" style="float: right">&#8635;</a></h2>
