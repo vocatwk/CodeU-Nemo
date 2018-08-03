@@ -16,8 +16,9 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <h4> Back from fishing? This is what you missed:</h4>
+
   <div id="notifications">
+      <p> Back from fishing? This is what you missed:</p>
       <ul>
     <% for (Event notification : notifications) { %>
       <%
@@ -27,8 +28,8 @@
         String type = notification.getType();
       %>
       <%if(type.equals("Conversation")){%>
-        <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
           <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
             <strong><%= Username %></strong> opened a conversation!
             Conversation:   <a href="/chat/<%= notifcationInfo.get(2) %>"> <%= notifcationInfo.get(1)%> </a>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -37,8 +38,8 @@
           </div>
         </li>
       <% }else if(type.equals("Message")){ %>
-          <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
             <div class="alert alert-primary alert-dismissible fade show" role="alert">
+              <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
               <strong><%= Username %></strong> sent a message!
               Check conversation:   <a href="/chat/<%=notifcationInfo.get(3)%>"><%= notifcationInfo.get(1)%></a>
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
