@@ -55,8 +55,11 @@ ConversationStore conversationStore = ConversationStore.getInstance();
             String conversationId = information.get(information.size() - 1);
             boolean isPrivate =
                 conversationStore.getConversation(UUID.fromString(conversationId)).isPrivate();
+            boolean inConversation =
+                conversationStore.getConversation(UUID.fromString(conversationId))
+                    .containsMember(navBarUsername);
               if (event.getType().equals("Conversation") && information.size() > 2) {
-                if (!isPrivate) {
+                if (!isPrivate && inConversation) {
               %>
                   <li class="list-group-item">
                     <b><%= date %></b>
@@ -68,7 +71,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
               }
               else if (event.getType().equals("Message") && information.size() > 3) {
                 String messageContent = information.get(2);
-                if (!isPrivate) {
+                if (!isPrivate && inConversation) {
               %>
                   <li class="list-group-item">
                     <b><%= date %></b>
