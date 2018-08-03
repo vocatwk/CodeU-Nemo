@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <p> Hello! This is your notifcation page</p>
+  <h4> Back from fishing? This is what you missed:</h4>
   <div id="notifications">
       <ul>
     <% for (Event notification : notifications) { %>
@@ -30,6 +30,7 @@
         <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
           <div class="alert alert-info alert-dismissible fade show" role="alert">
             <strong><%= Username %></strong> opened a conversation!
+            Conversation:   <a href="/chat/<%= notifcationInfo.get(2) %>"> <%= notifcationInfo.get(1)%> </a>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -39,6 +40,7 @@
           <li> <strong> <%= Date.from(notification.getCreationTime()) %>: </strong>
             <div class="alert alert-primary alert-dismissible fade show" role="alert">
               <strong><%= Username %></strong> sent a message!
+              Check conversation:   <a href="/chat/<%=notifcationInfo.get(3)%>"><%= notifcationInfo.get(1)%></a>
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
