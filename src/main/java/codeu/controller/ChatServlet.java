@@ -148,12 +148,8 @@ public class ChatServlet extends HttpServlet {
       response.getWriter().write(json);
       return;
     }
-    List<UUID> userSubbedList = user.getSubscriptions();
-    Boolean subValue = false;
-    if(userSubbedList.contains(conversationId)){
-      subValue=true;
-    }
 
+    Boolean subValue = user.getSubscriptions().contains(conversationId);
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
     String membersOfConversation = new Gson().toJson(conversation.getMembers());

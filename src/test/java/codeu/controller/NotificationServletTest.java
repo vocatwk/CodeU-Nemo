@@ -124,7 +124,7 @@ public class NotificationServletTest{
   }
 
   @Test
-  public void testDoGet_ifConversation() throws IOException, ServletException {
+  public void testDoGet_ifNotificationIsAConversation() throws IOException, ServletException {
     List<Event> fakeEventList = new ArrayList<>();
     List<Event> eventsToShow = new ArrayList<>();
     UUID fakeUserId = UUID.randomUUID();
@@ -162,7 +162,7 @@ public class NotificationServletTest{
   }
 
   @Test
-  public void testDoGet_ifMessage() throws IOException, ServletException {
+  public void testDoGet_ifNotificationIsAMessage() throws IOException, ServletException {
     List<Event> fakeEventList = new ArrayList<>();
     List<Event> eventsToShow = new ArrayList<>();
     UUID fakeUserId = UUID.randomUUID();
