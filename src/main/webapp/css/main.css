@@ -164,6 +164,7 @@ body {
 .messageContainer{
   margin-bottom:10px;
   display:flex;
+  word-break: break-word;
 }
 
 .right{
