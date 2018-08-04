@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Conversation" %>
@@ -129,6 +130,7 @@ User subjectUser = UserStore.getInstance().getUser(subject);
 
     <div id="messages">
 
+
       <ul class="list-group">
         <% 
         for (Message message : messages) { 
@@ -138,19 +140,27 @@ User subjectUser = UserStore.getInstance().getUser(subject);
           boolean userInConversation = conversation.containsMember(user);
           if (!isPrivate && userInConversation) {
         %>
-          <li class="list-group-item">
-            <strong> <%= Date.from(message.getCreationTime()) %>: </strong>
-            In <a href="/chat/<%= conversation.getId() %>"><%= conversation.getTitle() %></a>: 
-            <%= message.getContent() %> 
-          </li>
+            <li class="list-group-item">
+              <strong> <%= Date.from(message.getCreationTime()) %>: </strong>
+              In <a href="/chat/<%= conversation.getId() %>"><%= conversation.getTitle() %></a>: 
+              <%= message.getContent() %> 
+            </li>
         <%
           }
         } %>
       </ul>
 
     </div>
-
   </div>
+  <h2> <%= subject %>'s subscriptions </h2>
+  <%--Ids of subscribed to chats--%>
+  <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionIds"); %>
+  <%--Names of the conversations stored on the id List--%>
+  <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
+
+  <% for(int i = 0; i < conversationNames.size(); i++) { %>
+        <a href="/chat/<%=conversationsIds.get(i)%>"> <%=conversationNames.get(i)%> </a> <br/>
+  <% } %>
 
 </body>
 </html>
