@@ -312,15 +312,6 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
                 <button type="submit" class="btn btn-primary">Send</button>
               </div>
       </form>
-      <span></span>
-      <script>
-      $( "messageForm" ).submit(function( event ) {
-        if ( $( "input:first" ).val() === "correct" ) {
-          $( "span" ).text( "Validated..." ).show();
-          return;
-        }
-      });
-      </script>
       <hr/>
     </div>
   </div>
