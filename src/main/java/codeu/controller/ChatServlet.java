@@ -121,8 +121,9 @@ public class ChatServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
     UUID conversationId = getIdFromString(conversationIdAsString);
-
+    String username = (String)request.getSession().getAttribute("user");
     Conversation conversation = conversationStore.getConversation(conversationId);
+
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
       System.out.println("Conversation was null: " + conversationIdAsString);
@@ -130,7 +131,6 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String username = (String) request.getSession().getAttribute("user");
     if(!conversation.containsMember(username)){
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
@@ -149,14 +149,17 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    Boolean subValue = user.getSubscriptions().contains(conversationId);
 
+    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
     String membersOfConversation = new Gson().toJson(conversation.getMembers());
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("isPrivate", conversation.isPrivate());
     request.setAttribute("membersOfConversation", membersOfConversation);
+    request.setAttribute("subValue", subValue);
+
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -210,11 +213,11 @@ public class ChatServlet extends HttpServlet {
       messageInformation.add(conversation.getTitle());
       messageInformation.add(cleanedMessageContent);
       messageInformation.add(conversationId.toString());
-      Event messageEvent = 
+      Event messageEvent =
           new Event(
-              UUID.randomUUID(), 
-              "Message", 
-              message.getCreationTime(), 
+              UUID.randomUUID(),
+              "Message",
+              message.getCreationTime(),
               messageInformation);
       eventStore.addEvent(messageEvent);
 
@@ -232,22 +235,21 @@ public class ChatServlet extends HttpServlet {
                 botResponse,
                 Instant.now());
         messageStore.addMessage(botMessage);
-        
+
         List<String> botMessageInformation = new ArrayList<String>();
         botMessageInformation.add(bot.getName());
         botMessageInformation.add(conversation.getTitle());
         botMessageInformation.add(botResponse);
         botMessageInformation.add(conversationId.toString());
-        Event botMessageEvent = 
+        Event botMessageEvent =
             new Event(
-                UUID.randomUUID(), 
-                "Message", 
-                botMessage.getCreationTime(), 
+                UUID.randomUUID(),
+                "Message",
+                botMessage.getCreationTime(),
                 botMessageInformation);
         eventStore.addEvent(botMessageEvent);
       }
     }
- 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationId);
   }
@@ -257,11 +259,10 @@ public class ChatServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String username = (String) request.getSession().getAttribute("user");
-
+    User currentUser = userStore.getUser(username);
     String requestUrl = request.getRequestURI();
     String conversationIdAsString = requestUrl.substring("/chat/".length());
     UUID conversationId = getIdFromString(conversationIdAsString);
-
     Conversation conversation = conversationStore.getConversation(conversationId);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
@@ -280,7 +281,7 @@ public class ChatServlet extends HttpServlet {
       // wrong form of PUT request, do nothing
       return;
     }
-    
+
     if(purpose.equals("Changing chat privacy")){
       String privacyCommand = request.getReader().readLine();
 
@@ -297,7 +298,7 @@ public class ChatServlet extends HttpServlet {
       String jsonString = request.getReader().readLine();
       String cleanedJsonString = Jsoup.clean(jsonString, Whitelist.none());
       String[] userNameArray = null;
-      
+
       try{
         userNameArray = new Gson().fromJson(cleanedJsonString, String[].class);
       }
@@ -321,15 +322,25 @@ public class ChatServlet extends HttpServlet {
       HashSet<String> membersList = new HashSet<>(Arrays.asList(userNameArray));
       conversation.setMembers(membersList);
       conversationStore.updateConversation(conversation);
+
+    } else if(purpose.equals("recievingNotifications")){
+      String notificationCommand = request.getReader().readLine();
+
+      if(notificationCommand.equals("unmute")){
+        currentUser.addSubscription(conversationId);
+      }
+      if(notificationCommand.equals("mute")){
+        currentUser.removeSubscription(conversationId);
+      }
     }
-    
-  }
+      }
+
 
   /**
-  * This function scans through the source String and checks if it's a registered 
+  * This function scans through the source String and checks if it's a registered
   * mention key in BotController.
   *
-  * @return null if no word is registered. 
+  * @return null if no word is registered.
   */
   private String getMentionKey(String source) {
     for (String word : source.split("[[\\p{Punct}&&[^@]]\\s]+")) {

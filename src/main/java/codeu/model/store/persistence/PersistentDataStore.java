@@ -77,6 +77,7 @@ public class PersistentDataStore {
         String aboutMe = (String) entity.getProperty("about_me");
         Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
         String lastSeenNotifications = (String) entity.getProperty("last_seen_notifications");
+        List<String> subscriptionsAsString = (List<String>) entity.getProperty("subscriptions");
         Text picture = (Text) entity.getProperty("picture");
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
@@ -91,7 +92,14 @@ public class PersistentDataStore {
           }
           user.setLastSeenConversations(lastSeenConversations);
         }
-
+        List<UUID> subIdAsId = new ArrayList<>();
+        if(subscriptionsAsString!= null){
+          for(String subIdAsAString:subscriptionsAsString){
+            UUID subId = UUID.fromString(subIdAsAString);
+            subIdAsId.add(subId);
+          }
+          user.setSubscriptions(subIdAsId);
+        }
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -225,6 +233,7 @@ public class PersistentDataStore {
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("about_me", user.getAboutMe());
     userEntity.setProperty("is_admin", user.getIsAdmin());
+    userEntity.setProperty("subscriptions", user.getSubscriptionsAsString());
     String picture = user.getPicture();
     if(picture != null) userEntity.setProperty("picture", new Text(user.getPicture()));
     Instant last_seen_notifications = user.getLastSeenNotifications();

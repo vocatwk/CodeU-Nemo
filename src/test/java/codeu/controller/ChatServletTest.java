@@ -102,18 +102,24 @@ public class ChatServletTest {
   @Test
   public void testDoGet() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    UUID randomConversationId = UUID.randomUUID();
+    List<UUID> subbedId = new ArrayList<>();
+    subbedId.add(randomConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
-    
+
     fakeConversation.addMember("test_user1");
     fakeConversation.addMember("test_user2");
 
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(fakeConversation);
 
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
     Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
 
     List<Message> fakeMessageList = new ArrayList<>();
@@ -124,6 +130,7 @@ public class ChatServletTest {
             UUID.randomUUID(),
             "test message",
             Instant.now()));
+
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
         .thenReturn(fakeMessageList);
 
@@ -137,6 +144,7 @@ public class ChatServletTest {
     Mockito.verify(mockRequest).setAttribute("isPrivate",false);
     Mockito.verify(mockRequest)
         .setAttribute("membersOfConversation","[\"test_user2\",\"test_user1\"]");
+    Mockito.verify(mockRequest).setAttribute("subValue",false);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -144,11 +152,13 @@ public class ChatServletTest {
   public void testDoGet_PurposeIsToGetMembers() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_user1");
+    Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
+
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
-    
+
     fakeConversation.addMember("test_user1");
     fakeConversation.addMember("test_user2");
 
@@ -156,7 +166,7 @@ public class ChatServletTest {
         .thenReturn(fakeConversation);
 
     Mockito.when(mockUserStore.getUser("test_user1")).thenReturn(mockUser);
-    
+
     Mockito.when(mockRequest.getHeader("purpose")).thenReturn("Get members");
 
     chatServlet.doGet(mockRequest, mockResponse);
@@ -174,9 +184,12 @@ public class ChatServletTest {
   @Test
   public void testDoGet_badConversation() throws IOException, ServletException {
     UUID fakeConversationId = UUID.randomUUID();
+    UUID randomConversationId = UUID.randomUUID();
+    List<UUID> subbedId = new ArrayList<>();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
-        .thenReturn(null);
+      .thenReturn(null);
+    Mockito.when(mockUser.getSubscriptions()).thenReturn(subbedId);
 
     chatServlet.doGet(mockRequest, mockResponse);
 
@@ -201,7 +214,7 @@ public class ChatServletTest {
 
     Conversation fakeConversation =
         new Conversation(fakeConversationId, UUID.randomUUID(), "test_conversation", Instant.now());
-    
+
     fakeConversation.addMember("test_user1");
     fakeConversation.addMember("test_user2");
 
@@ -436,7 +449,7 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
     Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
@@ -446,7 +459,7 @@ public class ChatServletTest {
     Mockito.when(mockReader.readLine())
         .thenReturn("make private");
     Mockito.when(mockConversation.isPrivate()).thenReturn(false);
-    
+
     chatServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockConversation).makePrivate();
@@ -458,7 +471,7 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
     Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
@@ -468,7 +481,7 @@ public class ChatServletTest {
     Mockito.when(mockReader.readLine())
         .thenReturn("make public");
     Mockito.when(mockConversation.isPrivate()).thenReturn(true);
-    
+
     chatServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockConversation).makePublic();
@@ -480,7 +493,7 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
     Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
@@ -489,7 +502,7 @@ public class ChatServletTest {
 
     Mockito.when(mockReader.readLine())
         .thenReturn("[\"test_user1\",\"test_user2\"]");
-    
+
     User fakeUser1 =
         new User(
             UUID.randomUUID(),
@@ -510,13 +523,45 @@ public class ChatServletTest {
     HashSet<String> fakeUsersToBeAdded = new HashSet<>();
     fakeUsersToBeAdded.add("test_user1");
     fakeUsersToBeAdded.add("test_user2");
-    
+
     Mockito.when(mockConversation.getMembers()).thenReturn(fakeUsersToBeAdded);
 
     chatServlet.doPut(mockRequest, mockResponse);
 
     Mockito.verify(mockConversation).setMembers(fakeUsersToBeAdded);
     Mockito.verify(mockConversationStore).updateConversation(mockConversation);
+    Mockito.when(mockSession.getAttribute("subbed")).thenReturn(false);
+
+  }
+
+  @Test
+  public void testDoPut_RecievingNotificationsUnmute() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId)).thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
+    Mockito.when(mockReader.readLine()).thenReturn("unmute");
+
+    chatServlet.doPut(mockRequest, mockResponse);
+    Mockito.verify(mockUser).addSubscription(fakeConversationId);
+  }
+
+  @Test
+  public void testDoPut_RecievingNotificationsMute() throws IOException, ServletException {
+    UUID fakeConversationId = UUID.randomUUID();
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
+    Mockito.when(mockConversationStore.getConversation(fakeConversationId)).thenReturn(mockConversation);
+    Mockito.when(mockConversation.containsMember("test_username")).thenReturn(true);
+    Mockito.when(mockRequest.getHeader("purpose")).thenReturn("recievingNotifications");
+    Mockito.when(mockReader.readLine()).thenReturn("mute");
+
+    chatServlet.doPut(mockRequest, mockResponse);
+    Mockito.verify(mockUser).removeSubscription(fakeConversationId);
   }
 
   @Test
@@ -524,7 +569,7 @@ public class ChatServletTest {
     UUID fakeConversationId = UUID.randomUUID();
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/" + fakeConversationId);
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
-    
+
     Mockito.when(mockConversationStore.getConversation(fakeConversationId))
         .thenReturn(mockConversation);
     Mockito.when(mockConversation.containsMember("test_username")).thenReturn(false);

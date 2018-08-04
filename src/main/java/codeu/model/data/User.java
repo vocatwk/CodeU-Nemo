@@ -13,9 +13,10 @@
 // limitations under the License.
 
 package codeu.model.data;
-
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -28,6 +29,7 @@ public class User {
   private String aboutMe;
   private boolean isAdmin;
   private Instant lastSeenNotifications;
+  private List<UUID> subscriptions;
   private HashMap<UUID, Instant> lastSeenConversations;
   private String picture;
   /**
@@ -46,6 +48,7 @@ public class User {
     aboutMe = "";
     isAdmin = false;
     lastSeenNotifications = creation;
+    subscriptions = new ArrayList<>();
     lastSeenConversations = new HashMap<>();
     this.picture = null;
   }
@@ -94,8 +97,7 @@ public class User {
   public void setLastSeenNotifications(Instant lastSeen){
     lastSeenNotifications = lastSeen;
   }
-
-  /** Returns the Instant the last time the user visted the notification page */
+  /** get the Instant the last time the user visted the notification page */
   public Instant getLastSeenNotifications(){
     return lastSeenNotifications;
   }
@@ -110,6 +112,32 @@ public class User {
 
   public void sawConversation(UUID conversationId){
     lastSeenConversations.put(conversationId, Instant.now());
+  }
+    /** Add a conversation id to the subscriptions list */
+    public void addSubscription(UUID conversationId){
+      subscriptions.add(conversationId);
+    }
+
+    /** get the subscriptions list*/
+    public List<UUID> getSubscriptions(){
+      return subscriptions;
+    }
+    /** remove a conversation id from the subscriptions list */
+    public void removeSubscription(UUID conversationId){
+      subscriptions.remove(conversationId);
+    }
+    /** set the subscriptions list*/
+    public void setSubscriptions(List<UUID> subscriptions){
+       this.subscriptions = subscriptions;
+    }
+
+    public List<String> getSubscriptionsAsString(){
+      List<String> idsAsStrings = new ArrayList<>();
+      for(UUID subId: subscriptions){
+        String subIdAsString = subId.toString();
+        idsAsStrings.add(subIdAsString);
+      }
+      return idsAsStrings;
   }
 
   public String getPicture(){

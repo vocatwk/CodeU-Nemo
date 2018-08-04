@@ -3,9 +3,11 @@ package codeu.controller;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.data.Event;
+import codeu.model.data.Conversation;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.model.store.basic.EventStore;
+import codeu.model.store.basic.ConversationStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -20,7 +22,7 @@ import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
-   
+
   private MessageStore messageStore;
 
   /** Store class that gives access to Users. */
@@ -29,6 +31,9 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Events. */
   private EventStore eventStore;
 
+  /** Store class that gives access to Conversations. */
+  private ConversationStore conversationStore;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
@@ -36,6 +41,7 @@ public class ProfileServlet extends HttpServlet {
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
     setEventStore(EventStore.getInstance());
+    setConversationStore(ConversationStore.getInstance());
   }
 
   /**
@@ -63,6 +69,14 @@ public class ProfileServlet extends HttpServlet {
   }
 
   /**
+   * Sets the ConversationStore used by this servlet. This function provides a common setup method for use
+   * by the test framework or the servlet's init() function.
+   */
+  void setConversationStore(ConversationStore conversationStore) {
+    this.conversationStore = conversationStore;
+  }
+
+  /**
    * This function fires when a user navigates to the profile page. It gets the profile name from
    * the URL, finds the corresponding profile subject, and fetches the messages sent by that subject.
    * It then forwards to profile.jsp for rendering.
@@ -79,16 +93,16 @@ public class ProfileServlet extends HttpServlet {
       return;
     }
     String subjectName = requestUrl.substring("/profile/".length());
-    
+
     User subject = userStore.getUser(subjectName);
- 
+
     if(subject == null) {
       // couldn't file profile, redirect to index.jsp
       // TODO respond with 404
       response.sendRedirect("/");
       return;
     }
- 
+
     request.setAttribute("subject", subjectName);
     UUID subjectId = subject.getId();
 
@@ -96,6 +110,17 @@ public class ProfileServlet extends HttpServlet {
 
     request.setAttribute("aboutMe", subject.getAboutMe());
     request.setAttribute("messages", messages);
+
+    List<UUID> subscriptionIds = subject.getSubscriptions();
+    List<String> conversationNames =  new ArrayList<>();
+    for (UUID subID : subscriptionIds) {
+        Conversation convo = conversationStore.getConversation(subID);
+        String convoName = convo.getTitle();
+        conversationNames.add(convoName);
+    }
+    request.setAttribute("subscriptionIds",subscriptionIds);
+    request.setAttribute("conversationNames", conversationNames);
+
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
 
@@ -107,7 +132,7 @@ public class ProfileServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String requestUrl = request.getRequestURI();
-    String username = (String) request.getSession().getAttribute("user"); 
+    String username = (String) request.getSession().getAttribute("user");
     User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
 
     if(!username.equals(subject.getName())){
@@ -115,7 +140,7 @@ public class ProfileServlet extends HttpServlet {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
- 
+
     String aboutMe = request.getParameter("aboutMe");
 
     // remove any HTML from the About me message
@@ -124,7 +149,7 @@ public class ProfileServlet extends HttpServlet {
     //set user's about me and update it in dataStore
     subject.setAboutMe(cleanedAboutMe);
     userStore.updateUser(subject);
-    
+
     List<String> aboutMeInformation = new ArrayList<>();
     aboutMeInformation.add(subject.getName());
     aboutMeInformation.add(subject.getAboutMe());
