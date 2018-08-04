@@ -315,29 +315,27 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
                 <div class="messageContainer">
                   <img class="dot" src="<%= picture %>">
                   <div class="box triangle leftBubble">
-                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
+                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a>
                     <br>
                     <%= message.getContent() %>
                   </div>
                 </div>
           <%
               }
-            } 
+            }
           %>
         </div>
       </div>
 
       <hr/>
-
       <form action="/chat/<%= conversation.getId() %>" method="POST">
-        <div class="flex" id="messageForm">
-          <div class="form-group" id="messageInput">
-            <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
-          </div>
-          <button type="submit" class="btn btn-primary">Send</button>
-        </div>
+          <div class="flex" id="messageForm">
+                <div class="form-group" id="messageInput">
+                  <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
       </form>
-
       <hr/>
     </div>
   </div>
