@@ -29,6 +29,7 @@ public class User {
   private boolean isAdmin;
   private Instant lastSeenNotifications;
   private HashMap<UUID, Instant> lastSeenConversations;
+  private String picture;
   /**
    * Constructs a new User.
    *
@@ -46,6 +47,7 @@ public class User {
     isAdmin = false;
     lastSeenNotifications = creation;
     lastSeenConversations = new HashMap<>();
+    this.picture = null;
   }
 
   /** Returns the ID of this User. */
@@ -108,6 +110,14 @@ public class User {
 
   public void sawConversation(UUID conversationId){
     lastSeenConversations.put(conversationId, Instant.now());
+  }
+
+  public String getPicture(){
+    return this.picture;
+  }
+
+  public void setPicture(String pictureUpload){
+    this.picture = pictureUpload;
   }
 
 }
