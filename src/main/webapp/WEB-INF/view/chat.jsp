@@ -69,7 +69,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       var it = membersOfConversation.values();
 
       if(membersOfConversation.size >= 3){
-        $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and " 
+        $(".memberList").html("People: " + it.next().value + ", " + it.next().value + ", and "
           + (membersOfConversation.size - 2) + " others.");
       }else if(membersOfConversation.size == 2) {
         $(".memberList").html("People: " + it.next().value + " and " + it.next().value);
@@ -237,7 +237,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
     };
 
   </script>
-  
+
 </head>
 <body onload="scrollChat()">
 
@@ -266,7 +266,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
 
         <%@ include file="addUserBox.jsp" %>
 
-        <div class="flex text-primary"> 
+        <div class="flex text-primary">
           <strong class="memberList"> </strong>
           <a href="" ><h2> &#8635; </h2></a>
         </div>
@@ -291,29 +291,36 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
                 <div class="messageContainer">
                   <img class="dot" src="/default-user.png">
                   <div class="box triangle leftBubble">
-                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
+                    <a class="author" href="/profile/<%=author%>"> <%=author%> </a>
                     <br>
                     <%= message.getContent() %>
                   </div>
                 </div>
           <%
               }
-            } 
+            }
           %>
         </div>
       </div>
 
       <hr/>
-
       <form action="/chat/<%= conversation.getId() %>" method="POST">
-        <div class="flex" id="messageForm">
-          <div class="form-group" id="messageInput">
-            <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
-          </div>
-          <button type="submit" class="btn btn-primary">Send</button>
-        </div>
+          <div class="flex" id="messageForm">
+                <div class="form-group" id="messageInput">
+                  <input type="text" class="form-control" name="message" placeholder="Type your message here ... ">
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
       </form>
-
+      <span></span>
+      <script>
+      $( "messageForm" ).submit(function( event ) {
+        if ( $( "input:first" ).val() === "correct" ) {
+          $( "span" ).text( "Validated..." ).show();
+          return;
+        }
+      });
+      </script>
       <hr/>
     </div>
   </div>
