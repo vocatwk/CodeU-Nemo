@@ -26,6 +26,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 String user = (String) request.getSession().getAttribute("user");
 String privacySettingButtonValue = (Boolean) request.getAttribute("isPrivate")? "make public":"make private";
 String membersOfConversation = (String) request.getAttribute("membersOfConversation");
+String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmute";
 %>
 
 <!DOCTYPE html>
@@ -236,6 +237,22 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
+    var newSubButtonValue = "<%= subButtonValue %>";
+    $(document).ready(function() {
+      $("#SubButton").click(function() {
+        fetch('/chat/<%= conversation.getId() %>', {
+          method: "PUT",
+          headers: {
+            "purpose" : "recievingNotifications"
+          },
+          body : newSubButtonValue,
+          credentials: "same-origin"
+        }).then(function() {
+          newSubButtonValue = newSubButtonValue === "unmute" ? "mute":"unmute";
+          $("#SubButton").html(newSubButtonValue);
+        })
+      });
+    });
   </script>
 
 </head>
@@ -248,7 +265,6 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
       <div class="headerContainer flex">
 
         <div class="titleAndSettings flex">
-
           <!-- Setting button and content -->
           <div class="dropdown">
             <h4 class="dropdown-toggle text-primary" id="settings-dropdown-trigger" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -257,6 +273,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <button id="privacySettingButton" class="dropdown-item" type="button"><%= privacySettingButtonValue %></button>
               <button id="EditMembersButton" class="dropdown-item btn btn-primary" type="button" data-toggle="modal" data-target="#setUsersModal">Edit Members</button>
+              <button id="SubButton" class="dropdown-item btn btn-primary" type="button"><%= subButtonValue %></button>
             </div>
           </div>
 
@@ -276,20 +293,27 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
         <div id="messagesContainer">
           <%
             for (Message message : messages) {
-              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+              User authorUser = UserStore.getInstance().getUser(message.getAuthorId());
+              String author = authorUser.getName();
+              String picture = authorUser.getPicture();
+
+              if(picture == null){
+                picture = "/default-user.png";
+              }
+
               if(user.equals(author)){
           %>
                 <div class="messageContainer right">
                   <div class="box triangle rightBubble blue">
                     <%= message.getContent() %>
                   </div>
-                  <img class="dot" src="/default-user.png">
+                  <a href="/profile/<%=author%>"> <img class="dot" src="<%= picture %>"> </a>
                 </div>
           <%
               }else{
           %>
                 <div class="messageContainer">
-                  <img class="dot" src="/default-user.png">
+                  <img class="dot" src="<%= picture %>">
                   <div class="box triangle leftBubble">
                     <a class="author" href="/profile/<%=author%>"> <%=author%> </a>
                     <br>

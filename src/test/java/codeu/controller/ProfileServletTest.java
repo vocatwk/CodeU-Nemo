@@ -149,6 +149,6 @@ public class ProfileServletTest {
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockResponse).sendRedirect("/login");
+    Mockito.verify(mockResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
   }
 }

@@ -36,7 +36,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
           if (event.getType().equals("User")) {
           %>
             <li class="list-group-item">
-            <b><%= date %></b>
+            <b><%= date %>:</b>
             <a href="/profile/<%= userName %>"><%= userName %></a> joined!
           </li>
           <%
@@ -45,7 +45,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
             String aboutMe = information.get(1);
           %>
             <li class="list-group-item">
-            <b><%= date %></b>
+            <b><%= date %>:</b>
             <a href="/profile/<%= userName %>"><%= userName%></a> updated their About Me:
             "<%= aboutMe %>"
           <%
@@ -62,7 +62,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
                 if (!isPrivate && inConversation) {
               %>
                   <li class="list-group-item">
-                    <b><%= date %></b>
+                    <b><%= date %>:</b>
                     <a href="/profile/<%= userName %>"><%= userName %></a> created a new conversation: 
                     <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>
                   </li>
@@ -74,7 +74,7 @@ ConversationStore conversationStore = ConversationStore.getInstance();
                 if (!isPrivate && inConversation) {
               %>
                   <li class="list-group-item">
-                    <b><%= date %></b>
+                    <b><%= date %>:</b>
                     <a href="/profile/<%= userName %>"><%= userName %></a> sent a message in 
                     <a href="/chat/<%= conversationId %>"><%= conversationTitle %></a>: "<%= messageContent %>"
                   </li>
