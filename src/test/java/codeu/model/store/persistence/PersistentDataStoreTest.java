@@ -48,11 +48,16 @@ public class PersistentDataStoreTest {
     Instant creationOne = Instant.ofEpochMilli(1000);
     boolean isAdminOne = true;
     Instant lastSeenNotificationsOne = Instant.ofEpochMilli(1000);
+    List<UUID> subscriptionsOne = new ArrayList<>();
     User inputUserOne = new User(idOne, nameOne, passwordHashOne, creationOne);
     String aboutMeOne = "test_about_me_one";
+    subscriptionsOne.add(UUID.fromString("10000003-2222-3333-4444-555555555555"));
+    subscriptionsOne.add(UUID.fromString("10000004-2222-3333-4444-555555555555"));
+    subscriptionsOne.add(UUID.fromString("10000005-2222-3333-4444-555555555555"));
     inputUserOne.setIsAdmin(isAdminOne);
     inputUserOne.setAboutMe(aboutMeOne);
     inputUserOne.setLastSeenNotifications(lastSeenNotificationsOne);
+    inputUserOne.setSubscriptions(subscriptionsOne);
 
     UUID idTwo = UUID.fromString("10000001-2222-3333-4444-555555555555");
     String nameTwo = "test_username_two";
@@ -61,10 +66,13 @@ public class PersistentDataStoreTest {
     String aboutMeTwo = "test_about_me_two";
     boolean isAdminTwo = false;
     Instant lastSeenNotificationsTwo = Instant.ofEpochMilli(2000);
+    List<UUID> subscriptionsTwo = new ArrayList<>();
+    subscriptionsOne.add(UUID.fromString("10000006-2222-3333-4444-555555555555"));
     User inputUserTwo = new User(idTwo, nameTwo, passwordHashTwo, creationTwo);
     inputUserTwo.setIsAdmin(isAdminTwo);
     inputUserTwo.setLastSeenNotifications(lastSeenNotificationsTwo);
     inputUserTwo.setAboutMe(aboutMeTwo);
+    inputUserTwo.setSubscriptions(subscriptionsTwo);
 
     // save
     persistentDataStore.writeThrough(inputUserOne);
@@ -82,6 +90,7 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(isAdminOne, resultUserOne.getIsAdmin());
     Assert.assertEquals(lastSeenNotificationsOne, resultUserOne.getLastSeenNotifications());
     Assert.assertEquals(aboutMeOne, resultUserOne.getAboutMe());
+    Assert.assertEquals(subscriptionsOne, resultUserOne.getSubscriptions());
 
     User resultUserTwo = resultUsers.get(1);
     Assert.assertEquals(idTwo, resultUserTwo.getId());
@@ -91,6 +100,7 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(isAdminTwo, resultUserTwo.getIsAdmin());
     Assert.assertEquals(lastSeenNotificationsTwo, resultUserTwo.getLastSeenNotifications());
     Assert.assertEquals(aboutMeTwo, resultUserTwo.getAboutMe());
+    Assert.assertEquals(subscriptionsTwo, resultUserTwo.getSubscriptions());
   }
 
   @Test

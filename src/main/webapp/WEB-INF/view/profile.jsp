@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Conversation" %>
@@ -130,7 +131,7 @@ User subjectUser = UserStore.getInstance().getUser(subject);
     <div id="messages">
 
       <ul>
-        <% for (Message message : messages) { 
+        <% for (Message message : messages) {
             if (!conversationStore.getConversation(message.getConversationId()).isPrivate()) {
         %>
               <li> <strong> <%= Date.from(message.getCreationTime()) %>:
@@ -140,8 +141,16 @@ User subjectUser = UserStore.getInstance().getUser(subject);
       </ul>
 
     </div>
-
   </div>
+  <h2> <%= subject %>'s subscriptions </h2>
+  <%--Ids of subscribed to chats--%>
+  <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionIds"); %>
+  <%--Names of the conversations stored on the id List--%>
+  <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
+
+  <% for(int i = 0; i < conversationNames.size(); i++) { %>
+        <a href="/chat/<%=conversationsIds.get(i)%>"> <%=conversationNames.get(i)%> </a> <br/>
+  <% } %>
 
 </body>
 </html>
