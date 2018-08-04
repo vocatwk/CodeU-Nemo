@@ -290,7 +290,7 @@ String membersOfConversation = (String) request.getAttribute("membersOfConversat
                   <div class="box triangle rightBubble blue">
                     <%= message.getContent() %>
                   </div>
-                  <img class="dot" src="<%= picture %>">
+                  <a href="/profile/<%=author%>"> <img class="dot" src="<%= picture %>"> </a>
                 </div>
           <%
               }else{

@@ -112,8 +112,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
-      // TODO respond with access denied
-      response.sendRedirect("/login");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
  
@@ -149,8 +148,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
-      // TODO respond with access denied
-      response.sendRedirect("/login");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
  

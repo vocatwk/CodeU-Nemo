@@ -311,14 +311,18 @@ button {
 }
 
 #aboutSection{
-  max-height: 27%;
+  max-height: 30%;
   overflow-y: auto;
 }
 
 #messages {
   background-color: white;
-  height: 43%;
+  height: 40%;
   overflow-y: auto;
+}
+
+#aboutMe{
+    margin-top: 5px;
 }
 
 /* This is for the Activity Feed Page */

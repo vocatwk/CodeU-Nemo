@@ -109,7 +109,7 @@ User subjectUser = UserStore.getInstance().getUser(subject);
         <form action="/profile/<%= subject %>" method="POST">
           <input type="text" name="aboutMe">
           <br/>
-          <button type="submit">Submit</button>
+          <button id="aboutMe" type="submit">Submit</button>
         </form>
       <% } %>
 
