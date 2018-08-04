@@ -322,6 +322,10 @@ button {
   overflow-y: auto;
 }
 
+#messages .list-group {
+  word-break: break-word;
+}
+
 #aboutMe{
     margin-top: 5px;
 }
