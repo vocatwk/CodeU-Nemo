@@ -49,25 +49,21 @@
           <a class="nav-link" href="/admin">Admin Page</a>
         </li>
       <%}%>
-    </ul>
-
-    <%@ include file="searchbar.jsp" %>
-
-    <div class="navbar-nav nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-user"></i>
-      </a>
-
-      <div class="nav-item dropdown">
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fa fa-user"></i>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/profile/<%=navBarUsername %>">My Profile</a>
           <div class="dropdown-divider"></div>
           <form id="logout" class="form-inline" action="/logout" method="POST">
             <a class="dropdown-item" href="#" onclick="document.getElementById('logout').submit();">Sign Out</a>
           </form>
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
+
+    <%@ include file="searchbar.jsp" %>
 
   </div>
 </nav>
