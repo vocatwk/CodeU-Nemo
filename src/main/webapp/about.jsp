@@ -26,7 +26,7 @@
   <div id="aboutChat">
       <h1>About Nemo Chat</h1>
      This is a chat app created by Team Nemo. It features:
-      <li> a profile pages for users where they can update their About Me's and view their sent messages.</li>
+      <li> a profile pages for users where they can update their About Me's, upload profile pictures, and view their sent messages.</li>
       <li> private and public conversations.</li>
       <li> allows you to add/remove users from a conversation.</li>
       <li> a notification page that allows you to see when messages and conversations are being made that you are member of.</li>

@@ -293,20 +293,27 @@ String subButtonValue = (Boolean) request.getAttribute("subValue")? "mute":"unmu
         <div id="messagesContainer">
           <%
             for (Message message : messages) {
-              String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+              User authorUser = UserStore.getInstance().getUser(message.getAuthorId());
+              String author = authorUser.getName();
+              String picture = authorUser.getPicture();
+
+              if(picture == null){
+                picture = "/default-user.png";
+              }
+
               if(user.equals(author)){
           %>
                 <div class="messageContainer right">
                   <div class="box triangle rightBubble blue">
                     <%= message.getContent() %>
                   </div>
-                  <img class="dot" src="/default-user.png">
+                  <a href="/profile/<%=author%>"> <img class="dot" src="<%= picture %>"> </a>
                 </div>
           <%
               }else{
           %>
                 <div class="messageContainer">
-                  <img class="dot" src="/default-user.png">
+                  <img class="dot" src="<%= picture %>">
                   <div class="box triangle leftBubble">
                     <a class="author" href="/profile/<%=author%>"> <%=author%> </a> 
                     <br>

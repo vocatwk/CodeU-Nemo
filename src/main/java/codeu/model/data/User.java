@@ -31,7 +31,7 @@ public class User {
   private Instant lastSeenNotifications;
   private List<UUID> subscriptions;
   private HashMap<UUID, Instant> lastSeenConversations;
-
+  private String picture;
   /**
    * Constructs a new User.
    *
@@ -50,6 +50,7 @@ public class User {
     lastSeenNotifications = creation;
     subscriptions = new ArrayList<>();
     lastSeenConversations = new HashMap<>();
+    this.picture = null;
   }
 
   /** Returns the ID of this User. */
@@ -137,6 +138,14 @@ public class User {
         idsAsStrings.add(subIdAsString);
       }
       return idsAsStrings;
+  }
+
+  public String getPicture(){
+    return this.picture;
+  }
+
+  public void setPicture(String pictureUpload){
+    this.picture = pictureUpload;
   }
 
 }
