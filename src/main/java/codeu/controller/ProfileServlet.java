@@ -112,8 +112,7 @@ public class ProfileServlet extends HttpServlet {
 
     if(!username.equals(subject.getName())){
       // user is trying to edit another user's profile
-      // TODO respond with access denied
-      response.sendRedirect("/login");
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
       return;
     }
  
@@ -134,5 +133,29 @@ public class ProfileServlet extends HttpServlet {
     eventStore.addEvent(aboutMeEvent);
 
     response.sendRedirect("/profile/" + subject.getName());
+  }
+
+  /**
+   * This function fires when a user uploads a profile picture.
+   */
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+    String requestUrl = request.getRequestURI();
+    String username = (String) request.getSession().getAttribute("user"); 
+    User subject = userStore.getUser(requestUrl.substring("/profile/".length()));
+
+    if(!username.equals(subject.getName())){
+      // user is trying to edit another user's profile
+      response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have access to this page");
+      return;
+    }
+ 
+    String base64 = request.getReader().readLine();
+
+    //set user's about me and update it in dataStore
+    subject.setPicture(base64);
+    userStore.updateUser(subject);
   }
 }

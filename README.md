@@ -17,6 +17,7 @@ sent messages.
 * Nemo allows you to add/remove users from a conversation.
 * Nemo keeps your conversations safe by allowing only members access.
 * Nemo allows you to create conversations with titles that have multiple words.
+* Nemo allows you to upload profile pictures and see other users' pictures with their messages.
 * Nemo features a notification page that allows you to see when messages and conversations are being made.
 * Nemo has an Activity Feed that allows users to see when new users join, create
  conversations, send messages, and update their About Me's.
