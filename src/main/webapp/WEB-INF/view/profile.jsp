@@ -23,7 +23,7 @@ User subjectUser = UserStore.getInstance().getUser(subject);
   <script>
     // scroll the messages div to the bottom
     function scrollChat() {
-      var chatDiv = document.getElementById('profileContainer');
+      var chatDiv = document.getElementById('messages');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
@@ -129,14 +129,24 @@ User subjectUser = UserStore.getInstance().getUser(subject);
 
     <div id="messages">
 
-      <ul>
-        <% for (Message message : messages) { 
-            if (!conversationStore.getConversation(message.getConversationId()).isPrivate()) {
+      <ul class="list-group">
+        <% 
+        for (Message message : messages) { 
+          Conversation conversation =
+              conversationStore.getConversation(message.getConversationId());
+          boolean isPrivate = conversation.isPrivate();
+          boolean subjectInConversation = conversation.containsMember(subject);
+          boolean userInConversation = conversation.containsMember(user);
+          if (!isPrivate && subjectInConversation && userInConversation) {
         %>
-              <li> <strong> <%= Date.from(message.getCreationTime()) %>:
-                 </strong> <%= message.getContent() %> </li>
-        <%  }
-          } %>
+          <li class="list-group-item">
+            <strong> <%= Date.from(message.getCreationTime()) %>: </strong>
+            In <a href="/chat/<%= conversation.getId() %>"><%= conversation.getTitle() %></a>: 
+            <%= message.getContent() %> 
+          </li>
+        <%
+          }
+        } %>
       </ul>
 
     </div>
