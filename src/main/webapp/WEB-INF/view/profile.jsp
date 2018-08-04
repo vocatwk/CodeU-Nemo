@@ -31,9 +31,9 @@ User subjectUser = UserStore.getInstance().getUser(subject);
     function readImage() {
 
       if (this.files && this.files[0]) {
-        
+
         var FR = new FileReader();
-        
+
         FR.addEventListener("load", function(e) {
 
           fetch('/profile/<%= subject %>', {
@@ -51,11 +51,11 @@ User subjectUser = UserStore.getInstance().getUser(subject);
             console.log("An error occured. " + error.message);
           })
 
-        }); 
-        
+        });
+
         FR.readAsDataURL( this.files[0] );
       }
-  
+
     };
 
     $(document).ready(function(){
@@ -77,7 +77,7 @@ User subjectUser = UserStore.getInstance().getUser(subject);
         <h1 id="name"> <strong> <%= subject %> </strong> </h1>
 
         <%
-        if (user.equals(subject)) { 
+        if (user.equals(subject)) {
         %>
             <input id="profilePictureInput" type='file'>
         <%
@@ -85,25 +85,25 @@ User subjectUser = UserStore.getInstance().getUser(subject);
         %>
       </div>
 
-      <% 
+      <%
         String picture = subjectUser.getPicture();
-        if (picture != null){ 
+        if (picture != null){
       %>
           <img id="profilePicture" src="<%=picture%>">
-      <% 
+      <%
         } else {
       %>
           <img id="profilePicture" src="/default-user.png">
       <%
         }
       %>
-      
+
     </div>
 
     <hr/>
 
     <div id="aboutSection">
-      <h2> About <%= subject %> </h2>    
+      <h2> About <%= subject %> </h2>
 
       <% if (user.equals(subject)) { %>
         <p> Edit your About Me </p>
@@ -132,8 +132,8 @@ User subjectUser = UserStore.getInstance().getUser(subject);
 
 
       <ul class="list-group">
-        <% 
-        for (Message message : messages) { 
+        <%
+        for (Message message : messages) {
           Conversation conversation =
               conversationStore.getConversation(message.getConversationId());
           boolean isPrivate = conversation.isPrivate();
@@ -142,25 +142,26 @@ User subjectUser = UserStore.getInstance().getUser(subject);
         %>
             <li class="list-group-item">
               <strong> <%= Date.from(message.getCreationTime()) %>: </strong>
-              In <a href="/chat/<%= conversation.getId() %>"><%= conversation.getTitle() %></a>: 
-              <%= message.getContent() %> 
+              In <a href="/chat/<%= conversation.getId() %>"><%= conversation.getTitle() %></a>:
+              <%= message.getContent() %>
             </li>
         <%
           }
         } %>
       </ul>
-
+      <hr>
     </div>
-  </div>
-  <h2> <%= subject %>'s subscriptions </h2>
-  <%--Ids of subscribed to chats--%>
-  <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionIds"); %>
-  <%--Names of the conversations stored on the id List--%>
-  <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
+    <h2> <%= subject %>'s subscriptions </h2>
+    <%--Ids of subscribed to chats--%>
+    <% List<UUID> conversationsIds = (List<UUID>) request.getAttribute("subscriptionIds"); %>
+    <%--Names of the conversations stored on the id List--%>
+    <% List<String> conversationNames = (List<String>) request.getAttribute("conversationNames"); %>
 
-  <% for(int i = 0; i < conversationNames.size(); i++) { %>
-        <a href="/chat/<%=conversationsIds.get(i)%>"> <%=conversationNames.get(i)%> </a> <br/>
-  <% } %>
+    <% for(int i = 0; i < conversationNames.size(); i++) { %>
+          <a href="/chat/<%=conversationsIds.get(i)%>"> <%=conversationNames.get(i)%> </a> <br/>
+    <% } %>
+    <hr/>
+  </div>
 
 </body>
 </html>
