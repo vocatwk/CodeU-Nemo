@@ -26,6 +26,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.EmbeddedEntity;
+import com.google.appengine.api.datastore.Text;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,9 +77,11 @@ public class PersistentDataStore {
         String aboutMe = (String) entity.getProperty("about_me");
         Boolean isAdmin = (Boolean) entity.getProperty("is_admin");
         String lastSeenNotifications = (String) entity.getProperty("last_seen_notifications");
+        Text picture = (Text) entity.getProperty("picture");
         if(aboutMe != null) user.setAboutMe(aboutMe);
         if(isAdmin != null && isAdmin == true) user.setIsAdmin(isAdmin);
         if (lastSeenNotifications!= null) user.setLastSeenNotifications(Instant.parse(lastSeenNotifications));
+        if(picture != null) user.setPicture(picture.getValue());
 
         EmbeddedEntity ee = (EmbeddedEntity) entity.getProperty("lastSeenConversation");
         if (ee != null) {
@@ -222,6 +225,8 @@ public class PersistentDataStore {
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("about_me", user.getAboutMe());
     userEntity.setProperty("is_admin", user.getIsAdmin());
+    String picture = user.getPicture();
+    if(picture != null) userEntity.setProperty("picture", new Text(user.getPicture()));
     Instant last_seen_notifications = user.getLastSeenNotifications();
     if(last_seen_notifications != null){
       userEntity.setProperty("last_seen_notifications", last_seen_notifications.toString());
