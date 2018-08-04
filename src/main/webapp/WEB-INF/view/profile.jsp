@@ -135,9 +135,8 @@ User subjectUser = UserStore.getInstance().getUser(subject);
           Conversation conversation =
               conversationStore.getConversation(message.getConversationId());
           boolean isPrivate = conversation.isPrivate();
-          boolean subjectInConversation = conversation.containsMember(subject);
           boolean userInConversation = conversation.containsMember(user);
-          if (!isPrivate && subjectInConversation && userInConversation) {
+          if (!isPrivate && userInConversation) {
         %>
           <li class="list-group-item">
             <strong> <%= Date.from(message.getCreationTime()) %>: </strong>
